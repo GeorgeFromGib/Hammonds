@@ -1,0 +1,71 @@
+﻿@*@inherits System.Web.Mvc.ViewUserControl<string>*@
+@*@ViewData.TemplateInfo.GetFullHtmlFieldName(string.Empty)*@
+@model HammondsIBMS_Domain.Model.IbmsImage.IbmsImage
+           
+@{
+    var imgId = Guid.NewGuid().ToString();
+    Session["__IbmsImage"] = Model;
+    if(Model==null) { <script type="text/javascript">$("#imageDelete").hide();</script>;}
+}
+
+          
+<table width="100%">
+    <tr>
+        <td>
+            <img id="___imageUrlImg" src="/ImageUrl/GetSessionImage/@imgId" alt="Init" height="200px" width="200px"/>
+        </td>
+        <td width="100%" style="text-align:center ">
+        @{<text>
+            @{Html.Telerik().Upload()
+                  .Name("ImageUrlUploader")
+                  .Async(async=> async.Save("Save","ImageUrl"))
+                  .ClientEvents(events=>events.OnSuccess("___OnSuccess").OnUpload("___onUpload"))
+                  .Multiple(false).ShowFileList(false)
+                  .Render();
+                  }</text>}<br />
+                  <div id="imageDelete" class="t-button t-upload-button t-delete-button"><span>Delete...</span></div>
+        </td>
+    </tr>
+</table>
+<script type="text/javascript">
+    jQuery(document).ready(function () {
+        $("#imageDelete").unbind("click").click(function () {
+            $.post("/ImageUrl/Delete", function (data) {
+                $("#imageDelete").hide();
+                ChangeImage(data.Path);
+            });
+        });
+    });
+
+    function ChangeImage(Path){
+        var de = $('#___imageUrlImg');
+
+        de.fadeOut('fast', function() {
+            de.attr("src", Path);
+        });
+        de.fadeIn('fast');
+    }
+
+    function ___OnSuccess(e) {
+        ChangeImage(e.response.Path);
+        $("#imageDelete").show('fast');
+    }
+
+    function ___onUpload(e) {
+        // Array with information about the uploaded files
+        var files = e.files;
+
+        // Check the extension of each file and abort the upload if it is not .jpg
+        $.each(files, function () {
+            var allwdExtns = ".jpg .gif .png .jpeg";
+            if (allwdExtns.indexOf(this.extension.toLowerCase()) == -1) {
+                alert("Only the following file types are supported:'"+allwdExtns+"' !");
+                e.preventDefault();
+                return false;
+            }
+        });
+    }
+    
+</script>
+  
+

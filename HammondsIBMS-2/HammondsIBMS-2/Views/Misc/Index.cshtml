@@ -1,0 +1,41 @@
+﻿@using HammondsIBMS_Domain.Entities.Misc
+
+@Html.ContentTitle("Miscellaneous Settings")
+
+
+@{Html.Telerik().Grid<Misc>()
+      .Name("MiscGrid")
+      .DataKeys(keys => keys.Add(o => o.MiscId))
+      .DataBinding(databind => databind.Ajax()
+          .Select("_MiscGridBind","Misc"))
+          .ClientEvents(events => events.OnRowDataBound("Grid_onRowDataBound"))
+      .Columns(columns =>
+                   {
+                       
+              columns.Bound(o => o.Identifier);
+                       columns.Bound(o => o.Value);         
+              columns.Bound(o => o.MiscId).Title("").Sortable(false).Width(50).ClientTemplate("<div class='commandColumn'>" + Html.ActionDialogFormButton(new TelerikButtonParameters(ButtonIcon.Edit),
+                                                                                                                                           new ActionParameters("_Edit", new { id = "<#= MiscId #>" }),
+                                                                                                                                           new ActionDialogFormParamters("Edit Miscellaneous", null, "_Edit", null, "rebindMiscGrid")).ToHtmlString() +
+                                                                                                               "</div>");
+
+                   })
+      .Editable(editing => editing.Mode(GridEditMode.PopUp).TemplateName("MiscEdit"))
+      .Pageable()
+      .Sortable()
+      .Render();
+}
+
+<script>
+    function rebindMiscGrid() {
+        RebindTelerikGrid('MiscGrid');
+    }
+    
+    function Grid_onRowDataBound(e) {
+        var canEdit = e.dataItem.CanEdit;
+        if (!canEdit) {
+            $(e.row).find("div.commandColumn").hide();
+        }
+    }
+</script>
+

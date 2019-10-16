@@ -1,0 +1,71 @@
+﻿@model HammondsIBMS_Domain.Entities.Accounts.OneOffItem
+<div id="_EditItemCharge">
+    @using (Html.BeginForm())
+    {
+        @Html.ValidationSummary(true)
+        <fieldset>
+            <table class='edit-table'>
+                @Html.HiddenFor(model => model.OneOffItemId)
+
+                <tr>
+                    <td>
+                        @Html.LabelFor(model => model.Description)
+                    </td>
+                    <td>
+                        @Html.EditorFor(model => model.Description)
+                        @Html.ValidationMessageFor(model => model.Description)
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        @Html.LabelFor(model => model.Charge)
+                    </td>
+                    <td>
+                        @Html.EditorFor(model => model.Charge)
+                        @Html.ValidationMessageFor(model => model.Charge)
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        @Html.LabelFor(model => model.Quantity)
+                    </td>
+                    <td>
+                        @Html.EditorFor(model => model.Quantity)
+                        @Html.ValidationMessageFor(model => model.Quantity)
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        @Html.LabelFor(model => model.TotalCharge)
+                    </td>
+                    <td>
+                        <span class="input-xlarge uneditable-input" id="TotalCharge">@Model.TotalCharge.ToString("C")</span>
+                        @*@Html.ValidationMessageFor(model => model.TotalCharge)*@
+                    </td>
+                </tr>
+            </table>
+        </fieldset>
+        <div>
+            @Html.FormSubmitButton() @Html.FormCancelButton()
+
+        </div>
+    }
+</div>
+
+<script type="text/javascript">
+    $(function() {
+        $('#Quantity,#Charge').live('change', function () {
+            UpdateTotalCharge();
+        });
+        
+
+    });
+
+    function UpdateTotalCharge() {
+        var charge = getTelerikNumericTextBox('#Charge').value();
+        var qty = getTelerikNumericTextBox('#Quantity').value();
+        var tot = charge * qty;
+        $('#_EditItemCharge #TotalCharge').html(accounting.formatMoney(tot));
+
+    }
+</script>

@@ -1,0 +1,46 @@
+﻿<p style="text-align:center;"><strong><span style="text-decoration:underline;">Rent Form</span></strong></p>
+<fieldset><legend>Customer Details</legend> <table><tbody><tr><td><table style="width:100%;"><tbody><tr><td style="width:97px;">Customer Id :</td>
+<td>1</td>
+</tr>
+<tr><td>Name :</td>
+<td>$Customer.NameSurname$</td>
+</tr>
+<tr><td style="vertical-align:top;">Address :</td>
+<td>$Customer.Address$<br />
+</td>
+</tr>
+</tbody></table>
+</td>
+<td style="vertical-align:top;"><table style="width:100%;"><tbody><tr><td style="width:87px;"></td>
+</tr>
+<tr><td>Tel(1) :</td>
+<td>$Customer.Tel1$</td>
+</tr>
+<tr><td>Tel(2) :</td>
+<td>$Customer.Tel2$</td>
+</tr>
+<tr><td>Mobile :</td>
+<td>$Customer.Mobile1$</td>
+</tr>
+<tr><td>Email :</td>
+<td>$Customer.Email$</td>
+</tr>
+</tbody></table>
+</td>
+</tr>
+</tbody></table>
+</fieldset><fieldset><legend>Delivery</legend> <table><tbody><tr style="vertical-align:top;"><td><table style="width:100%;"><tbody><tr><td style="width:97px;vertical-align:top;">Instructions :</td>
+<td>$Instructions$</td>
+</tr>
+</tbody></table>
+</td>
+<td><table><tbody><tr><td style="width:97px;vertical-align:top;">Address :</td>
+<td>$Alternate.Address$<br />
+</td>
+</tr>
+</tbody></table>
+</td>
+</tr>
+</tbody></table>
+</fieldset><fieldset><legend>Units</legend>
+$RentedUnits$</fieldset>

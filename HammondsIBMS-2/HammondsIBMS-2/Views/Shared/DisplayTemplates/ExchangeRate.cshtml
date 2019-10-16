@@ -1,0 +1,6 @@
+﻿
+
+@using HammondsIBMS_2.ViewModels.StockInvoice
+@model int
+
+@Html.Raw(((List<ExchangeRateDropDownVM>)ViewBag.ExchangeRates).Single(s=>s.ExchangeRateId==Model).AbbreviationSymbolComb)

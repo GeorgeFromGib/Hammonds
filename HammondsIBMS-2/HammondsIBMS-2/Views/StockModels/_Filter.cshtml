@@ -1,0 +1,24 @@
+﻿@model HammondsIBMS_2.ViewModels.ModelView.ModelFilterVM
+<table>
+    @Html.HiddenFor(m=>m.IsFiltered)
+    <tr>
+        <td>
+            @Html.LabelFor(model => model.ModelCode)
+        </td>
+        <td class="focus">
+            @Html.EditorFor(model => model.ModelCode)
+        </td>
+        <td>
+            @Html.LabelFor(model => model.ManufacturerFilterId)
+        </td>
+        <td>
+            @Html.EditorFor(model => model.ManufacturerFilterId)
+        </td>
+        <td>
+            @Html.LabelFor(model => model.CategoryFilterId)
+        </td>
+        <td>
+            @Html.EditorFor(model => model.CategoryFilterId)
+        </td>
+    </tr>
+</table>

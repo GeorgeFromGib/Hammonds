@@ -1,0 +1,43 @@
+﻿@model HammondsIBMS_2.ViewModels.StockInvoice.StockInvoiceVM
+<table class="table table-striped table-condensed table-bordered">
+    <tr>
+        <td style="width:200px">
+            @Html.LabelFor(model => model.InvoiceDate)
+        </td>
+        <td>
+            @Html.DisplayFor(model => model.InvoiceDate)
+        </td>
+    </tr>
+    <tr>
+        <td>
+            @Html.LabelFor(model => model.InvoiceRef)
+        </td>
+        <td>
+            @Html.DisplayFor(model => model.InvoiceRef)
+        </td>
+    </tr>
+    <tr>
+        <td>
+            @Html.LabelFor(model => model.SupplierId)
+        </td>
+        <td>
+            @Html.DisplayFor(model => model.SupplierId)
+        </td>
+    </tr>
+    <tr>
+        <td>
+            @Html.LabelFor(model => model.ExchangeRateId)
+        </td>
+        <td>
+            @Html.DisplayFor(model => model.ExchangeRateId)
+        </td>
+    </tr>
+    <tr>
+        <td>
+            @Html.LabelFor(model => model.NativeCurrencyToGBP)
+        </td>
+        <td>
+            @Html.DisplayFor(model => model.NativeCurrencyToGBP)
+        </td>
+    </tr>
+</table>

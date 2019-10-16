@@ -1,0 +1,53 @@
+﻿@model HammondsIBMS_Domain.Entities.Contracts.ItemCharge
+@using (Html.BeginForm())
+{
+    @Html.ValidationSummary(true)
+    <fieldset>
+        <table class='edit-table'>
+            @Html.HiddenFor(model => model.ItemChargeId)
+
+            <tr>
+                <td>
+                    @Html.LabelFor(model => model.Description)
+                </td>
+                <td>
+                    @Html.EditorFor(model => model.Description)<br />
+                    @Html.ValidationMessageFor(model => model.Description)
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    @Html.LabelFor(model => model.Amount)
+                </td>
+                <td>
+                    @Html.EditorFor(model => model.Amount)
+                    @Html.ValidationMessageFor(model => model.Amount)
+                </td>
+            </tr>
+
+            <tr>
+                <td>
+                    @Html.LabelFor(model => model.PurchaseDefault)
+                </td>
+                <td>
+                    @Html.EditorFor(model => model.PurchaseDefault)
+                    @Html.ValidationMessageFor(model => model.PurchaseDefault)
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    @Html.LabelFor(model => model.RentalDefault)
+                </td>
+                <td>
+                    @Html.EditorFor(model => model.RentalDefault)
+                    @Html.ValidationMessageFor(model => model.RentalDefault)
+                </td>
+            </tr>
+        </table>
+    </fieldset>
+    <div>
+        @Html.FormSubmitButton() @Html.FormCancelButton()
+
+    </div>
+}
+

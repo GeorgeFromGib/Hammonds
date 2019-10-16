@@ -1,0 +1,24 @@
+﻿@using HammondsIBMS_Domain.Entities.Contracts
+@model Employer
+
+@*@using (Html.Container("Name"))
+{
+    <table class="table table-striped table-condensed table-bordered">
+        <tr>
+            <td class="label-width">
+                @Html.LabelFor(model => model.EmployerName)
+            </td>
+            <td>
+                @Html.DisplayFor(model => model.EmployerName)
+            </td>
+        </tr>
+    </table>
+}*@
+@using (Html.Container("Address"))
+{
+    @Html.DisplayFor(o => o.Address, "_Address")
+}
+@using (Html.Container("Contact Info"))
+{
+    @Html.DisplayFor(o => o.ContactInfo, "_ContactInfo")
+}

@@ -1,0 +1,53 @@
+﻿<div id="_AccountStockSelector">
+    <table class="edit-table" style="width: 100%">
+        <tr>
+            <td style="width: 150px">
+                @Html.Label("HTV-Identifier")
+            </td>
+            <td>
+                @{ Html.Telerik().ComboBox()
+                       .Name("ComboBoxIdentifier")
+                       //.Placeholder("Select stock Id")
+                       .DataBinding(binding => binding.Ajax().Select("_FindStockByIdentifierForAutoComplete", "Account"))
+                       .Filterable(filtering => filtering.FilterMode(AutoCompleteFilterMode.StartsWith))
+                       .ClientEvents(events => events.OnOpen("ClearSerial").OnChange("ContractUnitStockComboBoxChanged"))
+                       .HighlightFirstMatch(true)
+                       .InputHtmlAttributes(new { style = "width:120px" })
+                       .Render(); }
+            </td>
+            <td style="width: 150px">
+                @Html.Label("- OR - Serial")
+            </td>
+            <td>
+                @{ Html.Telerik().ComboBox()
+                       .Name("ComboBoxSerial")
+                       //.Placeholder("Select stock serial")
+                       .DataBinding(binding => binding.Ajax().Select("_FindStockBySerialForAutoComplete", "Account"))
+                       .Filterable(filtering => filtering.FilterMode(AutoCompleteFilterMode.StartsWith))
+                       .ClientEvents(events => events.OnOpen("ClearIdentifier").OnChange("ContractUnitStockComboBoxChanged"))
+                       .HighlightFirstMatch(true)
+                       .InputHtmlAttributes(new { style = "width:120px" })
+                       .Render(); }
+            </td>
+            <td style="width: 100%; text-align: right;"></td>
+        </tr>
+    </table>
+</div>
+
+<script type="text/javascript">
+
+    function ClearSerial() {
+        $("[name='ComboBoxSerial']").data('tComboBox').value('');
+    }
+
+    function ClearIdentifier() {
+        $("[name='ComboBoxIdentifier']").data('tComboBox').value('');
+    }
+
+    function ContractUnitStockComboBoxChanged(e) {
+
+        $('#_AccountStockSelector').trigger('selectionChanged', { value: e.value });
+    }
+
+
+</script>

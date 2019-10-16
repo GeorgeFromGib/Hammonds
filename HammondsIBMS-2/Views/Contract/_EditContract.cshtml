@@ -1,0 +1,15 @@
+﻿@model HammondsIBMS_Domain.Entities.Contracts.Contract
+
+
+
+@*@using (Ajax.BeginForm(new AjaxOptions { Url = Url.Action("_AddContract"), UpdateTargetId = "AttachedContractDetails", OnSuccess = "CloseIfInWindow()" }))*@
+@using (Html.BeginForm())
+{
+  @Html.Partial("_EditContractBody")
+    <p>
+        @Html.FormSubmitButton()
+        @Html.FormCancelButton()
+    </p>
+}
+
+

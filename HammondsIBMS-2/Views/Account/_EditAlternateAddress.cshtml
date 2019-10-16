@@ -1,0 +1,28 @@
+﻿@model HammondsIBMS_2.ViewModels.Contract.AlternateAddressVM
+@using (Html.BeginForm(null, null, FormMethod.Post, new { @class = "form-horizontal" }))
+{
+    <fieldset>
+        @Html.ValidationSummary(false)
+        @Html.HiddenFor(o => o.CustomerAccountId)
+        @using (Html.Container("Instructions"))
+        { 
+            <div class="control-group">
+                @Html.LabelFor(model => model.AlternateAddressInstructions, new { @class = "control-label" })
+                <div class="controls">
+                    @Html.EditorFor(model => model.AlternateAddressInstructions)<br />
+                    @Html.ValidationMessageFor(model => model.AlternateAddressInstructions)
+                </div>
+            </div>
+        }
+        @using (Html.Container("Address"))
+        {
+            @Html.EditorFor(o => o.AlternateAddress, "_Address")
+        }
+
+    </fieldset>
+    <p>
+        @Html.FormSubmitButton()
+        @Html.FormCancelButton()
+    </p>
+   
+}

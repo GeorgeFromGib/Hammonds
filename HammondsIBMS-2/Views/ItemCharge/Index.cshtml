@@ -1,0 +1,52 @@
+﻿@using HammondsIBMS_Domain.Entities.Contracts
+@Html.ContentTitle("Item Charges")
+<fieldset>
+    <fieldset>
+        <table >
+            <tr>
+                <td>
+
+                </td>
+                <td class="buttonspace">
+                    @Html.ActionDialogFormButton(new ButtonParameters(ButtonIcon.Add, "Add Item Charge"),
+                                   new ActionParameters("_AddItemCharge", null),
+                                                                                new ActionDialogFormParamters("Add Item Charge", null, Url.Action("_AddItemCharge"), null, "rebindItemChargeGrid"))
+                </td>
+            </tr>
+        </table>
+    </fieldset>
+@{Html.Telerik().Grid<ItemCharge>()
+      .Name("ItemChargeGrid")
+      .DataKeys(keys => keys.Add(o => o.ItemChargeId))
+      .DataBinding(databind => databind.Ajax()
+          .Select("ItemChargeGridBind", "ItemCharge"))
+  
+      .Columns(columns =>
+                   {
+                       columns.Bound(o => o.Description);
+                       columns.Bound(o => o.Amount).Format("{0:C}");
+                       columns.Bound(o => o.PurchaseDefault).HtmlAttributes(new { @class = "bool-text-to-icon" }).Width(30);
+                       columns.Bound(o => o.RentalDefault).HtmlAttributes(new { @class = "bool-text-to-icon" }).Width(30);  
+                       columns.Bound(o => o.ItemChargeId).Title("").Sortable(false).Width(50).ClientTemplate("<div class='commandColumn'>" + Html.ActionDialogFormButton(new TelerikButtonParameters(ButtonIcon.Edit),
+                                                                                                                                           new ActionParameters("_EditItemCharge", new { id = "<#= ItemChargeId #>" }),
+                                                                                                                                           new ActionDialogFormParamters("Edit Item Charge", null, Url.Action("_EditItemCharge"), null, "rebindItemChargeGrid")).ToHtmlString() +
+                                                                                                               "</div>");
+
+                   })
+      .Editable(editing => editing.Mode(GridEditMode.PopUp))
+      .ClientEvents(events=>events.OnDataBound("ItemChargeGridDataBound"))
+      .Pageable()
+      .Sortable()
+      .Render();
+}
+</fieldset>
+<script type="text/javascript">
+    function rebindItemChargeGrid() {
+        RebindTelerikGrid('ItemChargeGrid');
+
+    }
+
+    function ItemChargeGridDataBound() {
+        ChangeBoolTextToIcon();
+    }
+</script>

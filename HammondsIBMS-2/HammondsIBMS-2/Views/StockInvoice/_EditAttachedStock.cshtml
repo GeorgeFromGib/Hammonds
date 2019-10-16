@@ -1,0 +1,87 @@
+﻿@model HammondsIBMS_2.ViewModels.StockInvoice.StockInvoiceItemAttachedStockVM
+<div id="SelectableStockItems">
+    @using (Html.BeginForm())
+    { 
+        <fieldset>
+            @Html.HiddenFor(m => m.StockInvoiceItemId)
+            <div style="max-height: 300px; width:600px;overflow-y: scroll">
+                <table cellspacing="0" class="t-grid">
+                    <thead class="t-grid-header">
+                        <tr>
+                            <th class="t-header">
+                                @{ if (Model.IsOpen) { 
+                                       @Html.CheckBox("SelectAll", false, new {id = "SelectAll"})} } Remove?
+                            </th>
+                            <th class="t-header">
+                                Serial
+                            </th>
+                            <th class="t-header">
+                                HTV-Identifier
+                            </th>
+                            <th class="t-header" style="text-align: left">
+                                Model
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @{var idx = 0;}
+                        @foreach (var item in Model.SelectableStock)
+                        {
+                            <tr id="row-@item.StockId">
+                                <td>
+                                    @Html.Hidden(string.Format("SelectableStock[{0}].StockId", idx), item.StockId)
+                                    @*@Ajax.ActionLink("Select", "AvailableListSelected", new { id = item.StockId }, new AjaxOptions { UpdateTargetId = "InvoiceItemsDisplay", OnBegin = "onComplete(" + item.StockId + ")" })*@
+                                     @{ if (Model.IsOpen) { 
+                                       @Html.CheckBox(string.Format("SelectableStock[{0}].IsSelected", idx), item.IsSelected, new { id = item.StockId })} }
+                                </td>
+                                <td style="white-space: nowrap" class="strikethrough">
+                                    @Html.DisplayFor(modelItem => item.SerialNumber)
+                                </td>
+                                <td style="white-space: nowrap" class="strikethrough">
+                                    @Html.DisplayFor(modelItem => item.Identifier)
+                                </td>
+                                <td class="strikethrough" style="white-space: nowrap">
+                                    @Html.DisplayFor(modelItem => item.Model)
+                                </td>
+                            </tr>
+                            idx++;
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </fieldset>
+        <div>
+            @Html.FormSubmitButton(new ButtonParameters(ButtonIcon.Ok,ButtonType.Image,null,ButtonRole.Primary,ButtonIconColor.White, ButtonHeight.Small, Model.IsOpen,null)) @Html.FormCancelButton()
+        </div>
+           
+
+    }
+</div>
+<script type="text/javascript">
+    $(function() {
+        $('#SelectableStockItems input').change(function(e) {
+
+            var id = $(this).attr('id');
+            SelectEffect(this);
+              
+        });
+
+        $('#SelectAll').change(function(e) {
+            if (this.checked) {
+                $('#SelectableStockItems input').attr('checked', 'checked');
+            } else {
+                $('#SelectableStockItems input').removeAttr('checked');
+            }
+            $('#SelectableStockItems input').each(function(index) { SelectEffect(this); });
+        });
+    });
+
+    function SelectEffect(element) {
+        var id = $(element).attr('id');
+        if (element.checked)
+            $('#row-' + id + ' > .strikethrough').css('text-decoration', 'line-through');
+        else {
+            $('#row-' + id + ' > .strikethrough').css('text-decoration', '');
+        }
+    }
+</script>

@@ -1,0 +1,8 @@
+﻿@model string
+@Html.TextBox(string.Empty,Model,new {@class="sortCode"})
+
+<script type="text/javascript">
+    $(function($) {
+        $('.sortCode').mask('99-99-99');
+    })    
+</script>

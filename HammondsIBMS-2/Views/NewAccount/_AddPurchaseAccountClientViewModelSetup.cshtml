@@ -1,0 +1,37 @@
+﻿@model HammondsIBMS_2.ViewModels.Accounts.AddPurchaseAccountVM
+<script type="text/javascript">
+    var vm;
+
+    $(function() {
+        var viewModelData = {
+            TotalCharge: '@Model.TotalCharge.ToString()',
+            TotalUnits: '@Model.TotalUnits.ToString()',
+            TotalContracts: '@Model.TotalContracts.ToString()',
+            TotalItemCharges: '@Model.TotalItemCharges.ToString()',
+            Balance: '@Model.Balance.ToString()',
+            Payment: '@Model.Payment.ToString()',
+            TotalToPay:'@Model.TotalToPay.ToString()'
+        };
+
+        var PurchaseAccountCVM = function (data) {
+            var self = this;
+            
+            ko.mapping.fromJS(data, {}, self);
+
+            self.CalcBalance = ko.computed(function() {
+                return self.TotalToPay() - self.Payment();
+            }, self);
+
+            self.updatePayment = function(amount) {
+                self.Payment(amount);
+            };
+
+            self.update = function(newData) {
+                ko.mapping.fromJS(newData, {}, self);
+            };
+        };
+        
+        vm=new PurchaseAccountCVM(viewModelData);
+        ko.applyBindings(vm);
+    });
+</script>

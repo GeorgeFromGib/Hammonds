@@ -1,0 +1,11 @@
+﻿@model decimal
+@{var ctrName = ViewData.TemplateInfo.GetFullHtmlFieldName(string.Empty);}
+@(Html.Telerik().CurrencyTextBox()
+    .Name(ctrName)
+    .InputHtmlAttributes(new { style = "width:100%" })
+    .MinValue(0)
+    .CurrencySymbol("£")
+        .ClientEvents(events => events.OnChange("UpdateNumerical"))
+    .Value(Model))
+<div class="notifyOnChange" id="@(ctrName.Replace('.', '_') + "_CTR")">
+</div>

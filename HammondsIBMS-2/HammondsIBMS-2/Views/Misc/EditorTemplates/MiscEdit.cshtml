@@ -1,0 +1,37 @@
+﻿@model HammondsIBMS_Domain.Entities.Misc.Misc
+
+    @Html.HiddenFor(model => model.MiscId)
+    @Html.HiddenFor(model => model.Identifier)
+    @Html.HiddenFor(model => model.ValueRegexFilter)
+    @Html.HiddenFor(model => model.FormatExample)
+    <table>
+        <tr>
+            <td class="t-edit">
+                <div class="editor-label">
+                    @Html.LabelFor(model => model.Identifier)
+                </div>
+            </td>
+            <td>
+                <div class="editor-field">
+                    @Html.DisplayFor(model=>model.Identifier)
+                    @Html.ValidationMessageFor(model => model.Identifier)
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td class="t-edit">
+                <div class="editor-label">
+                    @Html.LabelFor(model => model.Value)
+                </div>
+            </td>
+            <td>
+                <div class="editor-field">
+                    @Html.EditorFor(model => model.Value)
+                    Example values : @Html.DisplayFor(model => model.FormatExample)<br/>
+                    @Html.ValidationMessageFor(model => model.Value)
+                </div>
+            </td>
+        </tr>
+    </table>
+
+

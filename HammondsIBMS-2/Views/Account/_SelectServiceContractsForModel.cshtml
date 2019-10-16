@@ -1,0 +1,63 @@
+﻿@model HammondsIBMS_2.ViewModels.Accounts.SelectContractTypesVM
+
+
+@using (Html.BeginForm())
+{
+    @Html.ValidationSummary(false)
+    @Html.HiddenFor(m => m.UnitId)
+    @Html.HiddenFor(m=>m.MinDate)
+    <fieldset>
+        <table class='edit-table' style="text-align: left">
+            <tr>
+                <td style="width: 75px">
+                    @Html.LabelFor(model => model.PurchaseDate)
+                </td>
+                <td >
+                    @Html.EditorFor(model => model.PurchaseDate)<br />
+                    @Html.ValidationMessageFor(model => model.PurchaseDate)
+                </td>
+            </tr>
+         </table>
+
+                    @{
+    Html.Telerik().Grid(Model.ContractTypes)
+        .Name("SelectServiceContractGrid")
+        .DataKeys(keys => keys.Add(o => o.ContractTypeId))
+        //.ClientEvents(events => events.OnLoad("GridOnLoad"))
+        .Columns(columns =>
+            {
+                columns.Bound(o => o.ContractTypeId).Template(
+                        @<text>
+                        <input type='checkbox' id='chkMessage' name='checkedRecords' value='@item.ContractTypeId' />
+                        </text>)
+                       .Title("Select")
+                       .Width(50)
+                       .HtmlAttributes(new { style = "text-align:center" });
+
+                columns.Bound(o => o.Description);
+                columns.Bound(o => o.PeriodInMonths);
+                columns.Bound(o => o.NormalTermAmount);
+                columns.Bound(o => o.PaymentPeriodDescription);
+            })
+        //.ClientEvents(events => events.OnDataBound("SelectedStockGrid_onDataBound"))
+        .Pageable(pager => pager.Enabled(false))
+        .Footer(false)
+        .Render();
+                    }
+                    @*        </div>*@
+         
+    </fieldset>
+    <div>
+        @Html.FormSubmitButton(new ButtonParameters(ButtonIcon.Ok).OfType(ButtonType.Image).Height(ButtonHeight.Small).IconColor(ButtonIconColor.White).Role(ButtonRole.Primary).Enable(Model.ContractTypes.Count > 0)) @Html.FormCancelButton()
+    </div>
+    <div id="selectedRepository">
+    </div>
+    
+}
+
+<script type="text/javascript">
+
+    $(function () {
+        GridCheckBoxRepositoryHandler('selectedRepository', 'SelectServiceContractGrid', 'ContractTypes', 'ContractTypeId');
+    });
+</script>

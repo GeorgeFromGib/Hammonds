@@ -1,0 +1,36 @@
+﻿@model HammondsIBMS_Domain.Entities.Customers.Customer
+<div class="well well-small well-noBackground">
+    @Html.ContentTitle("Add Customer")
+
+        @using (Html.BeginForm(null, null, FormMethod.Post, new { @class = "form-horizontal" }))
+        {
+            @Html.ValidationSummary(true)
+            <fieldset>
+                <legend>Name & Address</legend>
+                @Html.HiddenFor(model => model.CustomerId)
+                <div class="control-group">
+                    @Html.LabelFor(model => model.FirstName, new { @class = "control-label" })
+                    <div class="controls">
+                        @Html.EditorFor(model => model.FirstName)
+                        @Html.ValidationMessageFor(model => model.FirstName)
+                    </div>
+                </div>
+                <div class="control-group">
+                    @Html.LabelFor(model => model.Surname, new { @class = "control-label" })
+                    <div class="controls">
+                        @Html.EditorFor(model => model.Surname)<br />
+                        @Html.ValidationMessageFor(model => model.Surname)
+                    </div>
+                </div>
+                <hr />
+                @Html.EditorFor(model => model.Address)
+                <hr />
+                @Html.EditorFor(model => model.ContactInfo)
+            </fieldset>
+
+            @Html.Action("StepperControl")
+        }
+
+</div>
+
+

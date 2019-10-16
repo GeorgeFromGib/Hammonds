@@ -1,0 +1,202 @@
+﻿<ul class="validation-summary-errors"></ul>
+@using (Html.Container("Receive Collections"))
+{
+    <div id="collection-model-container">
+    <table>
+        <tr>
+            <td style="white-space: nowrap">Preferred Payment : </td>
+            <td style="text-align: left; width: 100%">@(Html.Telerik().DropDownList().Name("PreferedPaymentDD").BindTo(new SelectList((System.Collections.IEnumerable)ViewBag.PaymentSources
+            , "PaymentSourceId", "Description")).ClientEvents(events => events.OnChange("preferedPaymentChanged")))</td>
+        </tr>
+    </table>
+    <br />
+
+    <table  cellspacing="0" class="t-grid table-striped" style="width: 100%">
+        <thead class="t-grid-header">
+            <tr>
+                <th style="text-align: left">Account No.
+                </th>
+                <th style="text-align: left">Transaction Type.
+                </th>
+                 <th style="text-align: left">Note
+                </th>
+                <th class="money-align">Amount
+                </th>
+                <th style="text-align: left">&nbsp;&nbsp;Payment
+                </th>
+                <th class="money-align">Balance
+                </th>
+                <th style="text-align: center">Settle
+                </th>
+            </tr>
+        </thead>
+        <tbody data-bind="template: {name: 'template', foreach: Collections}"></tbody>
+        <script id="template" type="text/html">
+            <tr class="rolledTransaction">
+                <td data-bind="text: AccountNoAndType"></td>
+                <td data-bind="text: AccountTransactionTypeDescription"></td>
+                <td data-bind="text: Note"></td>
+                <td class="money-align" data-bind="money: Amount"></td>
+                <td style="width: 60px">
+                    <input class="input-small" data-bind="money: Payment" /></td>
+                <td style="width: 60px" class="money-align" data-bind="money: Balance"></td>
+                <td style="text-align: center; width: 30px">
+                    @Html.ClientButton(new ButtonParameters(ButtonIcon.Asterisk, ButtonHeight.Mini).Tip("Toggle full payment"), "", "#", null, new { data_bind = "click:$root.toggleIndividualPayment" })
+                </td>
+            </tr>
+        </script>
+        <tfoot>
+            <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td class="money-align" style="font-weight: bold">Payment Total :</td>
+                <td data-bind="money: PaymentTotal" style="font-weight: bold"></td>
+                <td class="money-align" data-bind="money: BalanceTotal"></td>
+                <td>
+                    @Html.ClientButton(new ButtonParameters(ButtonIcon.Asterisk, ButtonHeight.Mini).Tip("Toggle full payment").Role(ButtonRole.Inverse).IconColor(ButtonIconColor.White), new KnocktOutParameters("click:$root.toggleFull" ))
+                </td>
+            </tr>
+        </tfoot>
+    </table>
+    @Html.ClientButton(new ButtonParameters(ButtonIcon.Ok, ButtonType.ImageText, "Submit").Role(ButtonRole.Primary).IconColor(ButtonIconColor.White), new KnocktOutParameters("click:submit, enable: PaymentTotal()!=0"))
+    @Html.ClientButton(new ButtonParameters(ButtonIcon.Cancel, ButtonType.ImageText, "Cancel"), new KnocktOutParameters("click:cancel"))
+        </div>
+}
+
+<script type="text/javascript">
+
+    function Collection(data) {
+        ko.mapping.fromJS(data, {}, this);
+        this.Balance = ko.computed(function () {
+            return this.Amount() - this.Payment();
+        }, this);
+
+    }
+
+    var mapping = {
+        'Collections': {
+            create: function (options) {
+                if (options != null)
+                    return new Collection(options.data);
+                return null;
+            }
+        }
+    };
+
+    function CollectionViewModel(data) {
+        var self = this;
+        ko.mapping.fromJS(data, mapping, self);
+        //self.collections = ko.mapping.fromJS(data., mapping);
+        self.PaymentTotal = ko.computed(function () {
+            var sum = 0.0;
+            $.each(self.Collections(), function () { sum += this.Payment(); });
+            return sum;
+        });
+
+        self.BalanceTotal = ko.computed(function () {
+            var sum = 0.0;
+            $.each(self.Collections(), function () { sum += this.Balance(); });
+            return sum;
+        });
+
+        self.toggleIndividualPayment = function (collection) {
+            collection.Payment() == 0 ? collection.Payment(collection.Amount()) : collection.Payment(0);
+        };
+
+        self.toggleFull = function() {
+            $.each(self.Collections(), function () { self.toggleIndividualPayment(this); });
+        };
+
+        self.submit = function () {
+            var jsonData = ko.mapping.toJSON(vm);
+            writeData(jsonData);
+        };
+
+        self.cancel = function () {
+            returnToDisplayCollections();
+        };
+    }
+
+    var vm;
+
+    $(function () {
+        $.getJSON('@Url.Action("_GetReceiveCollectionVMasJson", new { customerId = ViewBag.CustomerId })', function (data) {
+            vm = new CollectionViewModel(data);
+
+            getTelerikDropDownList("PreferedPaymentDD").value(vm.PreferredPaymentSourceId());
+
+            ko.applyBindings(vm, document.getElementById("collection-model-container"));
+
+
+        });
+
+
+    });
+
+        function preferedPaymentChanged() {
+            var val = getTelerikDropDownList("PreferedPaymentDD").value();
+            vm.PreferredPaymentSourceId(val);
+        }
+
+        function returnToDisplayCollections() {
+            ko.cleanNode(document.getElementById("collection-model-container"));
+            vm = null;
+            AjaxUpdate('@Url.Action("_DisplayCustomerCollections", new { id = ViewBag.CustomerId })', 'CollectionsContainer');
+        }
+        
+    
+
+    function writeData(jsonData) {
+        $.ajax({
+            url: '@Url.Action("_ReceiveCollections")',
+            type: "POST",
+            data: jsonData,
+            datatype: "json",
+            contentType: "application/json charset=utf-8",
+            success: returnToDisplayCollections,
+            error: DisplayJsonErrorInSummary
+        });
+
+    }
+
+</script>
+
+@* 
+  @for (var i = 0; i < Model.Collections.Count; i++)
+              {
+                  <tr class="rolledTransaction">
+                      <td style="width: 20px">
+                          <span class="badge badge-important"></span>
+                      </td>
+                      <td>
+                          @Html.HiddenFor(m => m.Collections[i].CustomerAccountId)
+                          @Html.DisplayFor(m => m.Collections[i].CustomerAccountId) (@Html.DisplayFor(m => m.Collections[i].AccountType))
+                      </td>
+                      <td>
+                          @Html.DisplayFor(m => m.Collections[i].AccountTransactionTypeDescription)
+                          @Html.HiddenFor(m => m.Collections[i].AccountTransactionType)
+                      </td>
+                      <td class="money-align">
+                          @Html.DisplayFor(m => m.Collections[i].Amount) @Html.HiddenFor(m => m.Collections[i].Amount)
+                      </td>
+                      <td class="money-align">
+                          <div id="s-payment" style="font-weight: bolder">
+                              £0.00</div>
+                          @Html.HiddenFor(m => m.Collections[i].Payment)
+                      </td>
+                      <td class="money-align">
+                          <div id="Balance">
+                             @* @Html.DisplayFor(m => m.Collections[i].Balance)
+                          </div>
+                      </td>
+                      <td style="text-align: center">
+                         @* @Html.CheckBoxFor(m => m.Collections[i].Exclude, new {@class = "excluded-items"})
+                      </td>
+                      <td style="text-align: center">
+                          @Html.ClientButton(new ButtonParameters(ButtonIcon.Asterisk, ButtonHeight.Mini), "SettleToggled(" + i + ")")
+                      </td>
+                  </tr>
+              }
+
+ *@

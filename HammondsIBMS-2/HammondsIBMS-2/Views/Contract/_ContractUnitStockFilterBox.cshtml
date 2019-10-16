@@ -1,0 +1,88 @@
+﻿@model int
+<fieldset>
+    <div id="_ContractUnitStockFilterBox" style="width: 500px;">
+        @Html.Hidden("FilterBoxStockId", Model)
+
+        <table class="edit-table" style="width: 100%">
+            <tr>
+                <td style="width: 150px">
+                    @Html.Label("HTV-Identifier")
+                </td>
+                <td>
+                    @{ Html.Telerik().ComboBox()
+                           .Name("ComboBoxIdentifier")
+                           //.Placeholder("Select stock Id")
+                           .DataBinding(binding => binding.Ajax().Select("_FindStockByIdentifierForAutoComplete", "Contract"))
+                           .Filterable(filtering => filtering.FilterMode(AutoCompleteFilterMode.StartsWith))
+                           .ClientEvents(events => events.OnOpen("ClearSerial").OnChange("ContractUnitStockComboBoxChanged"))
+                           .HighlightFirstMatch(true)
+                           .InputHtmlAttributes(new { style = "width:120px" })
+                           .Render(); }
+                </td>
+                <td style="width: 150px">
+                    @Html.Label("- OR - Serial")
+                </td>
+                <td>
+                    @{ Html.Telerik().ComboBox()
+                           .Name("ComboBoxSerial")
+                           //.Placeholder("Select stock serial")
+                           .DataBinding(binding => binding.Ajax().Select("_FindStockBySerialForAutoComplete", "Contract"))
+                           .Filterable(filtering => filtering.FilterMode(AutoCompleteFilterMode.StartsWith))
+                           .ClientEvents(events => events.OnOpen("ClearIdentifier").OnChange("ContractUnitStockComboBoxChanged"))
+                           .HighlightFirstMatch(true)
+                           .InputHtmlAttributes(new { style = "width:120px" })
+                           .Render(); }
+                </td>
+                <td style="width: 100%; text-align: right;">
+                </td>
+            </tr>
+        </table>
+    <br>
+        <div style="height: 70px">
+            <div id="FilterUnitDetails">
+                @if (Model != 0)
+                {
+                    @Html.Action("_GetStock", new { id = Model });
+
+                }
+                else
+                { @:
+                <table>
+                    <tr>
+                        <td style="text-align: center">
+                            @Html.Badge(BadgeType.Warning,new IconParameters(ButtonIcon.Warning,ButtonIconColor.White),"No Selection Made")
+                        </td>
+                    </tr>
+                </table>
+                }
+            </div>
+            <div id="inAccount" class="error" style="display: none">
+                @Html.Badge(BadgeType.Important, new IconParameters(ButtonIcon.Warning, ButtonIconColor.White), "Stock is already allotted to another Account !")
+            </div>
+        </div>
+    </div>
+</fieldset>
+<script type="text/javascript">
+
+
+    function ClearSerial() {
+        $("[name='ComboBoxSerial']").data('tComboBox').value('');
+    }
+
+    function ClearIdentifier() {
+        $("[name='ComboBoxIdentifier']").data('tComboBox').value('');
+    }
+
+    function ContractUnitStockComboBoxChanged(e) {
+
+        $("[name='FilterBoxStockId']").val(e.value);
+
+        $.get('@Url.Action("_GetStock","Contract")', { id: e.value }, function (data) {
+            $('#FilterUnitDetails').slideUp('fast', function () { $(this).html(data).slideDown('fast'); });
+            $('#_ContractUnitStockFilterBox').trigger('selectionChanged', { value: e.value });
+
+        });
+    }
+
+
+</script>

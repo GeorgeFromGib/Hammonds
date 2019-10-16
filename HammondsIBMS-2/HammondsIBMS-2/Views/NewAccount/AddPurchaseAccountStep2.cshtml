@@ -1,0 +1,116 @@
+﻿@using HammondsIBMS_2.ViewModels.Contract
+@model HammondsIBMS_2.ViewModels.Accounts.AddPurchaseAccountVM
+<div class="well well-small well-noBackground">
+    @Html.ContentTitle(Html.Action("StepperHeader").ToHtmlString())
+    @using (Html.BeginForm(null, null, FormMethod.Post, new { @class = "form-horizontal" }))
+    {
+        @Html.ValidationSummary(true)
+        @Html.HiddenFor(model => model.CustomerAccountId)
+        @Html.HiddenFor(model => model.CustomerId)
+        @Html.HiddenFor(model => model.StockId)
+        @Html.HiddenFor(model => model.ModelSalesPrice)
+        <fieldset>
+            <legend>Purchase Account</legend>
+            <div class="control-group">
+                @Html.LabelFor(model => model.StockId, new { @class = "control-label" })
+                <div class="controls">
+                   <fieldset>
+                        <table>
+                            <tr>
+                                <td class="contentspace">
+                                    
+                                    @Html.Partial("_AccountStockSelector")
+
+
+                                    @{Html.Telerik().Grid<PurchasedUnitVM>()
+                                          .Name("TempPurchaseUnitVMGrid")
+                                          .DataKeys(keys => keys.Add(o => o.UnitId))
+                                          .DataBinding(databind => databind.Ajax()
+                                                                           .Select("_DisplayPurchasedUnits", "Account"))
+                                          .Columns(columns =>
+                                              {
+
+                                                  columns.Bound(o => o.StockDescription);
+                                                  columns.Bound(o => o.Identifier);
+                                                  columns.Bound(o => o.PurchasedDate).Format("{0:dd/MM/yyyy}");
+                                                  columns.Bound(o => o.RetailCost).Format("{0:£#0.00}");
+                                                  columns.Bound(o => o.DiscountedAmount).Format("{0:£#0.00}");
+                                                  columns.Bound(o => o.Total).Format("{0:£#0.00}");
+                                                  columns.Bound(o => o.UnitId).Title("").Sortable(false).Width(115).ClientTemplate("<div class='commandColumn'>" + @Html.ActionDialogFormButton(new TelerikButtonParameters(ButtonIcon.Edit),
+                                                                                                                                                                                                new ActionParameters("_EditPurchaseUnit", new { id = "<#= UnitId #>" }),
+                                                                                                                                                                                                new ActionDialogFormParamters("Edit Purchase Unit", null, "_EditPurchaseUnit", null, "OnUnitChanged")).ToHtmlString() +
+                                                                                                                                   Html.ActionDialogFormButton(new TelerikButtonParameters(ButtonIcon.Delete),
+                                                                                                                                                               new ActionParameters("_DeleteTempPurchaseStock", new { id = "<#= UnitId #>" }),
+                                                                                                                                                               new ActionDialogFormParamters("Remove Purchase Unit", null, "_DeleteTempPurchaseStock", null, "OnUnitChanged")).ToHtmlString() +
+
+                                                                                                                                   "</div>"
+                                                      );
+
+
+
+                                              })
+                                          .Editable(editing => editing.Mode(GridEditMode.PopUp))
+                                          .Pageable()
+                                          .Sortable()
+                                          .Footer(false)
+                                          .Render();
+                                    }
+
+                                </td>
+                            </tr>
+                        </table>
+
+
+                    </fieldset>
+                </div>
+            </div>
+            <div class="control-group">
+                @Html.LabelFor(model => model.TotalUnits, new { @class = "control-label" })
+                <div class="controls">
+                    <span class="input-xlarge uneditable-input" id="TotalUnits">@Model.TotalUnits.ToString("C")</span>
+                </div>
+            </div>
+          
+        </fieldset>
+        <div>
+            @Html.Action("StepperControl")
+        </div>
+    }
+</div>
+<script type="text/javascript">
+   
+    $(function () {
+        $('#_AccountStockSelector').live('selectionChanged', function (event, val) {
+            UnitSelected(val.value);
+        });
+    }
+    );
+
+    function UnitSelected(stockId) {
+        $.post('@Url.Action("_AddPurchaseUnit")', { id: stockId })
+            .success(function () {
+                ClearErrorSummary();
+                OnUnitChanged();
+            })
+            .fail(DisplayJsonErrorInSummary);
+        //UpdateSalesPrice(id);
+    }
+
+    function UpdateStockId(id) {
+        $('#StockId').val(id);
+    }
+
+    function UpdateSalesPrice(id) {
+        $.get('@Url.Action("_GetModelInfoForStockId")' + '/' + id, function (data) {
+            $('#ModelSalesPrice').val(data.RetailPrice);
+            $('#RetailPrice').html(accounting.formatMoney(data.RetailPrice));
+        });
+    }
+
+    function OnUnitChanged() {
+        RebindTelerikGrid('TempPurchaseUnitVMGrid');
+        $.get('@Url.Action("_GetTempPurchaseAccountTotals", new { dummy = Guid.NewGuid() })', function(data) {
+            $('#TotalUnits').html(accounting.formatMoney(data.TotalUnits));
+        });
+    }
+</script>

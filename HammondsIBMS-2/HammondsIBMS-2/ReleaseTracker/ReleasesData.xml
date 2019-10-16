@@ -1,0 +1,105 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<releases>
+  <releaseNumber release="0.1.1.0" date="22/6/2012">
+    <entry>Released for Testing</entry>
+  </releaseNumber>
+  <releaseNumber release="0.1.1.1" date="25/6/2012">
+    <entry>Fixed: Document/Image upload problem</entry>
+  </releaseNumber>
+  <releaseNumber release="0.1.2.0" date="25/6/2012">
+    <entry>Added: Model Image Upload shows loading spinner</entry>
+  </releaseNumber>
+  <releaseNumber release="0.1.2.1" date="11/7/2012">
+    <entry>Fixed: Checkboxes text not appearing</entry>
+    <entry>Fixed: Show expired on Purchase Contracts not working</entry>
+    <entry>Fixed: Rental units edit screen throws same stock validation error</entry>
+  </releaseNumber>
+  <releaseNumber release="0.1.3.0" date="3/9/2012">
+    <entry>Fixed: Stock Invoice totals did not change on currency change</entry>
+    <entry>Fixed: Alternate Address and instructions not working</entry>
+    <entry>Fixed: Written Off Status Changed to Scrapped</entry>
+    <entry>Fixed: Menu item Stock changed to Stock List</entry>
+    <entry>Fixed: Tables now display True, False as icons</entry>
+    <entry>Added: Inventory models show No. in stock</entry>
+    <entry>Added: Web Address to contacts</entry>
+    <entry>Added: Purchase Account can only change to ReRental</entry>
+    <entry>Added: Update Stock Model Prices when when changed in Stock Invoice and not when invoice is closed</entry>
+  </releaseNumber>
+  <releaseNumber release="0.1.4.0" date="7/10/2012">
+    <entry>Added: Wait Timer now shown on long running processes</entry>
+    <entry>Added: Select from Stock function in Stock Invoice now allows sorting and paging</entry>
+    <entry>Added: Document Template Editor</entry>
+    <entry>Added: Create new Subscriber now through step wizard</entry>
+    <entry>Added: Customer employer now from central repository. Only contact and contact notes unique to customer</entry>
+    <entry>Added: Invoices can now be deleted or cancelled depending if stock items have been attached.</entry>
+    <entry>Added: Contract TYpes can now define default payment periods</entry>
+  </releaseNumber>
+  <releaseNumber release="0.1.5.0" date="10/4/2013">
+    <entry>Released for Testing</entry>
+    <entry>Added: Contracts can now be model specific</entry>
+    <entry>Added: Add Purchase Account through step wizard</entry>
+    <entry>Added: Separate Manufacturer and Model in Add Stock Window</entry>
+  </releaseNumber>
+  <releaseNumber release="0.1.6.0" date="12/4/2013">
+    <entry>Released for Testing in Hammondsibms.azurewebsites.net/</entry>
+    <entry>Added: Supplier Name is now required</entry>
+  </releaseNumber>
+  <releaseNumber release="0.1.7.0" date="13/5/2013">
+    <entry>Updated : Separated Name and Contact details from bank details</entry>
+    <entry>Added : Implemented first document Template</entry>
+    <entry>Updatd : Extended PurchaseAccount stepper to display Sales Document and ask for confirmation</entry>
+    <entry>Released for Testing in Hammondsibms.azurewebsites.net/</entry>
+  </releaseNumber>
+  <releaseNumber release="0.1.8.0" date="13/5/2013">
+    <entry>Updated : Separated Name and Contact details from bank details</entry>
+    <entry>Added : Implemented first document Template</entry>
+    <entry>Updatd : Extended PurchaseAccount stepper to display Sales Document and ask for confirmation</entry>
+    <entry>Released for Testing in Hammondsibms.azurewebsites.net/</entry>
+  </releaseNumber>
+  <releaseNumber release="0.1.9.0" date="02/6/2013">
+    <entry>Added : Implemented rent account Document Template</entry>
+    <entry>Added : Deposit and Refund Fields to Rented Units</entry>
+    <entry>Added : Now Rent Account Stepper can add more than one Rented Unit with deposits.</entry>
+    <entry>Added : Purchase One of items are now editable and appear in Account View.</entry>
+  </releaseNumber>
+  <releaseNumber release="0-1-10-0" date="02/6/2013">
+    <entry>Added : Quantity to OneOfFItems - can be used in rental accounts with multi-units</entry>
+    <entry>Added : Explanation to Contract Types - will be used to describe contracts in printouts</entry>
+    <entry>Added : Separate One Of Items default options for Purchase and rental accounts</entry>
+    <entry>Added : Multi units with attached contracts in Purchases</entry>
+    <entry>Fixed : fix edit stock on new purchase</entry>
+    <entry>Fixed : Fix Rent Rent Units and Contracts  not showing</entry>
+    <entry>Updated : Add Contract status icons to Contract lists</entry>
+    <entry>Updated : Implement BR when rent unit is removed and added including when all units are removed.</entry>
+    <entry>Fixed : Fix swap of units in rented items</entry>
+  </releaseNumber>
+  <releaseNumber release="0-1-11-0" date="16/12/2013">
+    <entry>Added : Collections </entry>
+  </releaseNumber>
+  <releaseNumber release="0-1-11-1" date="18/12/2013">
+    <entry>Added : Two methods of reseting Databse ;- Repopulate and Reset </entry>
+  </releaseNumber>
+  <releaseNumber release="0-1-11-2" date="10/1/2013">
+    <entry>Fixed : Contract Types </entry>
+  </releaseNumber>
+  <releaseNumber release="0-1-12-0" date="23/2/2014">
+    <entry>Added : New Transactions Screen</entry>
+    <entry>Added : Historical Calculation on Rentals</entry>
+    <entry>Added : Introduced Basket system new Rentals and Purchases</entry>
+    <entry>Added : Display 'Paid Up To' details on rental accounts</entry>
+  </releaseNumber>
+  <releaseNumber release="0-1-13-0" date="22/3/2014">
+    <entry>Added : Confirm Payment amount and amount in Basket completion. </entry>
+    <entry>Added : Purchase unit Delete now asks for refund confirmation</entry>
+    <entry>Added : Removal of rental unit now calculates pro-rata + return of deposit</entry>
+    <entry>Fixed : Basket did not take into account payment of scheduled Contracts</entry>
+    <entry>Added : One off items can be removed and Refunded</entry>
+    <entry>Added : Contracts can be expired and refunds given pro-rated</entry>
+    <entry>Added : Delete prompts with tranasction implications now ask for confirmation berfore OK button is enabled</entry>
+  </releaseNumber>
+<releaseNumber release="0-1-14-0" date="22/5/2014">
+    <entry>Fixed : Adding (paid) service contract in accounts screen now adds charge </entry>
+  <entry>Added :  Ajustments can now be made against any transactional entry</entry>
+  
+  </releaseNumber>
+</releases>

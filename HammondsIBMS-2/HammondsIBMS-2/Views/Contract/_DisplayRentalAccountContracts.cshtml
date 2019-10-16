@@ -1,0 +1,54 @@
+﻿@model HammondsIBMS_Domain.Entities.Accounts.RentalAccount
+<fieldset>
+    <table cellspacing="0" class="t-grid" style="width:100%">
+        <thead class="t-grid-header">
+            <tr>
+                <th class="t-header" style="width: 30px;">
+                    
+                </th>
+                <th class="t-header" >
+                    @Html.Label("Contract")
+                </th>
+                <th class="t-header">
+                    @Html.Label("Starts")
+                </th>
+                <th class="t-header">
+                    @Html.Label("Ends")
+                </th>
+                <th class="t-header">
+                    @Html.Label("Status") 
+                </th>
+                <th class="t-header">
+                    @Html.Label("Pay Int")
+                </th>
+                 <th class="t-header">
+                    @Html.Label("Pay Int Amnt")
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td >
+                </td>
+                <td>
+                    Rental
+                </td>
+                <td>
+                     @Html.DisplayFor(o => o.RentedContract.StartDate)
+                </td>
+                <td>
+                     @Html.DisplayFor(o => o.RentedContract.ExpiryDate)
+                </td>
+                <td>
+                     @Html.DisplayFor(o => o.RentedContract.ContractStatus.Description)
+                </td>
+                <td>
+                     @Html.DisplayFor(o => o.RentedContract.PaymentPeriod.Description)
+                </td>
+                <td>
+                    @Html.DisplayFor(o => o.RentedContract.PeriodPaymentAmount)
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</fieldset>

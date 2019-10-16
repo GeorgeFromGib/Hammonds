@@ -1,0 +1,97 @@
+﻿@model HammondsIBMS_Domain.Entities.Customers.CustomerEmployer
+@Html.ValidationSummary(true)
+<fieldset>
+    <legend>Customer Employer</legend>
+    @Html.HiddenFor(model => model.CustomerEmployerId)
+    @Html.HiddenFor(model => model.CustomerId)
+    <div class="control-group" style="min-width: 600px;">
+        @Html.LabelFor(model => model.EmployerId, new { @class = "control-label" })
+        <div class="controls">
+ 
+                <div style="float: left;">
+                    @{ Html.Telerik().DropDownListFor(model => model.EmployerId)
+                           .Name("EmployerId")
+                           //.Placeholder("Select stock Id")
+                           .DataBinding(binding => binding.Ajax().Select("_EmployersForAutoComplete", "Customer"))
+                           .ClientEvents(events => events.OnChange("EmployerChanged").OnLoad("OnLoad"))
+                           .HtmlAttributes(new { style = "width:170px" })
+                           .Render(); }
+                    @*  @Html.EditorFor(model => model.EmployerId)*@
+                </div>
+                <div  style="float:left;text-align: left">
+                    &nbsp;@Html.ActionDialogFormButton(new ButtonParameters(ButtonIcon.Add, ButtonType.ImageText, "Add New Employer", ButtonRole.Default, ButtonIconColor.Black, ButtonHeight.Small, true, null),
+                                                 new ActionParameters("_AddEmployer", "Employer"),
+                                                 new ActionDialogFormParamters("New Employer", null, Url.Action("_AddEmployer", "Employer"), null, "EmployerAdded"))
+                </div>
+          
+            @Html.ValidationMessageFor(model => model.EmployerId)
+        </div>
+    </div>
+    <div class="control-group">
+        @Html.LabelFor(model => model.ContactPerson, new { @class = "control-label" })
+        <div class="controls">
+
+            @Html.EditorFor(model => model.ContactPerson)<br />
+            @Html.ValidationMessageFor(model => model.ContactPerson)
+        </div>
+    </div>
+    <div class="control-group">
+        @Html.LabelFor(model => model.ContactNotes, new { @class = "control-label" })
+        <div class="controls">
+            @Html.EditorFor(model => model.ContactNotes)<br />
+            @Html.ValidationMessageFor(model => model.ContactNotes)
+        </div>
+    </div>
+    <div id="employerDetails" style="display: none;">
+    </div>
+</fieldset>
+<script type="text/javascript">
+    $(function () {
+        //$('#EmployerId').on('change', function (event, e) {
+        //    UpdateEmployerDetails(e.value);
+        //});
+
+        //var empId = GetEmployerIdValue();
+        //if (empId != -1)
+        //    UpdateEmployerDetails(empId);
+
+    });
+    
+    function OnLoad(e) {
+        GetEmployerControl().reload();
+    }
+
+    function EmployerChanged(e) {
+        UpdateEmployerDetails(e.value);
+    }
+
+    var empElem = '#employerDetails';
+
+    function GetEmployerIdValue() {
+        var combo = $('#EmployerId');
+        return combo.val();
+    }
+
+    function GetEmployerControl() {
+        return $("[name='EmployerId']").data('tDropDownList');
+    }
+
+    function SetEmployerControlValue(val) {
+        GetEmployerControl().value(val);
+    }
+
+    function EmployerAdded(e) {
+        GetEmployerControl().reload();
+
+    }
+
+    function UpdateEmployerDetails(empId) {
+        if (empId == -1 || empId==null || empId=="")
+            AnimHide(empElem);
+        else {
+            AjaxUpdate('@Url.Action("_DisplayEmployerDetailsBody")' + '/' + empId, empElem);
+            AnimShow(empElem);
+        }
+
+    }
+</script>

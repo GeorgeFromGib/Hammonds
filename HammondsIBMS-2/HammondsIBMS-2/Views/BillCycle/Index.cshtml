@@ -1,0 +1,53 @@
+﻿@using HammondsIBMS_2.ViewModels.BillCycleRun
+@Html.ContentTitle("Billing Cycles")
+@using (Html.Container()) { 
+<table>
+    <tr>
+        <td id="lastBillCycle">
+            @Html.Action("_LastBillCycle")
+        </td>
+        <td style="text-align: right">
+            @Html.ActionWindowButton(new ButtonParameters(ButtonIcon.Add,ButtonType.ImageText,"New Bill Cycle Run")
+                               ,new ActionParameters("_NewBillCycle")
+                               ,new ActionButtonWindowParameters("NewBillCycle","New Bill Cycle",300,200,ActionWindowTitleBarButtons.None,"BillWindowClosed"))
+        </td>
+    </tr>
+</table>
+}
+
+@using(Html.Container("History"))
+{
+
+    {
+        Html.Telerik().Grid<BillCycleRunVM>()
+            .Name("BilCycleHistoryGrid")
+            .DataKeys(keys => keys.Add(o => o.BillCycleRunId))
+            .DataBinding(databind => databind.Ajax()
+                                         .Select("_BillCycleHistoryGridBind", "BillCycle"))
+            .Columns(columns =>
+                         {
+
+                             columns.Bound(o => o.BillCycle).Title("Bill Cycle");
+                             columns.Bound(o => o.DateOfRun).Format("{0:dd/MM/yyyy}");
+                             columns.Bound(o => o.NoOfCustomersInvoiced);
+                             columns.Bound(o => o.AmountInvoiced).Format("{0:£0.00}");
+
+                         })
+            .Pageable()
+            .Sortable(s => s.OrderBy(o => o.Add(k => k.BillCycle).Descending()))
+            .Render();
+    }
+}
+<script type="text/javascript">
+
+    function BillWindowClosed() {
+        RebindTelerikGrid('BilCycleHistoryGrid');
+        UpdateLastBillCycle();
+    }
+    
+    function UpdateLastBillCycle() {
+        AjaxUpdate('@Url.Action("_LastBillCycle")', 'lastBillCycle');
+    }
+</script>
+
+

@@ -1,0 +1,49 @@
+﻿@model HammondsIBMS_2.ViewModels.StockInvoice.StockInvoiceVM
+<table class="table table-striped table-condensed table-bordered">
+     <tr>
+        <td style="width: 200px">
+            @Html.LabelFor(model => model.Freight)
+        </td>
+        <td>
+            @Html.DisplayFor(model => model.Freight)
+        </td>
+    </tr>
+    <tr>
+        <td style="width: 200px">
+            @Html.LabelFor(model => model.OtherCharges)
+        </td>
+        <td>
+            @Html.DisplayFor(model => model.OtherCharges)
+        </td>
+    </tr>
+    <tr>
+        <td>
+            @Html.LabelFor(model => model.TotalCharges)
+        </td>
+        <td>
+            @Html.DisplayFor(model => model.TotalCharges)
+        </td>
+    </tr>
+    <tr>
+        <td></td><td></td>
+    </tr>
+    <tr>
+        <td>
+            @Html.LabelFor(model => model.ItemsTotal)
+        </td>
+        <td>
+            @Html.DisplayFor(model => model.ItemsTotal)
+        </td>
+    </tr>
+    <tr>
+        <td></td><td></td>
+    </tr>
+    <tr>
+        <td>
+            <strong>@Html.LabelFor(model => model.InvoiceTotal)</strong>
+        </td>
+        <td>
+            <strong>@Html.DisplayFor(model => model.InvoiceTotal)</strong>
+        </td>
+    </tr>
+</table>

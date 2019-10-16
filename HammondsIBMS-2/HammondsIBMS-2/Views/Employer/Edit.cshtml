@@ -1,0 +1,27 @@
+﻿@model HammondsIBMS_Domain.Entities.Contracts.Employer
+@using (Html.BeginForm(null, null, FormMethod.Post, new { @class = "form-horizontal" }))
+{
+    <fieldset>
+        @Html.ValidationSummary(true)
+        @Html.HiddenFor(o => o.EmployerId)
+        <fieldset>
+            <legend>Name</legend>
+            <div class="control-group">
+                @Html.LabelFor(o => o.EmployerName,new {@class="control-label"})
+                <div class="controls">
+                     @Html.EditorFor(o => o.EmployerName)<br />
+                     @Html.ValidationMessageFor(o => o.EmployerName)
+                </div>
+            </div>
+        </fieldset>
+        <fieldset>
+            <legend>Address</legend>
+            @Html.EditorFor(model => model.Address, "_Address")
+        </fieldset>
+    </fieldset>
+
+    <div>
+        @Html.FormSubmitButton()
+        @Html.FormCancelButton()
+    </div>
+}

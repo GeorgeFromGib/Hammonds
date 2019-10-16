@@ -1,0 +1,51 @@
+﻿@using HammondsIBMS_2.ViewModels.Contract
+@model HammondsIBMS_2.ViewModels.Accounts.AddRentAccountVM
+<div class="well well-small well-noBackground">
+    @Html.ContentTitle(Html.Action("StepperHeader").ToHtmlString())
+    @using (Html.BeginForm(null, null, FormMethod.Post, new { @class = "form-horizontal" }))
+    {
+        @Html.ValidationSummary(true)
+        @Html.HiddenFor(model => model.CustomerAccountId)
+        @Html.HiddenFor(model => model.CustomerId)
+        @Html.HiddenFor(model => model.StockId)
+        <fieldset>
+            <legend>Rent Account</legend>
+            <div class="control-group">
+                @Html.LabelFor(model => model.StockId, new { @class = "control-label" })
+                <div class="controls">
+                    @Html.Partial("_AccountStockFilterBox", Model.StockId)
+                    @Html.ValidationMessageFor(model => model.StockId)
+                </div>
+            </div>
+            <div class="control-group">
+                @Html.LabelFor(model => model.ModelRentPrice, new { @class = "control-label" })
+                <div class="controls">
+                    @Html.EditorFor(model => model.ModelRentPrice)
+                    @Html.ValidationMessageFor(model => model.ModelRentPrice)
+                </div>
+            </div>
+          
+        </fieldset>
+        <div>
+            @Html.Action("StepperControl")
+        </div>
+    }
+</div>
+<script type="text/javascript">
+    $(function () {
+        $('#_AccountStockFilterBox').on('selectionChanged', function (event, e) {
+            UpdateStockId(e.value);
+            UpdateSalesPrice(e.value);
+        });
+    });
+
+    function UpdateStockId(id) {
+        $('#StockId').val(id);
+    }
+
+    function UpdateSalesPrice(id) {
+        $.get('@Url.Action("_GetModelInfoForStockId")' + '/' + id, function (data) {
+            $('#ModelRentPrice').data('tTextBox').value(data.RentalPrice);
+        });
+    }
+</script>

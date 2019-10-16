@@ -1,0 +1,51 @@
+﻿@using HammondsIBMS_2.ViewModels.ModelView
+@model ModelVM
+<script type="text/javascript">
+    function OnEditContract() {
+        RebindTelerikGrid('ModelContractsGrid');
+    }
+</script>
+<fieldset>
+    <fieldset>
+        <table>
+            <tr>
+                <td></td>
+                <td class="buttonspace">@Html.ActionDialogFormButton(new ButtonParameters(ButtonIcon.Add, ButtonType.ImageText, "Add Model Specific Contract"),
+                                   new ActionParameters("_AddModelSpecificContract", new { id = Model.ModelId }),
+                                   new ActionDialogFormParamters("Add Model Specific Contract", null, Url.Action("_AddModelSpecificContract"), null, "OnEditContract"))</td>
+
+            </tr>
+        </table>
+
+    </fieldset>
+    @{
+        Html.Telerik().Grid<ModelSpecificContractVM>()
+            .DataKeys(dataKeys => dataKeys.Add(c => c.ModelSpecificContractId))
+            .Name("ModelContractsGrid")
+            .DataBinding(dataBinding => dataBinding
+                                            .Ajax()
+                                            .Select("_GetModelSpecificContracts", "StockModels", new { id = Model.ModelId})
+                                            .Delete("_DeleteModelSpecificContracts", "StockModels"))
+            .Columns(columns =>
+                {
+                    columns.Bound(o => o.ContractDescription);
+                    columns.Bound(o => o.PeriodInMonths);
+                    columns.Bound(o => o.NormalTermAmount).Format("{0:C}");
+
+                    columns.Bound(o => o.ModelSpecificContractId).Title("").Sortable(false).Width(90).ClientTemplate("<div class='commandColumn'>" + @Html.ActionDialogFormButton(new TelerikButtonParameters(ButtonIcon.Edit),
+                                                                                                                                                                              new ActionParameters("_EditModelSpecificContract", new { id = "<#= ModelSpecificContractId #>" }),
+                                                                                                                                                                              new ActionDialogFormParamters("Edit Contract", null, Url.Action("_EditModelSpecificContract", new { id = "<#= ModelSpecificContractId #>" }), null, "OnEditContract")).ToHtmlString()
+                                                                                                                                                   + @Html.ActionDialogFormButton(new TelerikButtonParameters(ButtonIcon.Delete),
+                                                                                                                                                                              new ActionParameters("_DeleteModelSpecificContract", new { id = "<#= ModelSpecificContractId #>" }),
+                                                                                                                                                                              new ActionDialogFormParamters("Delete Contract", null, Url.Action("_DeleteModelSpecificContract"), null, "OnEditContract")).ToHtmlString()
+                                                                                                                 + "</div>");
+
+
+                })
+            .Pageable()
+            .Sortable()
+            .Render();
+    }
+</fieldset>
+
+

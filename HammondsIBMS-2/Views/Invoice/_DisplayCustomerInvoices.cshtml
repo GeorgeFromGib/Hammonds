@@ -1,0 +1,32 @@
+﻿@using HammondsIBMS_2.ViewModels.Invoice
+@*@model IEnumerable<CustomerInvoiceVM>*@
+<fieldset>
+@{
+    Html.Telerik().Grid<CustomerInvoiceVM>()
+        .Name("Grid")
+        .DataBinding(dataBinding => dataBinding
+              .Ajax()
+                   .Select("_CustomerInvoicesGridBind", "Invoice", new { id = ViewBag.CustomerId }))
+        .Columns(columns =>
+
+            {
+
+
+                columns.Bound(o => o.InvoiceId);
+                columns.Bound(o => o.BillCycle);
+                columns.Bound(o => o.InvoiceDate).Format("{0:dd/MM/yyyy}");
+                columns.Bound(o => o.InvoicedTotal).Format("{0:£#0.00}");
+                columns.Bound(o => o.PreviousBalance).Format("{0:£#0.00}");
+                columns.Bound(o => o.InvoiceBalance).Format("{0:£#0.00}"); 
+
+            })
+        .DetailView(detailView => detailView.ClientTemplate(
+            Html.Telerik().TabStrip()
+                .Name("TabStrip_<#= InvoiceId #>")                
+                .SelectedIndex(0)                
+                .Items(items => items.Add().Text("Invoice Details").LoadContentFrom("_DisplayInvoiceDetails", "Invoice", new {id = "<#= InvoiceId #>"})).ToHtmlString()))
+        .Pageable()
+        .Sortable()
+        .Render();
+}
+</fieldset>

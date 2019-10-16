@@ -1,0 +1,36 @@
+﻿@using HammondsIBMS_2.ViewModels.DocumentTemplates
+
+
+@Html.ContentTitle("Document Templates")
+<fieldset>
+    
+    @{Html.Telerik().Grid<DocumentTemplateVM>()
+          .Name("ManufacturersGrid")
+          .DataKeys(keys => keys.Add(o => o.DocumentTemplateId))
+          .DataBinding(databind => databind.Ajax().Select("_DocumentTemplateGridBind", "DocumentTemplate").Update("Edit", "DocumentTemplate"))
+          .Columns(columns =>
+                       {
+                           columns.Bound(o => o.Title);
+                           columns.Bound(o => o.DocumentTemplateId).Title("").Sortable(false).Width(30).ClientTemplate("<div class='commandColumn'>" + Html.ActionDialogFormButton(new TelerikButtonParameters(ButtonIcon.Edit),
+                                                                                                                                                                               new ActionParameters("Edit", new { id = "<#= DocumentTemplateId #>" }),
+                                                                                                                                                                               new ActionDialogFormParamters("Edit Document Template", null, "Edit", null, "rebindDocumentTemplateGrid")).ToHtmlString() +
+                                                                                                                   
+                                                                                                                   "</div>");
+                       })
+          .Editable(editing => editing.Mode(GridEditMode.PopUp))
+          .ClientEvents(events=>events.OnRowDataBound("onGridDataBinding"))
+          .Pageable()
+          .Sortable()
+          .Render();
+    }
+</fieldset>
+<script type="text/javascript">
+    function rebindDocumentTemplateGrid() {
+        RebindTelerikGrid('ManufacturersGrid');
+    }
+
+    function onGridDataBinding(e) {
+        ChangeBoolTextToIcon();
+    }
+</script>
+

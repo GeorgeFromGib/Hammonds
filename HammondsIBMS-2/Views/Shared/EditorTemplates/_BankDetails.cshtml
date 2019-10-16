@@ -1,0 +1,29 @@
+﻿@model HammondsIBMS_Domain.Values.BankDetails
+<div class="control-group">
+     @Html.LabelFor(model => model.BankName,new {@class="control-label"})
+     <div class="controls">
+          @Html.EditorFor(model => model.BankName)
+          @Html.ValidationMessageFor(model => model.BankName)    
+     </div>  
+</div>
+ <div class="control-group">
+     @Html.LabelFor(model => model.AccountHolder,new {@class="control-label"})
+     <div class="controls">
+          @Html.EditorFor(model => model.AccountHolder)
+          @Html.ValidationMessageFor(model => model.AccountHolder)    
+     </div>  
+</div>
+ <div class="control-group">
+     @Html.LabelFor(model => model.SortCode,new {@class="control-label"})
+     <div class="controls">
+          @Html.EditorFor(model => model.SortCode)
+          @Html.ValidationMessageFor(model => model.SortCode)    
+     </div>  
+</div>
+ <div class="control-group">
+     @Html.LabelFor(model => model.AccountNo,new {@class="control-label"})
+     <div class="controls">
+          @Html.EditorFor(model => model.AccountNo)
+          @Html.ValidationMessageFor(model => model.AccountNo)    
+     </div>  
+</div>

@@ -1,0 +1,6 @@
+﻿@using System.Collections
+@model int
+           
+@{ Html.Telerik().DropDownList()
+    .Name(ViewData.TemplateInfo.GetFullHtmlFieldName(string.Empty))
+    .BindTo(new SelectList((IEnumerable)ViewBag.Manufacturers, "ManufacturerId", "Name", Model.ToString())).Render(); }

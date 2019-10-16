@@ -1,0 +1,47 @@
+﻿@using HammondsIBMS_2.ViewModels.Suppliers
+@Html.ContentTitle("Suppliers")
+<fieldset>
+    <fieldset>
+        <table>
+            <tr>
+                <td class="buttonspace">
+                    @Html.ActionDialogFormButton(new ButtonParameters(ButtonIcon.Add, "Add Supplier"),
+                                   new ActionParameters("Add", null),
+                                   new ActionDialogFormParamters("New Supplier", null, Url.Action("Add"), null, "rebindManufacturersGrid"))
+                </td>
+            </tr>
+        </table>
+    </fieldset>
+    @{Html.Telerik().Grid<SupplierVM>()
+          .Name("SuppliersGrid")
+          .DataKeys(keys => keys.Add(o => o.SupplierId))
+          .DataBinding(databind => databind.Ajax()
+                                       .Select("_SuppliersGridBind", "Suppliers").Update("Edit", "Suppliers"))
+
+          .Columns(columns =>
+                       {
+                           columns.Bound(o => o.Name);
+                           columns.Bound(o => o.MainContact);
+                           columns.Bound(o => o.ContactInfo.Tel);
+                           columns.Bound(o => o.ContactInfo.Mobile);
+                           columns.Bound(o => o.ContactInfo.Email);
+                           columns.Bound(o => o.PreferedExchangeRate);
+                           columns.Bound(o => o.SupplierId).Title("").Sortable(false).Width(50).ClientTemplate("<div class='commandColumn'>" + Html.ActionDialogFormButton(new TelerikButtonParameters(ButtonIcon.Edit),
+                                                                                                                                                                           new ActionParameters("Edit", new { id = "<#= SupplierId #>" }),
+                                                                                                                                                                           new ActionDialogFormParamters("Edit Supplier", null, "Edit", null, "rebindSupplierGrid")).ToHtmlString() + "</div>");
+
+
+
+                       })
+          .Editable(editing => editing.Mode(GridEditMode.PopUp))
+          .Pageable()
+          .Sortable()
+          .Render();
+    }
+</fieldset>
+<script type="text/javascript">
+    function rebindSupplierGrid() {
+        RebindTelerikGrid('SuppliersGrid');
+    }
+    
+</script>

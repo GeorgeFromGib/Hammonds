@@ -1,0 +1,16 @@
+﻿@model HammondsIBMS_Domain.Entities.Invoicing.BillCycle
+
+@{
+    var years = new List<DropDownItem>();
+    for (int year = DateTime.Today.Year - 3; year <= DateTime.Today.Year + 1; year++)
+    {
+        years.Add(new DropDownItem{Value=year.ToString(),Text = year.ToString()});
+    }
+
+    var months = new List<DropDownItem>();
+    for (int month = 1; month <= 12; month++)
+    {
+        months.Add(new DropDownItem {Text = month.ToString(), Value = month.ToString()});
+    }
+}
+@(Html.Telerik().DropDownListFor(m=>m.Year).BindTo(years)) @(Html.Telerik().DropDownListFor(m=>m.Month).BindTo(months))

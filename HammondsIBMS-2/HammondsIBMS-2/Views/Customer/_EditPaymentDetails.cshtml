@@ -1,0 +1,54 @@
+﻿@model HammondsIBMS_Domain.Entities.Customers.Customer
+@using (Html.BeginForm(null, null, FormMethod.Post, new { @class = "form-horizontal" }))
+{
+    @Html.ValidationSummary(true)
+    @Html.HiddenFor(model => model.CustomerId)
+    @Html.HiddenFor(model => model.Surname)
+    <fieldset>
+        <div class="row-fluid">
+            <div class="span6">
+                <div class="control-group">
+                    @Html.LabelFor(model => model.PreferredPaymentSourceId, new { @class = "control-label" })
+                    <div class="controls">
+                        @Html.EditorFor(model => model.PreferredPaymentSourceId)<br />
+                        @Html.ValidationMessageFor(model => model.PreferredPaymentSourceId)
+                    </div>
+                </div>
+                <div class="control-group">
+                    @Html.LabelFor(model => model.BankDetails.BankName, new { @class = "control-label" })
+                    <div class="controls">
+                        @Html.EditorFor(model => model.BankDetails.BankName)<br />
+                        @Html.ValidationMessageFor(model => model.BankDetails.BankName)
+                    </div>
+                </div>
+                <div class="control-group">
+                    @Html.LabelFor(model => model.BankDetails.AccountHolder, new { @class = "control-label" })
+                    <div class="controls">
+                        @Html.EditorFor(model => model.BankDetails.AccountHolder)<br />
+                        @Html.ValidationMessageFor(model => model.BankDetails.AccountHolder)
+                    </div>
+                </div>
+                <div class="control-group">
+                    @Html.LabelFor(model => model.BankDetails.SortCode, new { @class = "control-label" })
+                    <div class="controls">
+                        @Html.EditorFor(model => model.BankDetails.SortCode)<br />
+                        @Html.ValidationMessageFor(model => model.BankDetails.SortCode)
+                    </div>
+                </div>
+                <div class="control-group">
+                    @Html.LabelFor(model => model.BankDetails.AccountNo, new { @class = "control-label" })
+                    <div class="controls">
+                        @Html.EditorFor(model => model.BankDetails.AccountNo)<br />
+                        @Html.ValidationMessageFor(model => model.BankDetails.AccountNo)
+                    </div>
+                </div>
+            </div>
+        </div>
+    </fieldset>
+    <br />
+
+    <div>
+        @Html.FormSubmitButton()
+        @Html.FormCancelButton()
+    </div>
+}

@@ -1,0 +1,84 @@
+﻿@using System.Collections
+@model HammondsIBMS_2.ViewModels.Contract.DeleteRentedUnitVM
+@using (Html.BeginForm())
+{
+
+    @Html.HiddenFor(m => m.UnitId)
+     @Html.HiddenFor(m => m.Deposit)
+    @Html.HiddenFor(m=>m.StockDescription)
+    @Html.HiddenFor(m=>m.RentedDate)
+    @Html.HiddenFor(m=>m.PaidUntil)
+     @Html.HiddenFor(m=>m.ReturnDeposit)
+    @Html.ValidationSummary(true)
+    <fieldset>
+        <table class="edit-table">
+            <tr>
+                <td class="label-width">
+                    @Html.LabelFor(o => o.StockDescription)
+                </td>
+                <td>
+                    @Html.DisplayFor(o => o.StockDescription)<br />
+                </td>
+            </tr>
+            <tr>
+                <td class="label-width">
+                    @Html.LabelFor(o => o.RentedDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(o => o.RentedDate)<br />
+                </td>
+            </tr>
+            
+             <tr>
+                <td class="label-width">
+                    @Html.LabelFor(o => o.PaidUntil)
+                </td>
+                <td>
+                    @Html.DisplayFor(o => o.PaidUntil)<br />
+                </td>
+            </tr>
+            <tr>
+                <td >
+                    @Html.LabelFor(o => o.RemovalDate)
+                </td>
+                <td>
+                    @Html.EditorFor(o => o.RemovalDate)<br />
+                    @Html.ValidationMessageFor(o => o.RemovalDate)
+                </td>
+            </tr>
+            <tr>
+                <td >
+                    @Html.LabelFor(o => o.Deposit)
+                </td>
+                <td>
+                    @Html.DisplayFor(o => o.Deposit)<br />
+                </td>
+            </tr>
+             @* <tr>
+                <td >
+                    @Html.LabelFor(o => o.ReturnDeposit)
+                </td>
+                <td>
+                    @Html.EditorFor(o => o.ReturnDeposit)<br />
+                </td>
+            </tr>*@
+            <tr>
+                <td>
+                    @Html.LabelFor(o => o.ProductCycleLifeId)
+                </td>
+                <td>
+                    @{Html.Telerik().DropDownListFor(o => o.ProductCycleLifeId)
+                              .BindTo(new SelectList((IEnumerable)ViewBag.ContractChangeableProductLifeCycle
+                                                     , "ProductLifeCycleId", "Description"
+                                                     , Model.ProductCycleLifeId)).Render(); }
+
+                    @Html.ValidationMessageFor(o => o.ProductCycleLifeId)
+                </td>
+            </tr>
+        </table>
+    </fieldset>
+    <div>
+        @Html.FormSubmitButton(new ButtonParameters(ButtonIcon.Ok,ButtonType.Image,null,ButtonRole.Danger,ButtonIconColor.White,ButtonHeight.Small,true,null),"__FormSubmit")
+        @Html.FormCancelButton()
+    </div>
+}

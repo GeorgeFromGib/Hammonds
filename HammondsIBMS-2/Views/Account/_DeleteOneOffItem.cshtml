@@ -1,0 +1,46 @@
+﻿@model HammondsIBMS_2.ViewModels.Accounts.DeleteOneOffItemsPromptVM
+
+@using (Html.BeginForm()) {
+    @Html.HiddenFor(m=>m.RecordIndex)
+    @Html.HiddenFor(m=>m.Message)
+    @Html.HiddenFor(m=>m.Amount)
+    @Html.ValidationSummary(true)
+    <fieldset>
+        <table class='edit-table'>
+            <tr>
+                <td>
+                    @Html.LabelFor(model => model.Message)
+                </td>
+                <td>
+                    @Html.DisplayFor(model => model.Message)<br/>
+                    @Html.ValidationMessageFor(model => model.Amount)
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    @Html.LabelFor(model => model.Refunded)
+                </td>
+                <td>
+                    @Html.EditorFor(model => model.Refunded)<br/>
+                    @Html.ValidationMessageFor(model => model.Refunded)
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    @Html.LabelFor(model => model.Amount)
+                </td>
+                <td>
+                    @Html.DisplayFor(model => model.Amount)<br/>
+                    @Html.ValidationMessageFor(model => model.Amount)
+                </td>
+            </tr>
+     
+     
+        </table>
+    </fieldset>
+ <div>
+         @Html.Partial("_PromptButtons",Model)
+
+</div>
+}
+

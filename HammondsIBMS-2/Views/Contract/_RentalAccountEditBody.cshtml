@@ -1,0 +1,70 @@
+﻿@model HammondsIBMS_Domain.Entities.Accounts.RentalAccount
+           
+@Html.Partial("_CustomerAccountEditHeader", Model)
+
+<fieldset>
+    <legend>Unit Details</legend>
+    <table >
+        <tr>
+            <td class="contentspace" >
+                <div id="UnitDetails">
+                    @Html.Action("_DisplayRentalAccountItems", new { id = Model.CustomerAccountId })
+                </div>
+            </td>
+            <td class="buttonspace">
+                @Html.ActionDialogFormButton(new ButtonParameters(ButtonIcon.Add, ButtonType.ImageText, "Add"),
+                                   new ActionParameters("_AddContractUnitRentalItems", new { id = Model.CustomerAccountId }),
+                                   new ActionDialogFormParamters("Add Rental item", "UnitDetails", Url.Action("_DisplayRentalAccountItems", new { id = Model.CustomerAccountId })))
+            </td>
+        </tr>
+    </table>
+</fieldset>
+<fieldset>
+    <legend>Rental Details</legend>
+    <table >
+        <tr>
+            <td class="contentspace">
+                <div id="AttachedContractDetails">
+                    @Html.Action("_DisplayRentalContractsForEdit", new { id = Model.CustomerAccountId })
+                </div>
+            </td>
+            <td class="buttonspace">
+         
+            </td>
+        </tr>
+    </table>
+</fieldset>
+<fieldset>
+    <legend>Alternate Address</legend>
+    <table >
+        <tr>
+            <td class="contentspace">
+                <div id="AlternateAddressDetails">
+                    @Html.Action("_DisplayAlternateAddress", new { id = Model.CustomerAccountId })
+                </div>
+            </td>
+            <td class="buttonspace">
+                @Html.ActionDialogFormButton(new ButtonParameters(ButtonIcon.Edit, ButtonType.ImageText, "Edit"),
+                                   new ActionParameters("_EditAlternateAddress", new { id = Model.CustomerAccountId }),
+                                   new ActionDialogFormParamters("Edit Alternate Address", "AlternateAddressDetails", Url.Action("_DisplayAlternateAddress", new { id = Model.CustomerAccountId }),null))
+            </td>
+        </tr>
+    </table>
+</fieldset>
+<script type="text/javascript">
+
+    $(function () {
+        $('#UnitDetails').live('formDialogSuccess', function (event, e) {UpdateAttachedContracts();});
+
+        $('#_DisplayRentedUnits').live('changed', function (event, e) { UpdateAttachedContracts(); });
+
+    });
+    
+    function UpdateAttachedContracts() {
+        $.get('@Url.Action("_DisplayRentalContractsForEdit",new {id = Model.CustomerAccountId})', function(result) {
+            $('#AttachedContractDetails').html(result);
+        });
+    }
+
+
+</script> 

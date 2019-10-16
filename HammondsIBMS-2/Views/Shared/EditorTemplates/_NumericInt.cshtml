@@ -1,0 +1,11 @@
+﻿@model int
+@{var ctrName = ViewData.TemplateInfo.GetFullHtmlFieldName(string.Empty);}
+@(Html.Telerik().IntegerTextBox()
+                                     .Name(ctrName)
+                                     .Spinners(true)
+                                     .InputHtmlAttributes(new { style = "width:60px" })
+                                     .ClientEvents(events => events.OnChange("UpdateInteger"))
+                                     .MinValue(0)
+                                     .Value(Model))
+<div class="notifyOnChange" id="@(ctrName.Replace('.', '_') + "_CTR")">
+</div>

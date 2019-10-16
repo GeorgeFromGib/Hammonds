@@ -1,0 +1,42 @@
+﻿<fieldset>
+    <div id="EmployerDetails">
+        @model HammondsIBMS_Domain.Entities.Customers.Customer
+        @{
+            if (Model.EmployerId == null)
+            {
+
+
+            <table>
+                <tr>
+                    <td></td>
+                    <td class="buttonspace">@Html.ActionDialogFormButton(new ButtonParameters(ButtonIcon.Add, ButtonType.ImageText, "Add Employer Details"),
+                                   new ActionParameters("_AddEmployerDetails", null, new { id = Model.CustomerId }),
+                                   new ActionDialogFormParamters("Add Employer Details", "EmployerDetails", Url.Action("_DisplayEmployerDetails", new { id = Model.CustomerId }), null))
+                    </td>
+                </tr>
+            </table>
+
+
+            }
+            else
+            {
+            <table>
+                <tr>
+                    <td class="contentspace">
+                        <div id="EmployerDisplay">
+                            @Html.Action("_DisplayEmployerDetailsBody", new { id = Model.EmployerId })
+                        </div>
+                    </td>
+                    <td class="buttonspace">
+                        @Html.ActionDialogFormButton(new ButtonParameters(ButtonIcon.Edit, ButtonType.ImageText, "Edit"),
+                                             new ActionParameters("_EditEmployerDetails", null, new { id = Model.EmployerId }),
+                                                      new ActionDialogFormParamters("Edit Details", "EmployerDisplay", Url.Action("_DisplayEmployerDetailsBody", new { id = Model.EmployerId }), null))
+                    </td>
+                </tr>
+            </table>
+
+            }
+        }
+
+    </div>
+</fieldset>

@@ -1,0 +1,54 @@
+﻿<div id="CustomerDetails">
+    @model HammondsIBMS_Domain.Entities.Customers.Customer
+    @{
+        Html.Telerik().TabStrip().Name("CustomerDetailsTabStrip").Items(tabsrip =>
+           {
+               tabsrip.Add()
+                   .Text("Name & Address")
+                   .Content(@<text>
+                                <fieldset>
+                                    <table>
+                                        <tr>
+                                            <td class="contentspace">
+                                                <div id="NameAddress">
+                                                    @Html.Action("_DisplayNameAddress", new { id = Model.CustomerId })
+                                                </div>
+                                            </td>
+                                            <td class="buttonspace">
+                                                @Html.ActionDialogFormButton(new ButtonParameters(ButtonIcon.Edit, ButtonType.ImageText, "Edit"),
+                                                                                                    new ActionParameters("_EditCustomerDetails", null, new { id = Model.CustomerId }),
+                                                                                                                               new ActionDialogFormParamters("Edit Details", "NameAddress", Url.Action("_DisplayNameAddress", new { id = Model.CustomerId }), null, "UpdateCustomerHeader"))
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </fieldset>
+
+                        </text>);
+               tabsrip.Add()
+                   .Text("Payment & Bank details")
+                   .Content(@<text>
+                                  <fieldset>
+                                    <table>
+                                        <tr>
+                                        <td class="contentspace">
+                                            <div id="PaymentDetails">
+                                                @Html.Action("_DisplayPaymentAndBankDetails",new {id=Model.CustomerId})
+                                            </div>    
+                                        </td>
+                                        <td class="buttonspace">
+                                                @Html.ActionDialogFormButton(new ButtonParameters(ButtonIcon.Edit, ButtonType.ImageText, "Edit"),
+                                                                                                    new ActionParameters("_EditPaymentDetails", null, new { id = Model.CustomerId }),
+                                                                                                                               new ActionDialogFormParamters("Edit Details", "PaymentDetails", Url.Action("_DisplayPaymentAndBankDetails", new { id = Model.CustomerId }), null, "UpdateCustomerHeader"))
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </fieldset>
+                             </text>);
+
+           })
+        .SelectedIndex(0)
+        .Render();
+    }
+
+</div>
+

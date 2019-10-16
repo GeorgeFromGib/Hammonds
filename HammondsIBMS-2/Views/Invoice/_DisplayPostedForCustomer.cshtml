@@ -1,0 +1,67 @@
+﻿@using HammondsIBMS_2.ViewModels.Invoice
+@model IEnumerable<PostedVM>
+<script type="text/javascript">
+//    function OnRentedUnitChanged(e) {
+//        RebindGrid();
+//        $('#_DisplayRentedUnits').trigger('changed');
+//    }
+
+    function RebindPostedGrid() {
+        $('#PostedGrid').data('tGrid').rebind();
+    }
+
+    function PostedGrid_onDataBinding(e) {
+        e.data = { ShowInvoiced: $('#ShowInvoiced:checked').val() };
+
+    }
+
+    function PostedGrid_OnDelete(e) {
+        e.values.ShowInvoiced = $('#ShowInvoiced:checked').val();
+        e.values.cusId = @(ViewBag.CustomerId);
+    }
+
+    function PostedGrid_onRowDataBound(e) {
+        var dataItem = e.dataItem;
+        var invoiced = dataItem.HasBeenInvoiced;
+
+        if (invoiced) $(e.row).find(".t-grid-delete").hide();
+    }
+
+    $('#ShowInvoiced').click(function () {
+        RebindPostedGrid();
+    });
+
+
+</script>
+<fieldset>
+    <fieldset>
+        @Html.CheckBox("ShowInvoiced") Show Invoiced
+    </fieldset>
+    @{
+        Html.Telerik().Grid<PostedVM>()
+            .Name("PostedGrid")
+            .DataKeys(keys=>keys.Add(k=>k.PostedId))
+            .DataBinding(dataBinding => dataBinding
+                                            .Ajax()
+                                            .Select("_CustomerPostedGridBind", "Invoice", new { cusId = ViewBag.CustomerId })
+                                            .Delete("_DeletePosted","Invoice")
+                         )
+            .ClientEvents(events => events.OnRowDataBound("PostedGrid_onRowDataBound").OnDataBinding("PostedGrid_onDataBinding").OnDelete("PostedGrid_OnDelete"))    
+            .Columns(columns =>
+                         {
+
+                             columns.Bound(o => o.PostedDate).Format("{0:dd/MM/yyyy}");
+                             columns.Bound(o => o.Description);
+                             columns.Bound(o => o.ContractUnitDescription);
+                             columns.Bound(o => o.EffectiveDate).Format("{0:dd/MM/yyyy}");
+                             columns.Bound(o => o.Amount);
+                             columns.Bound(o => o.InvoiceInfo);
+                             columns.Command(commands => commands.Delete().ButtonType(GridButtonType.Image));
+
+
+                         })
+            .Pageable()
+            .Sortable()
+            .Render();
+    }
+</fieldset>

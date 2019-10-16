@@ -1,0 +1,87 @@
+﻿@model HammondsIBMS_2.ViewModels.Accounts.AddPurchaseAccountVM
+<div class="well well-small well-noBackground">
+    @Html.ContentTitle(Html.Action("StepperHeader").ToHtmlString())
+    @using (Html.BeginForm(null, null, FormMethod.Post, new { @class = "form-horizontal" }))
+    {
+        @Html.ValidationSummary(true)
+        @Html.HiddenFor(model => model.CustomerAccountId)
+        @Html.HiddenFor(model => model.CustomerId)
+       // @Html.HiddenFor(model => model.StockId)
+        <fieldset>
+            <legend>Alternate Details</legend>
+            <div class="control-group">
+                @Html.LabelFor(model => model.ModelDescription, new { @class = "control-label" })
+                <div class="controls">
+                    <span class="input-xlarge uneditable-input">@Model.ModelDescription</span>
+                </div>
+            </div>
+             <div class="control-group">
+                @Html.LabelFor(model => model.TotalUnits, new { @class = "control-label" })
+                <div class="controls">
+                    <span class="input-xlarge uneditable-input">@Model.TotalUnits.ToString("C")</span>
+                </div>
+            </div>
+            <div class="control-group">
+                @Html.LabelFor(model => model.TotalContracts, new { @class = "control-label" })
+                <div class="controls">
+                    <span class="input-xlarge uneditable-input" id="TotalContracts">@Model.TotalContracts.ToString("C")</span>
+                </div>
+            </div>
+            <div class="control-group">
+                @Html.LabelFor(model => model.TotalItemCharges, new { @class = "control-label" })
+                <div class="controls">
+                    <span class="input-xlarge uneditable-input" id="TotalContracts">@Model.TotalItemCharges.ToString("C")</span>
+                </div>
+            </div>
+            <div class="control-group">
+                @Html.LabelFor(model => model.TotalCharge, new { @class = "control-label" })
+                <div class="controls">
+                    <span class="input-xlarge uneditable-input" id="TotalCharge">@Model.TotalCharge.ToString("C")</span>
+
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label">Alternate Details</label>
+                <div class="controls">
+                    <fieldset>
+                        @Html.ActionDialogFormButton(new ButtonParameters(ButtonIcon.Edit, ButtonType.ImageText, "Edit Alternate Details").Height(ButtonHeight.Small),
+                                                     new ActionParameters("_EditStepperAlternateAddress"),
+                                                     new ActionDialogFormParamters("Edit Alternate Details", null, Url.Action("_EditStepperAlternateAddress"), null,"UpdateAlternateAddress"))
+                        @Html.ActionDialogPromptButton(new ButtonParameters(ButtonIcon.Delete,"Remove").Enable(Model.HasAlternateAddressOrInstructions).Height(ButtonHeight.Small).Id("removeAlternate"),
+                                                 Url.Action("_DeleteAlternateAddress"), "Remove Alternate","UpdateAlternateAddress")
+
+                        <div id="alternateDetails" style="padding-top: 10px">
+                            @if (Model.HasAlternateAddressOrInstructions)
+                            {
+                                @Html.DisplayFor(model => model.AlternateAddress)
+                            }
+                        </div>
+                    </fieldset>
+                </div>
+            </div>
+        </fieldset>
+        <div>
+            @Html.Action("StepperControl")
+        </div>
+    }
+</div>
+<script type="text/javascript">
+    function UpdateAlternateAddress() {
+        GetPurchaseAccountData(function (data) {
+            if (data.HasAlternateAddressOrInstructions) {
+                AjaxUpdate('@Url.Action("_DisplayAlternateAddress")', 'alternateDetails');
+                AnimShow("#alternateDetails");
+                EnableButton("removeAlternate", true);
+            } else {
+                AnimHide("#alternateDetails");
+                EnableButton("removeAlternate", false);
+            }
+        });
+    }
+
+    function GetPurchaseAccountData(func) {
+        $.get('@Url.Action("_GetAddPurchaseAccount")', function(data) {
+            func(data);
+        });
+    }
+</script>

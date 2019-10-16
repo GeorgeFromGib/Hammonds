@@ -1,0 +1,39 @@
+﻿@model HammondsIBMS_2.ViewModels.Contract.ExpireServiceContractVM
+@using (Html.BeginForm())
+{
+    @Html.HiddenFor(m => m.ContractId)
+    @Html.ValidationSummary(false)
+    <fieldset>
+        <table class="edit-table">
+            <tr>
+                <td style="width: 150px">
+                    @Html.LabelFor(o => o.ContractDescription)
+                </td>
+                <td>
+                    @Html.DisplayFor(o => o.ContractDescription)<br />
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    @Html.LabelFor(o => o.StartDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(o => o.StartDate)<br />
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    @Html.LabelFor(o => o.ExpiryDate)
+                </td>
+                <td>
+                    @Html.EditorFor(o => o.ExpiryDate)<br />
+                    @Html.ValidationMessageFor(o => o.ExpiryDate)
+                </td>
+            </tr>
+        </table>
+    </fieldset>
+    <div>
+        @Html.FormSubmitButton()
+        @Html.FormCancelButton()
+    </div>
+}

@@ -1,0 +1,33 @@
+﻿@model HammondsIBMS_2.ViewModels.StockInvoice.StockInvoiceChargesVM
+
+@using (Html.BeginForm()) {
+    @Html.ValidationSummary(false)
+    <fieldset>
+        <table class='edit-table'>
+            @Html.HiddenFor(model => model.StockInvoiceid)
+            <tr>
+                <td>
+                    @Html.LabelFor(model => model.Freight)
+                </td>
+                <td>
+                    @Html.EditorFor(model => model.Freight)
+                    @Html.ValidationMessageFor(model => model.Freight)
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    @Html.LabelFor(model => model.OtherCharges)
+                </td>
+                <td>
+                    @Html.EditorFor(model => model.OtherCharges)
+                    @Html.ValidationMessageFor(model => model.OtherCharges)
+                </td>
+            </tr>
+
+        </table>
+    </fieldset>
+ <div>
+        @Html.FormSubmitButton() @Html.FormCancelButton()
+
+</div>
+}

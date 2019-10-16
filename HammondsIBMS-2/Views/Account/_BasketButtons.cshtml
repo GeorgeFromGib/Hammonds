@@ -1,0 +1,43 @@
+﻿@model HammondsIBMS_Domain.Entities.Accounts.CustomerAccount
+@{var controller = ViewData["controller"] as string; }
+<div id="AddBasket">
+    @Html.ActionButton(new ButtonParameters(ButtonIcon.Add, ButtonType.ImageText, "Add"), Url.Action("AddUnitBasket", controller, new { CustomerAccountId = Model.CustomerAccountId }))
+</div>
+<div id="EditBasket">
+    <fieldset>
+        <table>
+            <tr>
+                <td style="text-align: center">
+                    <img src="@Url.Content("~/Content/Site/icons/shopping_cart16x16.png")" /></td>
+            </tr>
+            <tr>
+                <td>@Html.ActionButton(new ButtonParameters(ButtonIcon.Edit, ButtonType.ImageText, "Edit").SetWidth("60"), Url.Action("EditBasketForAccount", controller, new { CustomerAccountId = Model.CustomerAccountId }))</td>
+            </tr>
+            <tr>
+                <td>@Html.ActionDialogPromptButton(new ButtonParameters(ButtonIcon.Delete, ButtonType.ImageText, "Delete").SetWidth("60"), Url.Action("DeleteBasketForAccount", new { CustomerAccountId = Model.CustomerAccountId }), "Delete Basket?", "ToggleBasketButtons")</td>
+            </tr>
+        </table>
+    </fieldset>
+
+
+</div>
+<script type="text/javascript">
+    $(function () {
+        
+        ToggleBasketButtons();
+
+    });
+
+
+    function ToggleBasketButtons() {
+        $.get('@Url.Action("_CheckBasketExistsForAccount", new {Model.CustomerAccountId})', function(data) {
+            if (data) {
+                $('#AddBasket').hide();
+                $('#EditBasket').show();
+            } else {
+                $('#AddBasket').show();
+                $('#EditBasket').hide();
+            }
+        });
+    }
+</script>

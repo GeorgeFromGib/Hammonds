@@ -1,0 +1,33 @@
+﻿@model HammondsIBMS_Domain.Entities.Misc.Misc
+@using (Html.BeginForm())
+{
+    @Html.ValidationSummary(true)
+    <fieldset>
+        <table class='edit-table'>
+            @Html.HiddenFor(model => model.MiscId)
+            @Html.HiddenFor(model => model.ValueRegexFilter)
+            <tr>
+                <td>
+                    @Html.LabelFor(model => model.Identifier)
+                </td>
+                <td>
+                    @Html.DisplayFor(model => model.Identifier)<br />
+                    @Html.ValidationMessageFor(model => model.Identifier)
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    @Html.LabelFor(model => model.Value)
+                </td>
+                <td>
+                    @Html.EditorFor(model => model.Value)<br />
+                    Example values : @Html.DisplayFor(model => model.FormatExample)<br />
+                    @Html.ValidationMessageFor(model => model.Value)
+                </td>
+            </tr>
+        </table>
+    </fieldset>
+    <div>
+        @Html.FormSubmitButton() @Html.FormCancelButton()
+    </div>
+}

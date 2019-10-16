@@ -1,0 +1,103 @@
+﻿@model HammondsIBMS_Domain.Entities.Stock.Model
+@using (Html.BeginForm())
+{
+    @Html.ValidationSummary(true)
+    <fieldset>
+        <table class="edit-table">
+            @Html.HiddenFor(model => model.ModelId)
+            <tr>
+                <td>
+                    @Html.LabelFor(model => model.ManufacturerId) 
+                </td>
+                <td>
+                    @Html.EditorFor(model => model.ManufacturerId)
+                    @Html.ValidationMessageFor(model => model.ManufacturerId)
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    @Html.LabelFor(model => model.ModelCode)
+                </td>
+                <td>
+                    @Html.EditorFor(model => model.ModelCode)<br />
+                    @Html.ValidationMessageFor(model => model.ModelCode)
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    @Html.LabelFor(model => model.CategoryId)
+                </td>
+                <td>
+                    @Html.EditorFor(model => model.CategoryId)
+                    @Html.ValidationMessageFor(model => model.CategoryId)
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    @Html.LabelFor(model => model.Size)
+                </td>
+                <td>
+                    @Html.EditorFor(model => model.Size)<br />
+                    @Html.ValidationMessageFor(model => model.Size)
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    @Html.LabelFor(model => model.RentalPrice)
+                </td>
+                <td>
+                    @Html.EditorFor(model => model.RentalPrice)
+                    @Html.ValidationMessageFor(model => model.RentalPrice)
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    @Html.LabelFor(model => model.RetailPrice)
+                </td>
+                <td>
+                    @Html.EditorFor(model => model.RetailPrice)
+                    @Html.ValidationMessageFor(model => model.RetailPrice)
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    @Html.LabelFor(model => model.SpainRetailPrice)
+                </td>
+                <td>
+                    @Html.EditorFor(model => model.SpainRetailPrice)
+                    @Html.ValidationMessageFor(model => model.SpainRetailPrice)
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    @Html.LabelFor(model => model.Summary)
+                </td>
+                <td>
+                    @Html.EditorFor(model => model.Summary)<br />
+                    @Html.ValidationMessageFor(model => model.Summary)
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    @Html.LabelFor(model => model.Description)
+                </td>
+                <td>
+                    @Html.EditorFor(model => model.Description)<br />
+                    @Html.ValidationMessageFor(model => model.Description)
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    @Html.LabelFor(model => model.IsObsolete)
+                </td>
+                <td>
+                    @Html.EditorFor(model => model.IsObsolete)<br />
+                    @Html.ValidationMessageFor(model => model.IsObsolete)
+                </td>
+            </tr>
+        </table>
+    </fieldset>
+    <div>
+        @Html.FormSubmitButton() @Html.FormCancelButton()
+    </div>
+}

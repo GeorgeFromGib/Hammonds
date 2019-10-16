@@ -1,0 +1,51 @@
+﻿@model HammondsIBMS_2.ViewModels.Suppliers.SupplierVM
+@using (Html.BeginForm(null, null, FormMethod.Post, new { @class = "form-horizontal" }))
+{
+    @Html.ValidationSummary(true)
+    @Html.HiddenFor(model => model.SupplierId)
+   
+    <fieldset>
+        <table class='edit-table'>
+            <tr>
+                <td>
+                    @Html.LabelFor(model => model.Name)
+                </td>
+                <td>
+                    @Html.EditorFor(model => model.Name)<br />
+                    @Html.ValidationMessageFor(model => model.Name)
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    @Html.LabelFor(model => model.MainContact)
+                </td>
+                <td>
+                    @Html.EditorFor(model => model.MainContact)<br />
+                    @Html.ValidationMessageFor(model => model.MainContact)
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    @Html.LabelFor(model => model.ExchangeRateId)
+                </td>
+                <td>
+                    @Html.EditorFor(model => model.ExchangeRateId)
+                    @Html.ValidationMessageFor(model => model.ExchangeRateId)
+                </td>
+            </tr>
+        </table>
+    </fieldset>
+ 
+    <fieldset>@Html.EditorFor(model => model.ContactInfo, "_ContactInfo")</fieldset>
+    <fieldset>@Html.EditorFor(m => m.Address, "_Address")</fieldset>
+    <br />
+   
+    <div>
+        @Html.FormSubmitButton() @Html.FormCancelButton()
+    </div>
+}
+<script type="text/javascript">
+    function OnContentLoad() {
+        ClearModalWindowSize();
+    }
+</script>

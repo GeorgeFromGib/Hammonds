@@ -1,0 +1,9 @@
+﻿@model int
+           
+@{Html.Telerik().DropDownList()
+        .Name(ViewData.TemplateInfo.GetFullHtmlFieldName(string.Empty))
+        .BindTo(new SelectList((System.Collections.IEnumerable)ViewBag.Employers
+            , "EmployerId", "EmployerName"
+            , Model == null ? "-1" : Model.ToString()))
+            .ClientEvents(events=>events.OnChange("DropdownChange"))
+        .Render();}

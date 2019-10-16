@@ -1,0 +1,141 @@
+﻿@model HammondsIBMS_2.ViewModels.StockView.StockEditVM
+@using (Html.BeginForm())
+{
+    @Html.ValidationSummary(true)
+    <fieldset>
+        <table class='edit-table'>
+            @Html.HiddenFor(model => model.StockId)
+            @Html.Hidden("HiddenModelId",Model.ModelId)
+            @Html.HiddenFor(m=>m.InvoiceStatusId)
+            <tr>
+                <td style="vertical-align: text-top">
+                    @Html.LabelFor(model => model.ManufacturerAndModel)
+                </td>
+                <td>
+                    <div id="ModelDisplayArea" >
+                        <span id="manufacturerModel">@Html.DisplayFor(model => model.ManufacturerAndModel)</span>
+                        @Html.ClientButton(new ButtonParameters(ButtonIcon.Exchange, ButtonHeight.Mini), "stockEditModelChange()")
+                    </div>
+                    <div id="ModelChangeArea" style="display:none" >
+                        <fieldset>
+                            <table>
+                                <tr>
+                                    <td>
+                                        @(Html.Telerik().DropDownList().Name("ManufacturerId")
+                                           .CascadeTo("ModelId")
+                                           .Placeholder("Select Manufacturer")
+                                           .HtmlAttributes(new { style = "width:260px" })
+                                           .DataBinding(binding => binding.Ajax().Select("_GetManufactures", "Stock")))
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        @(Html.Telerik().DropDownListFor(m => m.ModelId)
+                                            .Placeholder("Select Model")
+                                            .HtmlAttributes(new { style = "width:260px" })
+                                            .DataBinding(binding => binding.Ajax()
+                                                .Select("_GetManufacturerModels", "Stock")).ClientEvents(events => events.OnChange("modelSelected")))
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>@Html.ClientButton(new ButtonParameters(ButtonIcon.Ok, ButtonHeight.Mini, false), "modelChangeOk()", null, null, new { id = "modelChangeOkButton" })
+                                        @Html.ClientButton(new ButtonParameters(ButtonIcon.Cancel, ButtonHeight.Mini,(Model.ModelId>0)), "modelChangeCancel()", null,null, new { id = "modelChangeCancelButton" })
+                                    </td>
+                                </tr>
+                            </table>
+                        </fieldset>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    @Html.LabelFor(model => model.SerialNumber)
+                </td>
+                <td>
+                    @Html.EditorFor(model => model.SerialNumber)<br />
+                    @Html.ValidationMessageFor(model => model.SerialNumber)
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    @Html.LabelFor(model => model.Identifier)
+                </td>
+                <td>
+                    @Html.EditorFor(model => model.Identifier)<br />
+                    @Html.ValidationMessageFor(model => model.Identifier)
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    @Html.LabelFor(model => model.LandedCost)
+                </td>
+                <td>
+                    @Html.EditorFor(model => model.LandedCost)
+                    @Html.ValidationMessageFor(model => model.LandedCost)
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    @Html.LabelFor(model => model.ProductLifeCycleId)
+                </td>
+                <td>
+                    @Html.Telerik().DropDownListFor(m=>m.ProductLifeCycleId).BindTo(new SelectList(Model.ProductLifeCycles, "ProductLifeCycleId", "Description"))
+                </td>
+            </tr>
+        </table>
+    </fieldset>
+    <div>
+        @Html.FormSubmitButton("stockEditSubmit") @Html.FormCancelButton()
+    </div>
+}
+<script type="text/javascript">
+    function stockEditModelChange() {
+        ShowChangeArea();
+    }
+
+    function modelChangeOk() {
+        $.get('@Url.Action("_GetManufacturerModelDescription")', { id: $('#ModelId').val() }, function (data) {
+            if (data != '')
+                $('#manufacturerModel').html(data);
+        });
+        ShowDisplayArea();
+    }
+
+    function modelSelected(e) {
+        EnableButton('#modelChangeOkButton',true);
+        EnableButton('#modelChangeCancelButton', true);
+    }
+
+    function ManufacturerSelected(e) {
+        EnableButton('#modelChangeOkButton', false);
+    }
+
+    function modelChangeCancel() {
+        ShowDisplayArea();
+    }
+
+    function ShowChangeArea() {
+        ClearModalWindowSize();
+        AnimHide('#ModelDisplayArea');
+        AnimShow('#ModelChangeArea');
+        EnableButton('#stockEditSubmit', false);
+    };
+
+    function ShowDisplayArea() {
+        ClearModalWindowSize();
+        AnimHide('#ModelChangeArea');
+        AnimShow('#ModelDisplayArea');
+        EnableButton('#stockEditSubmit', true);
+    };
+
+    $(function () {
+        if ($('#HiddenModelId').val() == 0) {
+            $('#ModelDisplayArea').hide();
+            $('#ModelChangeArea').show();
+            EnableButton('#stockEditSubmit', false);
+            ClearModalWindowSize();
+        }
+
+    });
+   
+</script>

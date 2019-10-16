@@ -1,0 +1,259 @@
+﻿@using HammondsIBMS_2.ViewModels
+@model HammondsIBMS_2.ViewModels.StockInvoice.StockInvoiceVM
+@{var isInvOpen = Model.DateProcessed == null;}
+
+<div class="well well-small well-noBackground">
+    <div class="well well-small">
+        <table>
+            <tr>
+                <td>
+                    <h5 id="modelheader">@Html.Raw("Stock Invoice : " + Model.StockInvoiceid)</h5>
+                </td>
+                <td class="right-align">@Html.ActionButton(new ButtonParameters(ButtonIcon.Return, ButtonIconColor.White, ButtonRole.Info, "Invoice List"), Url.Action("Index"))
+                </td>
+            </tr>
+        </table>
+    </div>
+    <fieldset>
+        <table>
+            <tr>
+                <td style="width: 100%">
+                    <div id="DetailsArea">
+                        @Html.Action("_DisplayStockInvoiceDetails", new { id = Model.StockInvoiceid })
+                    </div>
+                </td>
+                <td class="buttonspace">
+                    @Html.ActionDialogFormButton(new ButtonParameters(ButtonIcon.Edit, ButtonType.ImageText, "Edit Details", isInvOpen, "90px"),
+                                                                                                           new ActionParameters("_EditStockInvoiceDetails", new { id = Model.StockInvoiceid }),
+                                                                                                           new ActionDialogFormParamters("Edit Details", null, Url.Action("_EditStockInvoiceDetails"), null, "RefreshStockInvoice"))
+                </td>
+            </tr>
+        </table>
+        <table>
+            <tr>
+                <td style="width: 100%">
+                    <div id="ChargesArea">@Html.Partial("_DisplayStockInvoiceCharges", Model)</div>
+                    <table class='table table-striped table-condensed table-bordered'>
+                        <tr>
+                            <td style="width: 200px">
+                                @{if (!isInvOpen)
+                                  {
+                                      @Html.LabelFor(m => m.DateProcessed);
+                                  }
+                                }
+                            </td>
+                            <td>
+                                  @{if (!isInvOpen)
+                                    {
+                                        @Html.DisplayFor(m => m.DateProcessed)
+                                    }
+                                    else
+                                    {
+                                        @Html.ActionDialogFormButton(new ButtonParameters(ButtonIcon.Check, ButtonType.ImageText, "Close Invoice", ButtonRole.Warning, ButtonIconColor.White, ButtonHeight.Normal, isInvOpen, null),
+                                                                    new ActionParameters("_CloseStockInvoice", new {id = Model.StockInvoiceid}),
+                                                                    new ActionDialogFormParamters("Close invoice", null, "_CloseStockInvoice", null, "CloseInvoice"))
+                                    }
+                                }
+                               
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+                <td class="buttonspace">
+                    @Html.ActionDialogFormButton(new ButtonParameters(ButtonIcon.Edit, ButtonType.ImageText, "Edit Charges", isInvOpen, "90px"),
+                                   new ActionParameters("_EditStockInvoiceCharges", new { id = Model.StockInvoiceid }),
+                                   new ActionDialogFormParamters("Edit Charges", null, Url.Action("_EditStockInvoiceCharges"), null, "RefreshStockInvoice"))
+                </td>
+            </tr>
+        </table>
+        <fieldset>
+            <legend>Invoice Items</legend>
+            <table>
+                <tr>
+                    <td>
+                    </td>
+                    <td class="buttonspace">
+   @*                      @Html.ActionWindowButton(new ButtonParameters(ButtonIcon.Add, ButtonType.ImageText,"Add From Stock",isInvOpen,null)
+                               ,new ActionParameters("_SelectAvailableStock", new { id = Model.StockInvoiceid })
+                               ,new ActionButtonWindowParameters("AddFromStock","Add from Stock",300,200,ActionWindowTitleBarButtons.Close,"RefreshStockInvoice"))*@
+                        @Html.ActionDialogFormButton(new ButtonParameters(ButtonIcon.Add, ButtonType.ImageText,"Add From Stock",isInvOpen,null),
+                                   new ActionParameters("_SelectAvailableStock", new { id = Model.StockInvoiceid }),
+                                   new ActionDialogFormParamters("Add from Stock", null, Url.Action("_SelectAvailableStock"), null, "RefreshStockInvoice"))
+                    </td>
+                </tr>
+            </table>
+
+            <div id="InvoiceItemsDisplay">
+                @(Html.Telerik().Grid<StockInvoiceItemVM>().Name("InvoiceItemsGrid")
+           .DataKeys(keys => keys.Add(o => o.StockInvoiceItemId))
+           .DataBinding(databind => databind.Ajax()
+                                        .Select("_StockItemGridBind", "StockInvoice", new { id = Model.StockInvoiceid })
+           )
+           .Columns(columns =>
+                        {
+
+                            columns.Bound(o => o.StockModel);
+                            columns.Bound(o => o.UnitCostDisplay).Title("Unit Cost");
+                            columns.Bound(o => o.NoOfUnits).Title("Units");
+                            columns.Bound(o => o.FreightApportionment).Format("{0:£#0.00}");
+                            columns.Bound(o => o.DutyPct).Format("{0:0.0}%"); ;
+                            columns.Bound(o => o.LandedCost).Format("{0:£#0.00}");
+                            columns.Bound(o => o.RetailPrice).Format("{0:£#0.00}");
+                            columns.Bound(o => o.RentalPrice).Format("{0:£#0.00}");
+                            columns.Bound(o => o.SpainRetailPrice).Format("{0:€#0.00}");
+                            columns.Bound(o => o.StockInvoiceItemId).Title("").Sortable(false).Width(80).ClientTemplate("<div class='commandColumn'>" + @Html.ActionDialogFormButton(new TelerikButtonParameters(ButtonIcon.Edit, ButtonType.Image,null,isInvOpen,null,"Edit Item Costs"),
+                                                                                                                                                                                     new ActionParameters("_EditInvoiceItem", new { id = "<#= StockInvoiceItemId #>" }),
+                                                                                                                                                                                     new ActionDialogFormParamters("Edit Invoice Items", null, "_EditInvoiceItem", null, "RefreshStockInvoice")).ToHtmlString() +
+                                                                                                                        Html.ActionDialogFormButton(new TelerikButtonParameters(ButtonIcon.List, "Manage Attached Stock"),
+                                                                                                                                                    new ActionParameters("_EditAttachedStock", new { id = "<#= StockInvoiceItemId #>" }),
+                                                                                                                                                    new ActionDialogFormParamters("Attached Stock", null, "_EditAttachedStock", null, "RefreshStockInvoice")).ToHtmlString() +
+                                                                                                                        "</div>");
+
+                        })
+           .Editable(editing => editing.Mode(GridEditMode.PopUp))
+           .Footer(false)
+                      )
+            </div>
+                    </fieldset>
+    </fieldset>
+</div>
+@* <table>
+        <tr>
+            <td class="t-edit">
+                <div class="editor-label">
+                    Items
+                </div>
+            </td>
+            <td>
+                <div class="editor-field">
+                    @(!invClosed?Html.GridTopButtonActionWindow(new ActionWindowParameters("AddinvoiceItems", "Available Stock Items", "GetAvailableItemsFromStock", "StockInvoice", "Add Items From Stock", 550, 250, new { id = Model.StockInvoiceid })):Html.Raw(""))
+                    <div id="InvoiceItemsDisplay">
+                        @{Html.RenderAction("InvoiceItems");}
+                    </div>
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td class="t-edit">
+                <div class="editor-label">
+                    @Html.LabelFor(model => model.InvoiceTotal)
+                </div>
+            </td>
+            <td>
+                <div id="InvoiceTotal" class="editor-field">
+                    @Html.DisplayFor(model => model.InvoiceTotal)
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td class="t-edit">
+                <div class="editor-label">
+                    @Html.LabelFor(model => model.IsProcessed)
+                </div>
+            </td>
+            <td>
+                <div class="editor-field">
+                    @(!invClosed?Html.EditorFor(model => model.IsProcessed):Html.DisplayFor(model=>model.IsProcessed))
+                    @Html.ValidationMessageFor(model => model.IsProcessed)
+                </div>
+            </td>
+        </tr>
+    </table>
+
+
+    <p>
+    @if (!invClosed) { 
+        <text><input type="submit" value="Update" onclick="return ConfirmSubmit()"/></text>
+    }
+    else {
+        @Html.ActionLink("Return", "ReturnToGrid")
+    }
+    </p>*@
+<script type="text/javascript">
+    function RefreshStockInvoice() {
+        RebindTelerikGrid('InvoiceItemsGrid');
+        RefreshDetailsArea();
+        RefreshChargesArea();
+    }
+
+    function RefreshDetailsArea() {
+        AjaxUpdate('@Url.Action("_DisplayStockInvoiceDetails", new { id = Model.StockInvoiceid })', 'DetailsArea');
+    }
+
+    function RefreshChargesArea() {
+        AjaxUpdate('@Url.Action("_DisplayStockInvoiceCharges", new { id = Model.StockInvoiceid })', 'ChargesArea');
+    }
+
+    function CloseInvoice() {
+        $(window).attr('location', '@Url.Action("Edit",new {id=Model.StockInvoiceid})'); 
+
+    }
+    //    jQuery(document).ready(function () {
+    //        $("#Freight_AmountNative_CTR,#OtherCharges_CTR").live('change', function (event, e) {
+    //            UpdateTotals();
+    //        });
+
+    //        $("#NativeCurrencyToGBP_CTR").live('change', function(event, e) {
+    //            UpdateFreight();
+    //            UpdateTotals();
+    //        });
+
+    //        $('#ExchangeRateId').live('change', function(e) {
+    //            UpdateFreight();
+    //            UpdateTotals();
+
+    //        });
+
+    //        $('#UnitCost_AmountNative_CTR,#DutyPct_CTR').live('change', function (event, e) {
+    //            $.get('/StockInvoice/ChangeCosts', $('form#form0').serialize(), function (data) {
+    //                $('form#form0 #UnitCosts').html(data.UnitCosts);
+    //                $('form#form0 #FreightApportionment').html(data.FreightApp);
+    //                $('form#form0 #LandedCost').html(data.LandedCost);
+    //            });
+    //        });
+
+    //        $('#AddinvoiceItemsWindow,#InvoiceEditWindow').bind('close', function () {
+    //            UpdateTotals();
+
+    //        });
+
+    //        var thisForm = $('form#StockInvoiceEdit');
+    //        $(':submit',thisForm).click(function(event) {
+    //            event.preventDefault();
+    //            if($('#IsProcessed').is(':checked')) {
+    //                if(confirm('Are you sure you wish to close this Invoice? Inventory will be updated!'))
+    //                    $.post(thisForm.attr('action'),thisForm.serialize());
+    //                return false;
+    //            }
+    //            $(this).parents('form').submit();
+    //        });
+
+
+
+    //   });
+
+    //    function ConfirmSubmit() {
+    //        if($('#IsProcessed').is(':checked')) {
+    //            return confirm('Are you sure you wish to close this Invoice? Inventory will be updated!');
+    //        }
+    //        return true;
+    //    }
+
+
+    //    function UpdateTotals() {
+    //        $.post('/StockInvoice/EditFreightAndOtherCharges', $('form').serialize(), function(data) {
+    //            $('#InvoiceItemsDisplay').html(data);
+    //            $.get('/StockInvoice/GetInvoiceTotals', { id: @(Model.StockInvoiceid) }, function(data2) {
+    //                $('#TotalCharges').html(data2.ChargesTotal);
+    //                $('#InvoiceTotal').html(data2.InvoiceTotal);
+    //            });
+    //        });
+    //    }
+
+    //    function UpdateFreight() {
+    //        $.post('/StockInvoice/UpdateFreight', $('form').serialize(), function(data) {
+    //            $('.freight').html(data);
+    //        });
+    //    }
+
+</script>

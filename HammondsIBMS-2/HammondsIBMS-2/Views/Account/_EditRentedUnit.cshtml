@@ -1,0 +1,143 @@
+﻿@using System.Collections
+@model HammondsIBMS_2.ViewModels.Contract.RentedUnitVM
+@using (Html.BeginForm())
+{ 
+    @Html.HiddenFor(m => m.CustomerAccountId)
+    @Html.HiddenFor(m => m.UnitId)
+    @Html.HiddenFor(m => m.OldStockId)
+    @Html.HiddenFor(m => m.StockId)
+    @Html.HiddenFor(m => m.CanChangeRentedDate)
+    @Html.HiddenFor(m => m.CanChangeProductCycle)
+    @Html.HiddenFor(m => m.HideStockSelector)
+    @Html.HiddenFor(m => m.HideChangeDate)
+    @Html.HiddenFor(m => m.CanChangeDeposit)
+    @Html.HiddenFor(m => m.OldAmount)
+    @Html.ValidationSummary(false)
+    <fieldset>
+        <table class="edit-table">
+            <tr>
+                <td class="label-width">
+
+                    @Html.LabelFor(o => o.RentedDate)
+
+                </td>
+                <td>
+                    @(Html.Telerik().DatePickerFor(m => m.RentedDate).Enable(Model.CanChangeRentedDate))<br />
+                    @Html.ValidationMessageFor(o => o.RentedDate)
+                    @if (!Model.CanChangeRentedDate)
+                    {
+                        @Html.HiddenFor(m => m.RentedDate)
+                    }
+                </td>
+            </tr>
+        </table>
+
+        @if (Model.UnitId == 0)
+        {
+            if (!Model.HideStockSelector)
+            {
+                @Html.Partial("_AccountStockFilterBox", Model.StockId)
+                if (Model.OldStockProductCycleId > 0 && Model.CanChangeProductCycle)
+                {
+                    using (Html.Container("Set old stock status to:"))
+                    {
+                        <table class="edit-table">
+                            <tr>
+                                <td class="label-width">
+                                    @(Html.Telerik().DropDownListFor(o => o.OldStockProductCycleId)
+                                          .BindTo(new SelectList((IEnumerable) ViewBag.ContractChangeableProductLifeCycle
+                                                                 , "ProductLifeCycleId", "Description"
+                                                                 , Model.OldStockProductCycleId)))
+                                </td>
+                            </tr>
+                        </table>
+                    }
+                }
+            }
+        }
+        <table class="edit-table">
+            @if (Model.UnitId != 0)
+            {
+                if (!Model.HideChangeDate)
+                {
+                    <tr>
+                        <td class="label-width">
+
+                            @Html.LabelFor(o => o.ChangedDate)
+
+                        </td>
+                        <td>
+
+                            @Html.EditorFor(o => o.ChangedDate)<br />
+                            @Html.ValidationMessageFor(o => o.ChangedDate)
+
+                        </td>
+                    </tr>
+                }
+            }
+            <tr>
+                <td class="label-width">
+
+                    @Html.LabelFor(o => o.Amount)
+
+                </td>
+                <td>
+
+                    @Html.EditorFor(o => o.Amount)
+                    @Html.ValidationMessageFor(o => o.Amount)
+
+                </td>
+            </tr>
+            <tr>
+                <td>
+
+                    @Html.LabelFor(o => o.Deposit)
+
+                </td>
+                <td>
+                    @if (Model.CanChangeDeposit)
+                    {
+                        @Html.EditorFor(o => o.Deposit)
+                    }
+                    else
+                    {
+                        @Html.DisplayFor(o => o.Deposit)
+                    }
+                    @Html.ValidationMessageFor(o => o.Deposit)
+
+                </td>
+            </tr>
+            <tr>
+                <td>
+
+                    @Html.LabelFor(o => o.Notes)
+
+                </td>
+                <td>
+
+                    @Html.EditorFor(o => o.Notes)<br />
+                    @Html.ValidationMessageFor(o => o.Notes)
+
+                </td>
+            </tr>
+        </table>
+    </fieldset>
+    <div>
+        @Html.FormSubmitButton()
+        @Html.FormCancelButton()
+    </div>
+    
+}
+<script type="text/javascript">
+    $(function () {
+        $("#_AccountStockFilterBox").live('selectionChanged', function (event, e) {
+            $('[name="StockId"]').val(e.value);
+            $.get('@Url.Action("_GetModelInfoForStockId")', { id: e.value })
+                .done(function (data) { UpdateRequiredFields(data); });
+        });
+    });
+
+    function UpdateRequiredFields(data) {
+        getTelerikNumericTextBox('#Amount').value(data.RentalPrice);
+    }
+</script>

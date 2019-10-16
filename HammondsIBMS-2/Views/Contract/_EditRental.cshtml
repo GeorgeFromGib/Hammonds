@@ -1,0 +1,123 @@
+﻿@model HammondsIBMS_Domain.Entities.Contracts.Rental
+
+
+@using (Html.BeginForm())
+{
+ @Html.HiddenFor(o => o.RentalId)
+@Html.HiddenFor(o => o.ContractUnitId)
+@Html.HiddenFor(o => o.PaymentPeriod.PeriodInMonths)
+@Html.HiddenFor(o => o.PaymentPeriod.Description)
+@Html.ValidationSummary(true)
+<table>
+    
+    <tr>
+        <td class="t-edit">
+            <div class="editor-label">
+                @Html.LabelFor(o => o.StartDate)
+            </div>
+        </td>
+        <td>
+            <div class="editor-field">
+                @Html.EditorFor(o => o.StartDate)<br />
+                @Html.ValidationMessageFor(o => o.StartDate)
+            </div>
+        </td>
+    </tr>
+    <tr>
+        <td class="t-edit">
+            <div class="editor-label">
+                @Html.LabelFor(o => o.MonthlyCharge)
+            </div>
+        </td>
+        <td>
+            <div class="editor-field">
+                @Html.EditorFor(o => o.MonthlyCharge)
+                @Html.ValidationMessageFor(o => o.MonthlyCharge)
+            </div>
+        </td>
+    </tr>
+    <tr>
+        <td class="t-edit">
+            <div class="editor-label">
+                @Html.LabelFor(o => o.PaymentPeriodId)
+            </div>
+        </td>
+        <td>
+            <div class="editor-field">
+                @Html.EditorFor(o => o.PaymentPeriodId)<br />
+                @Html.ValidationMessageFor(o => o.PaymentPeriodId)
+            </div>
+        </td>
+    </tr>
+    <tr>
+        <td class="t-edit">
+            <div class="editor-label">
+                @Html.LabelFor(o => o.PeriodPaymentAmount)
+            </div>
+        </td>
+        <td>
+            <div id="PeriodPaymentAmount" class="editor-field">
+                @Html.DisplayFor(o => o.PeriodPaymentAmount)<br />
+                @Html.ValidationMessageFor(o => o.PeriodPaymentAmount)
+            </div>
+        </td>
+    </tr>
+    
+    </table>
+    @Html.Separator("Status")
+    <table>
+    <tr>
+        <td class="t-edit">
+            <div  class="editor-label">
+                @Html.LabelFor(o => o.ContractStatus)
+            </div>
+        </td>
+        <td>
+            <div id="ContractStatus" class="editor-field ">
+                @Html.DisplayFor(o => o.ContractStatus)<br />
+            </div>
+        </td>
+    </tr>
+    
+</table>
+
+
+    <p>
+        @Html.FormSubmitButton()
+        @Html.FormCancelButton()
+    </p>
+}
+
+
+<script type="text/javascript">
+    $(function() {
+     
+
+        $('#MonthlyCharge').live('change', function(event, e) {
+            CallActionAndUpdate("@(Url.Action("_ChangeRentalCharge"))"); 
+        });
+
+        $('#PaymentPeriodId').live('change', function(event, e) {
+            CallActionAndUpdate("@Url.Action("_ChangeRentalPaymentPeriod")");
+        });
+        
+        function CallActionAndUpdate(action) {
+            Get(action, Update);
+        }
+        
+        function Get(action,func) {
+             $.get(action, $('form').serialize(), function(result) {
+                func(result);
+            });
+        }
+        
+        function Update(result) {
+
+            $('#PeriodPaymentAmount').html(accounting.formatMoney(result.PeriodPaymentAmount));
+            $('#PaymentPeriod_PeriodInMonths').val(result.PaymentPeriod.PeriodInMonths);
+            $('#PaymentPeriod_Description').val(result.PaymentPeriod.Description);
+            $('#ContractStatus').html(result.ContractStatus.Description);
+
+        }
+    });
+</script>

@@ -1,0 +1,12 @@
+﻿@model HammondsIBMS_2.ViewModels.Customer.CustomerFilterVM
+<table>
+    @Html.HiddenFor(m=>m.IsFiltered)
+    <tr>
+        <td>
+            @Html.LabelFor(model => model.SearchString)
+        </td>
+        <td class="focus">
+            @Html.EditorFor(model => model.SearchString)
+        </td>
+    </tr>
+</table>

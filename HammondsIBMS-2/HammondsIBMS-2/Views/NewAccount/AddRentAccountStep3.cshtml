@@ -1,0 +1,134 @@
+﻿@using HammondsIBMS_Domain.Entities.Accounts
+@using HammondsIBMS_Domain.Entities.Contracts
+@model HammondsIBMS_2.ViewModels.Accounts.AddRentAccountVM
+<div class="well well-small well-noBackground">
+    @Html.ContentTitle(Html.Action("StepperHeader").ToHtmlString())
+    @using (Html.BeginForm(null, null, FormMethod.Post, new { @class = "form-horizontal" }))
+    {
+        @Html.ValidationSummary(true)
+        @Html.HiddenFor(model => model.CustomerAccountId)
+        @Html.HiddenFor(model => model.CustomerId)
+        @Html.HiddenFor(model => model.StockId)
+        <fieldset>
+            <legend>Item Charges</legend>
+            <div class="control-group">
+                @Html.LabelFor(model => model.ModelDescription, new { @class = "control-label" })
+                <div class="controls">
+                    <span class="input-xlarge uneditable-input">@Model.ModelDescription</span>
+
+                </div>
+            </div>
+            <div class="control-group">
+                @Html.LabelFor(model => model.TotalRental, new { @class = "control-label" })
+                <div class="controls">
+                    <span class="input-xlarge uneditable-input" >@Model.TotalRental.ToString("C")</span>
+                </div>
+            </div>
+             <div class="control-group">
+                @Html.LabelFor(model => model.TotalDeposit, new { @class = "control-label" })
+                <div class="controls">
+                    <span class="input-xlarge uneditable-input" >@Model.TotalDeposit.ToString("C")</span>
+                </div>
+            </div>
+             <div class="control-group">
+                <label class="control-label">Item Charges</label>
+
+                <div class="controls">
+                    <fieldset>
+                        <table>
+                            <tr>
+                                <td class="contentspace">
+                                     @{ Html.Telerik().DropDownList()
+                                            .Name("AvaiableOneOffChargesDropDown")
+                                            .DataBinding(dataBinding => dataBinding.Ajax().Select("_AvailableOneOffCharges", "NewAccount"))
+                                            .ClientEvents(events => events.OnLoad("onComboLoad").OnChange("onComboChanged"))
+                                            .Render(); }
+
+                    
+                                    @{ Html.Telerik().Grid<OneOffItem>()
+                                           .Name("RentItemChargesGrid")
+                                           .DataKeys(keys => keys.Add(o => o.OneOffItemId))
+                                           .DataBinding(databind => databind.Ajax()
+                                                                            .Select("_DisplayItemCharges", "NewAccount"))
+                                           //.ClientEvents(events => events.OnLoad("GridOnLoad"))
+                                           .Columns(columns =>
+                                               {
+                                                   columns.Bound(o => o.Description);
+                                                   columns.Bound(o => o.Charge).Format("{0:£#0.00}");
+                                                   columns.Bound(o => o.Quantity);
+                                                   columns.Bound(o => o.TotalCharge).Format("{0:£#0.00}"); 
+                                                   columns.Bound(o => o.OneOffItemId).Title("").Sortable(false).Width(80)
+                                                          .ClientTemplate("<div class='commandColumn'>" + @Html.ActionDialogFormButton(new TelerikButtonParameters(ButtonIcon.Edit),
+                                                                                                                                       new ActionParameters("_EditItemCharge", new { id = "<#= OneOffItemId #>" }),
+                                                                                                                                       new ActionDialogFormParamters("Edit Item", null,
+                                                                                                                                                                     "_EditItemCharge", null, "OnItemChargesChanged")).ToHtmlString() +
+                                                                                                            Html.ActionDialogFormButton(new TelerikButtonParameters(ButtonIcon.Delete),
+                                                                                                                                       new ActionParameters("_DeleteItemCharge", new { id = "<#= OneOffItemId #>" }),
+                                                                                                                                       new ActionDialogFormParamters("Delete Item", null,
+                                                                                                                                                                     "_DeleteItemCharge", null, "OnItemChargesChanged")).ToHtmlString() +
+                                                                          "</div>");
+                                               })
+                                           //.ClientEvents(events => events.OnDataBound("SelectedStockGrid_onDataBound"))
+                                           .Pageable(pager => pager.Enabled(false))
+                                           .Footer(false)
+                                           .Render();
+                                    }
+                                </td>
+                              @*  <td class="buttonspace">
+                                    @Html.ActionDialogFormButton(new ButtonParameters(ButtonIcon.Edit, ButtonType.ImageText, "Edit"),
+                                                                 new ActionParameters("_AddAccountAddItemCharges", new { id = Model.Stock.ModelId }),
+                                                                 new ActionDialogFormParamters("Add Item Charges", null, Url.Action("_AddAccountAddItemCharges"), null, "OnItemChargesChanged"))
+                                </td>*@
+                            </tr>
+                        </table>
+
+                    </fieldset>
+                </div>
+            </div>
+             <div class="control-group">
+                @Html.LabelFor(model => model.TotalItemCharges, new { @class = "control-label" })
+                <div class="controls">
+                    <span class="input-xlarge uneditable-input" id="TotalItemCharges">@Model.TotalItemCharges.ToString("C")</span>
+                </div>
+            </div>
+            <div class="control-group">
+                @Html.LabelFor(model => model.TotalCharge, new { @class = "control-label" })
+                <div class="controls">
+                    <span class="input-xlarge uneditable-input" id="TotalCharge">@Model.TotalCharge.ToString("C")</span>
+
+                </div>
+            </div>
+        </fieldset>
+        <div>
+            @Html.Action("StepperControl")
+        </div>
+    }
+</div>
+<script type="text/javascript">
+    function OnItemChargesChanged() {
+        RebindTelerikGrid('RentItemChargesGrid');
+        GetAccountData(function (data) {
+            $('#TotalCharge').html(accounting.formatMoney(data.TotalToPay));
+            $('#TotalItemCharges').html(accounting.formatMoney(data.TotalItemCharges));
+        });
+
+    }
+    
+    function onComboLoad() {
+        $(this).data('tDropDownList').fill();
+    }
+
+    function onComboChanged(e) {
+        if (e.value == -1) return;
+        $.post('@Url.Action("_AddOneOffCharge")', { id: e.value,qty: '@Model.RentedUnits.Count' }, function () {
+            OnItemChargesChanged();
+        });
+        $(this).data('tDropDownList').value(-1);
+    }
+
+    function GetAccountData(func) {
+        $.get('@Url.Action("_GetAddRentAccount")', function (data) {
+            func(data);
+        });
+    }
+</script>

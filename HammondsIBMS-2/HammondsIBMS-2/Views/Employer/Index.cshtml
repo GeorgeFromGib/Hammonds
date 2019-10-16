@@ -1,0 +1,48 @@
+﻿@using HammondsIBMS_2.ViewModels
+@Html.ContentTitle("Employers")
+<fieldset>
+    <fieldset>
+        <table>
+            <tr>
+                <td class="buttonspace">
+                    @Html.ActionDialogFormButton(new ButtonParameters(ButtonIcon.Add, "Add Employer"),
+                                   new ActionParameters("_AddEmployer", null),
+                                   new ActionDialogFormParamters("New Employer", null, Url.Action("_AddEmployer"), null, "rebindEmployersGrid"))
+                </td>
+            </tr>
+        </table>
+    </fieldset>
+    @{Html.Telerik().Grid<EmployerVM>()
+          .Name("EmployersGrid")
+          .DataKeys(keys => keys.Add(o => o.EmployerId))
+          .DataBinding(databind => databind.Ajax().Select("_EmployersGridBind", "Employer").Update("Edit", "Employer"))
+          .Columns(columns =>
+                       {
+                           columns.Bound(o => o.EmployerName);
+                           columns.Bound(o => o.FullAddress).Title("Address");
+                           //columns.Bound(o => o.Retired).Width(60);
+                           columns.Bound(o => o.EmployerId).Title("").Sortable(false).Width(80).ClientTemplate("<div class='commandColumn'>" + Html.ActionDialogFormButton(new TelerikButtonParameters(ButtonIcon.Edit),
+                                                                                                                                                                               new ActionParameters("Edit", new { id = "<#= EmployerId #>" }),
+                                                                                                                                                                               new ActionDialogFormParamters("Edit Stock", null, "Edit", null, "rebindEmployersGrid")).ToHtmlString() +
+                                                                                                                   Html.ActionDialogFormButton(new TelerikButtonParameters(ButtonIcon.Delete),
+                                                                                                                                               new ActionParameters("Delete", new { id = "<#= EmployerId #>" }),
+                                                                                                                                               new ActionDialogFormParamters("Delete Stock", null, "Delete", null, "rebindEmployersGrid")).ToHtmlString() +
+                                                                                                                   "</div>");
+                       })
+          .Editable(editing => editing.Mode(GridEditMode.PopUp))
+          .ClientEvents(events=>events.OnRowDataBound("onGridDataBinding"))
+          .Pageable()
+          .Sortable()
+          .Render();
+    }
+</fieldset>
+<script type="text/javascript">
+    function rebindEmployersGrid() {
+        RebindTelerikGrid('EmployersGrid');
+    }
+
+    function onGridDataBinding(e) {
+        ChangeBoolTextToIcon();
+    }
+</script>
+

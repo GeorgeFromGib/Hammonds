@@ -1,0 +1,23 @@
+﻿@using HammondsIBMS_2.ViewModels.Menu
+@model IEnumerable<MenuVM>
+<li class="divider-vertical"></li>
+@foreach (var sm in Model)
+{
+    var activeClass = sm.Active ? "active" : "";
+    <li class="@activeClass dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown" data-index="@sm.Index">@sm.Title <b class="caret"></b></a>
+    <ul class="dropdown-menu">
+    @foreach (var subMnu in sm.SubMenu)
+    {
+        if (subMnu.MenuType == MenuVMType.Divider)
+        {
+        <li class="divider"></li>
+        }
+        else
+        {
+            <li ><a href="@subMnu.Action" data-parent="@subMnu.Parent.Index">@subMnu.Title </a></li>
+        }
+
+    }
+    </ul></li>
+}
+<li class="divider-vertical"></li>

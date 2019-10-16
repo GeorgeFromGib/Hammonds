@@ -1,0 +1,75 @@
+﻿@using HammondsIBMS_2.ViewModels.Payment
+@model IEnumerable<PaymentVM>
+<script type="text/javascript">
+    $(function() {
+        UpdateBalance(e);
+    });
+
+    function PaymentUpdate() {
+        RebindTelerikGrid('PaymentGrid');
+        UpdateBalance();
+    }
+
+    function UpdateBalance(e) {
+        AjaxUpdate('@Url.Action("_CustomerAccountsBalance", "Transactions", new { id = ViewBag.CustomerId })', 'AccountsBalanceDisplay');
+    }
+
+</script>
+<fieldset>
+    <fieldset>
+        <table>
+            <tr>
+                <td id="AccountsBalance">
+                    <div id="AccountsBalanceDisplay">
+                        @*@Html.Action("_CustomerAccountsBalance", "Transactions", new { id = ViewBag.CustomerId })*@
+                    </div>
+                </td>
+                <td class="buttonspace">
+                    @Html.ActionDialogFormButton(new ButtonParameters(ButtonIcon.Add, ButtonType.ImageText, "Make Payment"),
+                                   new ActionParameters("_MakePayment", "Payment", new { id = ViewBag.CustomerId }),
+                                   new ActionDialogFormParamters("Make Payment", null, Url.Action("_MakePayment", "Payment"), null, "PaymentUpdate"))
+                </td>
+            </tr>
+        </table>
+    </fieldset>
+    <fieldset>
+        <legend>Payment History</legend>
+        @{
+            Html.Telerik().Grid<PaymentVM>()
+                .Name("PaymentGrid")
+                .DataBinding(dataBinding => dataBinding
+                                                .Ajax()
+                                                .Select("_CustomerAccountPaymentsGridBind", "Payment", new { id = ViewBag.CustomerId }))
+                .Columns(columns =>
+                             {
+
+                                 columns.Bound(o => o.PaymentDate).Format("{0:dd/MM/yyyy}");
+                                 columns.Bound(o => o.PaymentId);
+                                 columns.Bound(o => o.PaymentSource);
+                                 columns.Bound(o => o.Reference);
+                                 columns.Bound(o => o.Amount).Format("{0:£#0.00}");
+                             })
+                .DetailView(detailView => detailView.ClientTemplate(
+                    Html.Telerik().Grid<PaymentItemVM>()
+                        .Name("Grid_<#= PaymentId #>")
+                        .DataBinding(dataBinding => dataBinding
+                                                        .Ajax()
+                                                        .Select("_PaymentsItemsGridBind", "Payment", new { id = "<#= PaymentId #>" }))
+                        .Columns(columns =>
+                                     {
+
+                                         columns.Bound(o => o.Type);
+                                         columns.Bound(o => o.AccountDescription);
+                                         columns.Bound(o => o.BillCycle);
+                                         columns.Bound(o => o.Description);
+                                         columns.Bound(o => o.Amount).Format("{0:£#0.00}");
+                                     })
+                        .Sortable()
+                        .Footer(false)
+                        .ToHtmlString()))
+                .Pageable()
+                .Sortable()
+                .Render();
+        }
+    </fieldset>
+</fieldset>

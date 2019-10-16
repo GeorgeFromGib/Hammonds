@@ -1,0 +1,56 @@
+﻿@using HammondsIBMS_2.ViewModels.Customer
+<div class="well well-small well-noBackground">
+@Html.ContentTitle("Customers")
+<fieldset>
+    <fieldset>
+        <table>
+            <tr>
+                <td>
+                    @Html.FormFilter("rebindCustomerGrid")
+                </td>
+                <td class="buttonspace">
+                    @Html.ActionButton(new ButtonParameters(ButtonIcon.Add, "Add Customer"), Url.Action("CreateCustomer"))
+                    @* @Html.ActionDialogFormButton(new ButtonParameters(ButtonIcon.Add, ButtonType.ImageText, "Add Customer"),
+                              new ActionParameters("CreateNewCustomer", null),
+                              new ActionDialogFormParamters("New Customer", Url.Action("Edit"), "CustomerId"))*@
+                </td>
+            </tr>
+        </table>
+    </fieldset>
+    @{Html.Telerik().Grid<CustomerListVM>()
+          .Name("CustomerGrid")
+          .DataKeys(keys => keys.Add(o => o.CustomerId))
+          .DataBinding(databind => databind.Ajax()
+                                       .Select("_CustomerGrdBind", "Customer"))
+
+          .Columns(columns =>
+              {
+
+                  //columns.Template(o =>
+                  //   Html.GridButtonAction(new GridButtonActionParameters("StockId" + o.CustomerId.ToString(),
+                  //        "Customer", "Edit",
+                  //       new { id = o.CustomerId }))).Width(40);
+                  columns.Bound(o => o.CustomerId);
+                  columns.Bound(o => o.Surname);
+                  columns.Bound(o => o.FirstName);
+                  columns.Bound(o => o.Tel);
+                  columns.Bound(o => o.Mobile);
+                  columns.Bound(o => o.AddressLine1);
+                  columns.Bound(o => o.AddressLine2);
+                  columns.Bound(o => o.CustomerId).Title("").Sortable(false).Width(40).ClientTemplate("<div class='commandColumn'>" + @Html.ActionButton(new TelerikButtonParameters(ButtonIcon.Edit, "Manage Customer"), Url.Action("Edit", new { id = "<#= CustomerId #>" })).ToHtmlString() +
+                                                                                                      "</div>");
+
+
+              })
+          .Editable(editing => editing.Mode(GridEditMode.PopUp))
+          .Pageable()
+          .Sortable()
+          .Render();
+    }
+</fieldset>
+    </div>
+<script type="text/javascript">
+    function rebindCustomerGrid() {
+        RebindTelerikGrid('CustomerGrid');
+    }
+</script>

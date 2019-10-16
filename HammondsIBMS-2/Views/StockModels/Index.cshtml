@@ -1,0 +1,57 @@
+﻿@using HammondsIBMS_2.ViewModels.ModelView
+@Html.ContentTitle("Inventory Models")
+<fieldset>
+    <fieldset>
+        <table>
+            <tr>
+                <td>
+                    @Html.FormFilter("UpdateStockModelsGrid")
+                </td>
+                <td class="buttonspace">
+                    @Html.ActionDialogFormButton(new ButtonParameters(ButtonIcon.Add, "Add Model"),
+                                   new ActionParameters("AddNewModel", null),
+                                   new ActionDialogFormParamters("New Model", Url.Action("Edit"), "ModelId"))
+                </td>
+            </tr>
+        </table>
+    </fieldset>
+    @{Html.Telerik().Grid<ModelVM>()
+              .Name("StockModelsGrid")
+              .DataKeys(keys => keys.Add(o => o.ModelId))
+              .DataBinding(databind => databind.Ajax()
+                                           .Select("_StockModelsGridBind", "StockModels"))
+          //.DetailView("Detail","StockModels")
+              .Columns(columns =>
+                           {
+                               columns.Bound(o => o.Manufacturer).Width(100);
+                               columns.Bound(o => o.ModelCode).Width(100).Groupable(false);
+                               columns.Bound(o => o.Summary).Groupable(false);
+                               columns.Bound(o => o.Category);
+                               columns.Bound(o => o.Size);
+                               columns.Bound(o => o.RetailPrice).Format("{0:£#0.00}").Groupable(false);
+                               columns.Bound(o => o.RentalPrice).Format("{0:£#0.00}").Groupable(false);
+                               columns.Bound(o => o.SpainRetailPrice).Format("{0:€#0.00}").Groupable(false);
+                               columns.Bound(o => o.NoInStock).Groupable(false);
+                               columns.Bound(o => o.IsObsolete).HtmlAttributes(new {@class = "bool-text-to-icon"});
+                               columns.Bound(o => o.ModelId).Title("").Sortable(false).Width(80).ClientTemplate("<div class='commandColumn'>" + @Html.ActionButton(new TelerikButtonParameters(ButtonIcon.Edit,"Edit Model"), Url.Action("Edit", new { id = "<#= ModelId #>" })).ToHtmlString() +
+                                                                                                                Html.ActionDialogFormButton(new TelerikButtonParameters(ButtonIcon.Delete, "Delete Model"),
+                                                                                                                                            new ActionParameters("_DeleteModel", new { id = "<#= ModelId #>" }),
+                                                                                                                                            new ActionDialogFormParamters("Delete Model", null, "_DeleteModel", null, "UpdateStockModelsGrid")).ToHtmlString() +
+                                                                                                                "</div>");
+                           })
+              .Editable(editing => editing.Mode(GridEditMode.PopUp))
+              .ClientEvents(events => events.OnDataBound("StockModelsGridDataBound"))
+              .Pageable()
+              .Sortable()
+              .Render();
+    }
+</fieldset>
+<script type="text/javascript">
+    function UpdateStockModelsGrid() {
+        RebindTelerikGrid('StockModelsGrid');
+    }
+
+    function StockModelsGridDataBound() {
+        ChangeBoolTextToIcon();
+    }
+</script>

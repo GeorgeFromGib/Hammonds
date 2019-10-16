@@ -1,0 +1,67 @@
+﻿<div id="ContractUnitsArea">
+    @if (ViewBag.MoveOnToEditAccount > -1)
+    {
+        @Html.Action("_EditAccount", new {accountId = ViewBag.MoveOnToEditAccount})
+    }
+    else
+    {
+        <fieldset>        
+            @model HammondsIBMS_Domain.Entities.Customers.Customer
+            <fieldset>
+                <table>
+                    <tr>
+                        <td>
+                            <div id="AccountsBalance">
+                                @Html.Action("_CustomerAccountsBalance", "Transactions", new {id = Model.CustomerId})
+                            </div>
+                        </td>
+                        <td class="buttonspace">
+                            @*@Ajax.ActionButton(new ButtonParameters(ButtonIcon.Add, ButtonType.ImageText, "Create Account"),
+                                            new ActionParameters("AddNewAccount",new {customerId=Model.CustomerId,updateTargetId="ContractUnitsArea"}),
+                                            new AjaxOptions{UpdateTargetId = "ContractUnitsArea"})*@ @*Will Do at a later date*@
+                            @Html.ActionButton(new ButtonParameters(ButtonIcon.Add, ButtonType.ImageText, "Create Account"), Url.Action("AddNewAccount","NewAccount", new {customerId = Model.CustomerId}))
+                            @*   @Html.ActionDialogFormButton(new ButtonParameters(ButtonIcon.Add, ButtonType.ImageText, "Create Account"),
+                                                     new ActionParameters("_AddCustomerAccount", new { id = Model.CustomerId }),
+                                                     new ActionDialogFormParamters("Create Account", "ContractUnitsArea", Url.Action("_EditAccountContainer"), "CustomerAccountId", null))*@
+                        </td>
+                    </tr>
+                </table>
+            </fieldset>
+            @foreach (var item in Model.CustomerAccounts.Where(c=>!c.IsTemp))
+            {
+                using (Html.Container(string.Format("Account : {0} - ({1}) {2}", item.CustomerAccountId, item.AccountType, item.ModelDescription)))
+                {
+                    <table>
+                        <tr>
+                            <td style="font-weight: bold">
+                                Balance : @Html.Raw(item.Transactions.Sum(c => c.Amount).ToString("C"))
+                            </td>
+                            <td style="text-align: right; vertical-align: top; padding-right: 10px">
+                                @if (item.HasAlternateAddress() || item.HasInstructions())
+                                {
+                                    @Html.ActionDialogFormButton(new ButtonParameters(ButtonIcon.Warning, ButtonType.Image, null, ButtonRole.Warning, ButtonIconColor.White, ButtonHeight.Normal, true, null, "Alternate Address or Instruction Alert"),
+                                                                 new ActionParameters("_DisplayAlternateAddress", new {id = item.CustomerAccountId}),
+                                                                 new ActionDialogFormParamters("Alternate Address & Instructions", null, null))
+                                }
+                            </td>
+                            <td class="buttonspace">
+                                @Ajax.ActionButton(new ButtonParameters(ButtonIcon.Edit, ButtonType.ImageText, "Edit"),
+                                                   new ActionParameters("_EditAccount", "Account", new {accountId = item.CustomerAccountId}),
+                                                   new AjaxOptions {UpdateTargetId = "ContractUnitsArea"})
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2" class="contentspace">
+                                @*@Html.Action("_DisplayCustomerAccountContracts", new { id = item.CustomerAccountId })*@
+                            </td>
+                            <td>
+                            </td>
+                        </tr>
+                    </table>
+                }
+
+            }
+        </fieldset>
+    }
+</div>
+

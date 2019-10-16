@@ -1,0 +1,143 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{EFB1E425-3D5F-4283-AA66-ACEAD73A012B}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>HammondsIBMS_Domain</RootNamespace>
+    <AssemblyName>HammondsIBMS_Domain</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="DataAnnotationsExtensions">
+      <HintPath>..\packages\DataAnnotationsExtensions.1.1.0.0\lib\NETFramework40\DataAnnotationsExtensions.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\EntityFramework.6.0.1\lib\net40\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer">
+      <HintPath>..\packages\EntityFramework.6.0.1\lib\net40\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
+    <Reference Include="FluentValidation">
+      <HintPath>..\packages\FluentValidation.3.4.6.0\lib\Net40\FluentValidation.dll</HintPath>
+    </Reference>
+    <Reference Include="FluentValidation.Mvc">
+      <HintPath>..\packages\FluentValidation.MVC3.3.4.6.0\lib\Net40\FluentValidation.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data.Entity" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="BaseInterfaces\DomainEvent.cs" />
+    <Compile Include="BaseInterfaces\EntityBase.cs" />
+    <Compile Include="BaseInterfaces\IConcurrentEntity.cs" />
+    <Compile Include="Entities\Accounts\AccountType.cs" />
+    <Compile Include="Entities\Accounts\OneOffItem.cs" />
+    <Compile Include="Entities\Accounts\OneOffTypes.cs" />
+    <Compile Include="Entities\Accounts\PurchaseAccount.cs" />
+    <Compile Include="Entities\Accounts\RentalAccount.cs" />
+    <Compile Include="Entities\Accounts\RentalUnitBasket.cs" />
+    <Compile Include="Entities\AccountTransactions\AccountTransaction.cs" />
+    <Compile Include="Entities\AccountTransactions\AccountTransactionType.cs" />
+    <Compile Include="Entities\BillCycles\BillCycleRun.cs" />
+    <Compile Include="Entities\Contracts\Contract.cs" />
+    <Compile Include="Entities\Contracts\ContractStatus.cs" />
+    <Compile Include="Entities\Contracts\ContractType.cs" />
+    <Compile Include="Entities\Contracts\ContractUnit.cs" />
+    <Compile Include="Entities\Contracts\PurchaseUnit.cs" />
+    <Compile Include="Entities\Contracts\UnitBase.cs" />
+    <Compile Include="Entities\Customers\Customer.cs" />
+    <Compile Include="Entities\Accounts\CustomerAccount.cs" />
+    <Compile Include="Entities\Customers\CustomerDocument.cs" />
+    <Compile Include="Entities\Customers\CustomerEmployer.cs" />
+    <Compile Include="Entities\Contracts\Employer.cs" />
+    <Compile Include="Entities\Contracts\ItemCharge.cs" />
+    <Compile Include="Entities\Contracts\PaymentPeriod.cs" />
+    <Compile Include="Entities\Contracts\RentalContract.cs" />
+    <Compile Include="Entities\Contracts\RentedUnit.cs" />
+    <Compile Include="Entities\Contracts\ServiceContract.cs" />
+    <Compile Include="Entities\Documents\Document.cs" />
+    <Compile Include="Entities\DocumentTemplates\DocumentTemplate.cs" />
+    <Compile Include="Entities\DocumentTemplates\DocumentTemplateEntityHelpers.cs" />
+    <Compile Include="Entities\DocumentTemplates\IDocumentTemplateParserSource.cs" />
+    <Compile Include="Entities\DocumentTemplates\PurchaseContractDocumentTemplate.cs" />
+    <Compile Include="Entities\DocumentTemplates\RentContractDocumentTemplate.cs" />
+    <Compile Include="Entities\Invoicing\AdjustmentPost.cs" />
+    <Compile Include="Entities\Invoicing\BillCycle.cs" />
+    <Compile Include="Entities\Invoicing\Invoice.cs" />
+    <Compile Include="Entities\Invoicing\InvoiceItem.cs" />
+    <Compile Include="Entities\Invoicing\PaymentSource.cs" />
+    <Compile Include="Entities\Invoicing\Transaction.cs" />
+    <Compile Include="Entities\Misc\Misc.cs" />
+    <Compile Include="Entities\Payments\Payment.cs" />
+    <Compile Include="Entities\Stock\AccountTypeChangeableLifeCycle.cs" />
+    <Compile Include="Entities\Stock\InvoiceStatus.cs" />
+    <Compile Include="Entities\Stock\ModelImage.cs" />
+    <Compile Include="Entities\Stock\ModelSpecificContract.cs" />
+    <Compile Include="Entities\Stock\StockInvoiceItems.cs" />
+    <Compile Include="Properties\Annotations.cs" />
+    <Compile Include="Repositories\IRentedUnitRepository.cs" />
+    <Compile Include="Repositories\IStockInvoiceRepository.cs" />
+    <Compile Include="Repositories\IStockRepository.cs" />
+    <Compile Include="Repositories\IRepository.cs" />
+    <Compile Include="Repositories\ISupplierRepository.cs" />
+    <Compile Include="Repositories\IUnitOfWork.cs" />
+    <Compile Include="Values\BankDetails.cs" />
+    <Compile Include="Values\ConstantValues.cs" />
+    <Compile Include="Values\ContactInfo.cs" />
+    <Compile Include="Entities\Supplier\ExchangeRate.cs" />
+    <Compile Include="Values\ForeignCurrency.cs" />
+    <Compile Include="Values\Address.cs" />
+    <Compile Include="Entities\Stock\Category.cs" />
+    <Compile Include="Entities\Stock\Invoice.cs" />
+    <Compile Include="Entities\Supplier\Suppliers.cs" />
+    <Compile Include="Entities\Stock\History.cs" />
+    <Compile Include="Entities\Product\Manufacturer.cs" />
+    <Compile Include="Entities\Stock\Model.cs" />
+    <Compile Include="Entities\Stock\ProductLifeCycle.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Entities\Stock\Stock.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

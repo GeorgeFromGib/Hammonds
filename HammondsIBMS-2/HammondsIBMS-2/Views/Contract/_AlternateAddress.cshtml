@@ -1,0 +1,13 @@
+﻿@model HammondsIBMS_Domain.Entities.Accounts.CustomerAccount
+<table class="table table-striped table-condensed table-bordered">
+    <tr>
+        <td style="width:150px">
+            @Html.LabelFor(o => o.AlternateAddressInstructions)
+        </td>
+        <td style="color:orange;max-width: 400px">
+            @Html.DisplayFor(o => o.AlternateAddressInstructions)
+            @Html.ValidationMessageFor(o => o.AlternateAddressInstructions)
+        </td>
+    </tr>
+</table>
+@Html.DisplayFor(o => o.AlternateAddress, "_Address")

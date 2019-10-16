@@ -1,0 +1,53 @@
+﻿@using HammondsIBMS_2.ViewModels.StockInvoice
+@model SelectStockForInvoiceVM
+@using (Html.BeginForm())
+{
+    @Html.HiddenFor(m => m.StockInvoiceId)
+    <fieldset>
+        @*        <div style="max-height: 300px; width: 650px; overflow-y: scroll">*@
+        @{
+    Html.Telerik().Grid<SelectableStockVM>()
+        .Name("SelectedStockGrid")
+        .DataKeys(keys => keys.Add(o => o.StockId))
+        .DataBinding(databind => databind.Ajax()
+                                     .Select("_GetAvailableStock", "StockInvoice"))
+        .Columns(columns =>
+            {
+                columns.Bound(o => o.StockId)
+                    .ClientTemplate("<input type='checkbox' id='chkMessage' name='checkedRecords' value='<#= StockId #>' />")
+                    .Title("Select")
+                    .Width(50)
+                    .HtmlAttributes(new { style = "text-align:center" });
+
+                columns.Bound(o => o.SerialNumber);
+                columns.Bound(o => o.Identifier);
+                columns.Bound(o => o.Manufacturer);
+                columns.Bound(o => o.Model);
+                columns.Bound(o => o.LastEntry);
+            })
+        .ClientEvents(events => events.OnDataBound("selectedStockGrid_onDataBound"))
+        .Pageable()
+        .Sortable()
+        .Render();
+        }
+        @*        </div>*@
+    </fieldset>
+    <div>
+        @Html.FormSubmitButton() @Html.FormCancelButton()
+    </div>
+    <div id="selectedRepository">
+    </div>
+}
+<script type="text/javascript">
+    
+    var gridCheckBox;
+
+    $(function() {
+        gridCheckBox = new GridCheckBoxRepositoryHandler('selectedRepository', 'SelectedStockGrid', 'SelectedStock', 'StockId');
+    });
+    
+    function selectedStockGrid_onDataBound(e) {
+        gridCheckBox.updateGridOnDataBound();
+    }
+    
+</script>

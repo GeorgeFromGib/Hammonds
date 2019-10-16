@@ -1,0 +1,10 @@
+﻿@model int
+           
+@{Html.Telerik().DropDownList()
+        .Name(ViewData.TemplateInfo.GetFullHtmlFieldName(string.Empty))
+        .BindTo(new SelectList((System.Collections.IEnumerable)ViewBag.Suppliers
+            , "SupplierId", "Name"
+            , Model == null ? "-1" : Model.ToString()))
+        .Render();}
+
+@*Expects ViewBag to contain a -1 indexed supplier as name None *@

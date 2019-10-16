@@ -1,0 +1,12 @@
+﻿@model HammondsIBMS_Domain.Entities.Contracts.ContractUnit
+
+<fieldset>
+  
+        @Html.Partial("_ContractUnitEditBody", Model)
+        <div>
+            @Ajax.ActionButton(new ButtonParameters(ButtonIcon.Ok, ButtonType.ImageText, "Contracts List"), 
+                                new ActionParameters("_DisplayCustomerContractUnits", new { id=Model.CustomerId }), 
+                                new AjaxOptions { UpdateTargetId = "ContractUnitsArea" })
+        </div>
+
+</fieldset>

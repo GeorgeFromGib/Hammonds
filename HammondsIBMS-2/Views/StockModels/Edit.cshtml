@@ -1,0 +1,46 @@
+﻿@using HammondsIBMS_2.Helpers.Html
+@model HammondsIBMS_2.ViewModels.ModelView.ModelVM
+<div class="well well-small well-noBackground">
+    <div class="well well-small">
+        <table >
+            <tr>
+                <td><h5 id="modelheader">@Html.Action("_DisplayModelEditHeader", new { id = Model.ModelId })</h5></td>
+                <td class="right-align">@Html.ActionButton(new ButtonParameters(ButtonIcon.Return,ButtonIconColor.White,ButtonRole.Info, "Inventory List"), Url.Action("Index"))</td>
+            </tr>
+        </table>
+
+       @* <div class="row-fluid">
+            <div class="span6"></div>
+            <div class="span6 right-align">@Html.ActionButton(new ButtonParameters(ButtonIcon.Return, "Back Inventory List"), "Index")</div>
+        </div>*@
+    </div>
+   
+    @{ Html.Telerik().TabStrip()
+           .Name("InventoryTabStrip")
+           .Effects(fx => fx.Toggle()                        
+               .Opacity()                         
+               .OpenDuration(200)                         
+               .CloseDuration(200)
+               )
+           .Items(tabstrip =>
+                      {
+                          tabstrip.Add().Text("Details")
+                              .LoadContentFrom(Url.Action("_DisplayModelDetails", new { id = Model.ModelId }));
+                          tabstrip.Add().Text("Stock")
+                              .LoadContentFrom(Url.Action("_DisplayStockForModel", new { id = Model.ModelId }));
+                          tabstrip.Add().Text("Contracts")
+                             .LoadContentFrom(Url.Action("_DisplayModelSpecificContracts", new { id = Model.ModelId }));
+
+                      })
+           .SelectedIndex(0).Render(); 
+    }
+
+</div>
+<script type="text/javascript">
+    $(function () {
+        $('#ModelDetailsArea').live('change', function () {
+            AjaxUpdate('@Url.Action("_DisplayModelEditHeader", new { id = Model.ModelId })', '#modelheader');
+        });
+    })
+
+</script>

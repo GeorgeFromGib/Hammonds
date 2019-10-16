@@ -1,0 +1,69 @@
+﻿@model HammondsIBMS_2.ViewModels.Accounts.EditPurchaseUnitVM
+
+@using (Html.BeginForm()) {
+    @Html.ValidationSummary(true)
+    <fieldset>
+       <table class='edit-table'>
+        @Html.HiddenFor(model => model.UnitId)
+        @Html.HiddenFor(m=>m.PurchasedDate)
+        @Html.HiddenFor(m=>m.RetailCost)
+
+      <tr>
+        <td>
+            @Html.LabelFor(model => model.PurchasedDate)
+        </td>
+        <td>
+            @Html.DisplayFor(model => model.PurchasedDate)<br/>
+            @Html.ValidationMessageFor(model => model.PurchasedDate)
+        </td>
+    </tr>
+      <tr>
+        <td>
+            @Html.LabelFor(model => model.RetailCost)
+        </td>
+        <td>
+            @Html.DisplayFor(model => model.RetailCost)<br/>
+            @Html.ValidationMessageFor(model => model.RetailCost)
+        </td>
+    </tr>
+           <tr>
+               <td>
+                   @Html.LabelFor(model => model.DiscountedAmount)
+               </td>
+               <td>
+                   @Html.EditorFor(model => model.DiscountedAmount)
+                   @Html.ValidationMessageFor(model => model.DiscountedAmount)
+               </td>
+           </tr>
+            <tr>
+        <td>
+            @Html.LabelFor(model => model.Total)
+        </td>
+        <td id="epu_vm_bindarea">
+            <div id="Total" >@Html.DisplayFor(model=>model.Total)</div>
+        </td>
+    </tr>
+      
+    </table>
+    </fieldset>
+ <div>
+        @Html.FormSubmitButton() @Html.FormCancelButton()
+
+</div>
+}
+<script type="text/javascript">
+
+
+    $(function() {
+        //$('#DiscountedAmount').die();
+        $('#DiscountedAmount').live('change', function(oldVal, newVal) {
+            UpdateTotal(newVal.Value);
+        });
+    });
+
+    function UpdateTotal(value) {
+        var retail = '@Model.RetailCost';
+        var total = retail - value;
+        $('#Total').html(accounting.formatMoney(total));
+    }
+</script>

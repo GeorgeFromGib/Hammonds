@@ -1,0 +1,108 @@
+﻿@model HammondsIBMS_2.ViewModels.StockInvoiceItemVM
+@using (Html.BeginForm(null,null,null,FormMethod.Post,new {id="EditStockInvoiceItemForm"}))
+{
+    @Html.ValidationSummary(true)
+    <fieldset>
+        <table class='edit-table'>
+            @Html.HiddenFor(model => model.StockInvoiceItemId)
+            <tr>
+                <td class="span2">
+                    @Html.LabelFor(model => model.StockModel)
+                </td>
+                <td class="span4">
+                    @Html.DisplayFor(model => model.StockModel)
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    @Html.LabelFor(model => model.UnitCost)
+                </td>
+                <td>
+                    @Html.EditorFor(model => model.UnitCost)
+                    @Html.ValidationMessageFor(model => model.UnitCost)
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    @Html.LabelFor(model => model.NoOfUnits)
+                </td>
+                <td>
+                    @Html.DisplayFor(model => model.NoOfUnits)
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    @Html.LabelFor(model => model.UnitCostTotal)
+                </td>
+                <td id="UnitCostTotalArea">
+                    @Html.DisplayFor(model => model.UnitCostTotal)
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    @Html.LabelFor(model => model.FreightApportionment)
+                </td>
+                <td id="FreightApportionmentArea">
+                    @Html.DisplayFor(model => model.FreightApportionment)
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    @Html.LabelFor(model => model.DutyPct)
+                </td>
+                <td>
+                    @Html.EditorFor(model => model.DutyPct)
+                    @Html.ValidationMessageFor(model => model.DutyPct)
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    @Html.LabelFor(model => model.LandedCost)
+                </td>
+                <td id="LandedCostArea">
+                    @Html.DisplayFor(model => model.LandedCost)
+                </td>
+            </tr>
+             <tr>
+                <td>
+                    @Html.LabelFor(model => model.RetailPrice)
+                </td>
+                <td>
+                    @Html.EditorFor(model => model.RetailPrice)
+                    @Html.ValidationMessageFor(model => model.RetailPrice)
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    @Html.LabelFor(model => model.RentalPrice)
+                </td>
+                <td>
+                    @Html.EditorFor(model => model.RentalPrice)
+                    @Html.ValidationMessageFor(model => model.RentalPrice)
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    @Html.LabelFor(model => model.SpainRetailPrice)
+                </td>
+                <td>
+                    @Html.EditorFor(model => model.SpainRetailPrice)
+                    @Html.ValidationMessageFor(model => model.SpainRetailPrice)
+                </td>
+            </tr>
+        </table>
+    </fieldset>
+    <div>
+        @Html.FormSubmitButton() @Html.FormCancelButton()
+    </div>
+}
+
+<script type="text/javascript">
+    $('#UnitCost_AmountNative, #DutyPct').change(function () {
+        $.get('@Url.Action("_ChangeStockInvoiceItemCosts")', $('#EditStockInvoiceItemForm').serialize(), function (data) {
+            $('#FreightApportionmentArea').html(data.FreightApp);
+            $('#LandedCostArea').html(data.LandedCost);
+            $('#UnitCostTotalArea').html(data.UnitCosts);
+        });
+    });
+</script>

@@ -1,0 +1,119 @@
+﻿@using HammondsIBMS_2.ViewModels.Contract
+@model HammondsIBMS_2.ViewModels.Accounts.AddPurchaseAccountVM
+<div class="well well-small well-noBackground">
+    @Html.ContentTitle(Html.Action("StepperHeader").ToHtmlString())
+    @using (Html.BeginForm(null, null, FormMethod.Post, new { @class = "form-horizontal" }))
+    {
+        @Html.ValidationSummary(true)
+        @Html.HiddenFor(model => model.CustomerAccountId)
+        @Html.HiddenFor(model => model.CustomerId)
+        @Html.HiddenFor(model => model.StockId)
+        <fieldset>
+            <legend>Model Contracts</legend>
+            <div class="control-group">
+                @Html.LabelFor(model => model.Stock.ManufacturerModel, new { @class = "control-label" })
+                <div class="controls">
+                    <span class="input-xlarge uneditable-input">@Model.Stock.ManufacturerModel</span>
+                </div>
+            </div>
+            <div class="control-group">
+                @Html.LabelFor(model => model.ModelSalesPrice, new { @class = "control-label" })
+                <div class="controls">
+                    <span class="input-xlarge uneditable-input">@Model.ModelSalesPrice.ToString("C")</span>
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label">Contracts</label>
+
+                <div class="controls">
+                    <fieldset>
+                        <table>
+                            <tr>
+                                <td class="contentspace"></td>
+                                <td class="buttonspace">
+                                    @Html.ActionDialogFormButton(new ButtonParameters(ButtonIcon.Add, ButtonType.ImageText, "Add Contracts"),
+                                                                 new ActionParameters("_AddAccountAddServiceContracts", new { id = Model.Stock.ModelId }),
+                                                                 new ActionDialogFormParamters("Add Contracts", null, Url.Action("_AddAccountAddServiceContracts"), null, "OnServiceContractChanged"))
+                                </td>
+                            </tr>
+                        </table>
+                        @{
+        Html.Telerik().Grid<ServiceContractVM>()
+            .Name("ServiceContractVMGrid")
+            .DataKeys(keys => keys.Add(o => o.ContractId))
+            .DataBinding(databind => databind.Ajax()
+                                             .Select("_DisplayServiceContracts", "Account", new { modelId = Model.Stock.ModelId }))
+            //.ClientEvents(events => events.OnLoad("ServiceContractVMGrid_onLoad").OnDataBinding("ServiceContractVMGrid_onDataBinding"))
+            .Columns(columns =>
+                {
+                    columns.Bound(o => o.ContractTypeDescription);
+                    columns.Bound(o => o.ContractLengthInMonths);
+                    columns.Bound(o => o.StartDate).Format("{0:dd/MM/yyyy}");
+                    columns.Bound(o => o.ExpiryDate).Format("{0:dd/MM/yyyy}");
+                    columns.Bound(o => o.ContractStatusDescription);
+                    columns.Bound(o => o.Charge).Format("{0:£#0.00}");
+                    columns.Bound(o => o.PeriodPaymentAmount).Format("{0:£#0.00}");
+                    columns.Bound(o => o.PaymentPeriodDescription);
+                    columns.Bound(o => o.ContractId).Title("").Sortable(false).Width(80)
+                           .ClientTemplate("<div class='commandColumn'>" /*+ Html.ActionDialogFormButton(  new ButtonParameters(ButtonIcon.Edit),
+                                                                                                                                            new ActionParameters("_EditServiceContract", new { id = "<#= ContractId #>" }),
+                                                                                                                                            new ActionDialogFormParamters("Edit Service Contract", null, 
+                                                                                                                                                "_EditServiceContract", null, "OnServiceContractChanged")).ToHtmlString()*/
+                                           + @Html.ActionDialogFormButton(new TelerikButtonParameters(ButtonIcon.Edit),
+                                                                          new ActionParameters("_AddAccountEditServiceContractPaymentPeriod", new { id = "<#= ContractId #>" }),
+                                                                          new ActionDialogFormParamters("Change Payment Period", null, "_AddAccountEditServiceContractPaymentPeriod", null, "OnServiceContractChanged")).ToHtmlString()
+                                           + Html.ActionDialogFormButton(new TelerikButtonParameters(ButtonIcon.Delete),
+                                                                         new ActionParameters("_AddAccountDeleteServiceContract", new { id = "<#= ContractId #>" }),
+                                                                         new ActionDialogFormParamters("Delete Contract", null,
+                                                                                                       "__AddAccountDeleteServiceContract", null, "OnServiceContractChanged")).ToHtmlString()
+                                           + "</div>");
+
+
+
+                })
+            //.Editable(editing => editing.Mode(GridEditMode.PopUp))
+            .Pageable()
+            .Sortable()
+            .Footer(false)
+            .Render();
+                        }
+                    </fieldset>
+                </div>
+            </div>
+            <div class="control-group">
+                @Html.LabelFor(model => model.TotalContracts, new { @class = "control-label" })
+                <div class="controls">
+                    <span class="input-xlarge uneditable-input">@Model.TotalContracts</span>
+                </div>
+            </div>
+            <div class="control-group">
+                @Html.LabelFor(model => model.TotalCharge, new { @class = "control-label" })
+                <div class="controls">
+                    <span class="input-xlarge uneditable-input" id="TotalCharge">@Model.TotalCharge.ToString("C")</span>
+
+                </div>
+            </div>
+        </fieldset>
+        <div>
+            @Html.Action("StepperControl")
+        </div>
+    }
+</div>
+<script type="text/javascript">
+
+
+    function OnServiceContractChanged(e) {
+        RebindTelerikGrid('ServiceContractVMGrid');
+        GetPurchaseAccountData(function (data) {
+            $('#TotalCharge').html(accounting.formatMoney(data.Total));
+            $('#TotalContracts').html(accounting.formatMoney(data.TotalContracts));
+        });
+
+    }
+
+    function GetPurchaseAccountData(func) {
+        $.get('@Url.Action("_GetAddPurchaseAccount")', function (data) {
+            func(data);
+        });
+    }
+</script>

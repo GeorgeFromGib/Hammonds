@@ -1,0 +1,17 @@
+﻿@model releases
+<fieldset>
+    <div style="max-height: 300px; width:600px;overflow-y: scroll">
+    @foreach (var item in Model.releaseNumber.OrderBy(m=>m.release).Reverse())
+    {
+        <h4>
+            Release : @item.release  &nbsp;&nbsp;  Date: @item.date
+        </h4>
+        <ul>
+            @foreach (var entry in item.entry)
+            {
+                <li>@entry</li>
+            }
+        </ul>
+    }</div>
+</fieldset>
+@Html.FormCancelButton()

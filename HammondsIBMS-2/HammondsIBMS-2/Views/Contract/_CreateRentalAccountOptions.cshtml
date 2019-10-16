@@ -1,0 +1,50 @@
+﻿@model HammondsIBMS_2.ViewModels.Contract.CreateContractUnitVM
+
+<table class="edit-table">
+    <tr>
+        <td width="150px">
+            @Html.LabelFor(o => o.RentalAmount)
+        </td>
+        <td>
+            @Html.EditorFor(o => o.RentalAmount)
+        </td>
+    </tr>
+    <tr>
+        <td>
+            @Html.LabelFor(o => o.PaymentPeriodId)
+        </td>
+        <td>
+            @Html.EditorFor(o => o.PaymentPeriodId)
+            @Html.ValidationMessageFor(o => o.PaymentPeriodId)
+        </td>
+    </tr>
+    <tr>
+        <td>
+            @Html.LabelFor(o => o.PeriodPaymentAmount)
+        </td>
+        <td>
+            <div id="PeriodPaymentAmount">
+                @Html.DisplayFor(o => o.PeriodPaymentAmount)<br />
+                @Html.ValidationMessageFor(o => o.PeriodPaymentAmount)
+            </div>
+        </td>
+    </tr>
+</table>
+<hr/>
+@Html.Partial("_ContractUnitStockFilterBox", 0)
+@Html.ValidationMessageFor(o => o.StockId)
+<script type="text/javascript">
+    $(function () {
+//        $('#_ContractUnitStockFilterBox').live('selectionChanged', function (event, e) {
+//            $('#StockId').val(e.value);
+//        });
+
+        $('#PaymentPeriodId,#RentalAmount').die('change');
+        $('#PaymentPeriodId,#RentalAmount').live('change', function (event, e) {
+            $.get('@Url.Action("_CalculatePaymentAmountForPeriodId")', { id: $('#PaymentPeriodId').val(), amount: $('#RentalAmount').val() }, function (result) {
+                $('#PeriodPaymentAmount').html(accounting.formatMoney(result.periodPaymentAmount));
+            });
+        });
+
+    })
+</script>

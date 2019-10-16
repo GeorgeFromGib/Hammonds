@@ -1,0 +1,45 @@
+﻿@using HammondsIBMS_Domain.Entities.Contracts
+
+@Html.ContentTitle("Payment Periods")
+<fieldset>
+    <fieldset>
+        <table >
+            <tr>
+                <td>
+
+                </td>
+                <td class="buttonspace">
+                    @Html.ActionDialogFormButton(new ButtonParameters(ButtonIcon.Add, "Add Payment Period"),
+                                   new ActionParameters("_AddPaymentPeriod", null),
+                                   new ActionDialogFormParamters("Add Payment Period", null, Url.Action("_AddPaymentPeriod"), null, "rebindPaymentPeriodGrid"))
+                </td>
+            </tr>
+        </table>
+    </fieldset>
+@{Html.Telerik().Grid<PaymentPeriod>()
+      .Name("PaymentPeriodGrid")
+      .DataKeys(keys => keys.Add(o => o.PaymentPeriodId))
+      .DataBinding(databind => databind.Ajax()
+          .Select("_PaymentPeriodsGridBind", "Contract"))
+      .Columns(columns =>
+                   {
+                       columns.Bound(o => o.Description);
+                       columns.Bound(o => o.PeriodInMonths);
+                       columns.Bound(o => o.PaymentPeriodId).Title("").Sortable(false).Width(50).ClientTemplate("<div class='commandColumn'>" + Html.ActionDialogFormButton(new TelerikButtonParameters(ButtonIcon.Edit),
+                                                                                                                                           new ActionParameters("_EditPaymentPeriod", new { id = "<#= PaymentPeriodId #>" }),
+                                                                                                                                           new ActionDialogFormParamters("Edit Payment Period", null, "_EditPaymentPeriod", null, "rebindPaymentPeriodGrid")).ToHtmlString() +
+                                                                                                               "</div>");
+
+
+                   })
+      .Editable(editing => editing.Mode(GridEditMode.PopUp))
+      .Pageable()
+      .Sortable()
+      .Render();
+}
+</fieldset>
+<script type="text/javascript">
+    function rebindPaymentPeriodGrid() {
+        RebindTelerikGrid('PaymentPeriodGrid');
+    }
+</script>

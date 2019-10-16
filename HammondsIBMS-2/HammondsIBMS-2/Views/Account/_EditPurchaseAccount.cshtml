@@ -1,0 +1,65 @@
+﻿@model HammondsIBMS_Domain.Entities.Accounts.PurchaseAccount
+@Html.Partial("_CustomerAccountEditHeader", Model)
+<fieldset>
+    <legend>Units/Contracts</legend>
+    <table>
+        <tr>
+            <td class="contentspace">
+                <div id="UnitDetails">
+                    @Html.Partial("_UnitsAndContractsGrid", new ViewDataDictionary { { "parentId", Model.CustomerAccountId }, { "controller", "PermUnitsAndContractsGrid" }, { "EditUnit", false },{"showToggles",true} })
+                    @*@Html.Action("_DisplayPurchaseAccountStock", new { accountId = Model.CustomerAccountId })*@
+                </div>
+            </td>
+            <td class="buttonspace">
+                @*                 @Html.ActionButton(new ButtonParameters(ButtonIcon.Add, ButtonType.ImageText, "Add"),Url.Action("AddPurchaseUnitBasket","NewPurchaseUnit",new{CustomerAccountId=Model.CustomerAccountId}))*@
+                @Html.Partial("_BasketButtons", Model, new ViewDataDictionary { { "controller", "NewPurchaseUnit" } })
+            </td>
+        </tr>
+    </table>
+</fieldset>
+@*<fieldset>
+    <legend>Attached Contract Items</legend>
+    <table>
+        <tr>
+            <td class="contentspace">
+                <div id="AttachedContractDetails">
+                    @Html.Action("_EditPurchaseAccountContractsDisplay", new { id = Model.CustomerAccountId })
+                </div>
+            </td>
+            <td class="buttonspace">
+                @Html.ActionDialogFormButton(new ButtonParameters(ButtonIcon.Add, ButtonType.ImageText, "Add"),
+                                             new ActionParameters("_AddContract", new { id = Model.CustomerAccountId }),
+                                             new ActionDialogFormParamters("Add Contract", "AttachedContractDetails", Url.Action("_EditPurchaseAccountContractsDisplay", new { id = Model.CustomerAccountId }), null))
+            </td>
+        </tr>
+    </table>
+</fieldset>*@
+<fieldset>
+    <legend>One Off Items</legend>
+    <table>
+        <tr>
+            <td class="contentspace">
+                <div id="OneOffItems">
+                    @Html.Partial("_DisplayOneOffItems", Model)
+                </div>
+            </td>
+        </tr>
+    </table>
+</fieldset>
+<fieldset>
+    <legend>Alternate Address</legend>
+    <table>
+        <tr>
+            <td class="contentspace">
+                <div id="AlternateAddressDetails">
+                    @Html.Action("_DisplayAlternateAddress", new { id = Model.CustomerAccountId })
+                </div>
+            </td>
+            <td class="buttonspace">
+                @Html.ActionDialogFormButton(new ButtonParameters(ButtonIcon.Edit, ButtonType.ImageText, "Edit"),
+                                                    new ActionParameters("_EditAlternateAddress", new { id = Model.CustomerAccountId }),
+                                                                      new ActionDialogFormParamters("Edit Alternate Address", "AlternateAddressDetails", Url.Action("_DisplayAlternateAddress", new { id = Model.CustomerAccountId }), null))
+            </td>
+        </tr>
+    </table>
+</fieldset>

@@ -1,0 +1,47 @@
+﻿@using HammondsIBMS_2.ViewModels.Manufacturer
+@Html.ContentTitle("Manufacturers")
+<fieldset>
+    <fieldset>
+        <table>
+            <tr>
+                <td class="buttonspace">
+                    @Html.ActionDialogFormButton(new ButtonParameters(ButtonIcon.Add, "Add Manufacturer"),
+                                   new ActionParameters("_AddManufacturer", null),
+                                   new ActionDialogFormParamters("New Manufacturer", null, Url.Action("_AddManufacturer"), null, "rebindManufacturersGrid"))
+                </td>
+            </tr>
+        </table>
+    </fieldset>
+    @{Html.Telerik().Grid<ManufacturerVM>()
+          .Name("ManufacturersGrid")
+          .DataKeys(keys => keys.Add(o => o.ManufacturerId))
+          .DataBinding(databind => databind.Ajax().Select("_ManufacturerGridBind", "Manufacturers").Update("Edit", "Manufacturers"))
+          .Columns(columns =>
+                       {
+                           columns.Bound(o => o.Name);
+                           columns.Bound(o => o.Retired).Title("Retired").Width(30).HtmlAttributes(new { @class = "bool-text-to-icon" }); 
+                           //columns.Bound(o => o.Retired).Width(60);
+                           columns.Bound(o => o.ManufacturerId).Title("").Sortable(false).Width(80).ClientTemplate("<div class='commandColumn'>" + Html.ActionDialogFormButton(new TelerikButtonParameters(ButtonIcon.Edit),
+                                                                                                                                                                               new ActionParameters("Edit", new { id = "<#= ManufacturerId #>" }),
+                                                                                                                                                                               new ActionDialogFormParamters("Edit Stock", null, "Edit", null, "rebindManufacturersGrid")).ToHtmlString() +
+                                                                                                                   Html.ActionDialogFormButton(new TelerikButtonParameters(ButtonIcon.Delete),
+                                                                                                                                               new ActionParameters("Delete", new { id = "<#= ManufacturerId #>" }),
+                                                                                                                                               new ActionDialogFormParamters("Delete Stock", null, "Delete", null, "rebindManufacturersGrid")).ToHtmlString() +
+                                                                                                                   "</div>");
+                       })
+          .Editable(editing => editing.Mode(GridEditMode.PopUp))
+          .ClientEvents(events=>events.OnRowDataBound("onGridDataBinding"))
+          .Pageable()
+          .Sortable()
+          .Render();
+    }
+</fieldset>
+<script type="text/javascript">
+    function rebindManufacturersGrid() {
+        RebindTelerikGrid('ManufacturersGrid');
+    }
+
+    function onGridDataBinding(e) {
+        ChangeBoolTextToIcon();
+    }
+</script>

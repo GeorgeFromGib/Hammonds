@@ -1,0 +1,11 @@
+﻿@model HammondsIBMS_Domain.Entities.Customers.CustomerEmployer
+
+    @using (Html.BeginForm(null, null, FormMethod.Post, new { @class = "form-horizontal" }))
+    {
+        @Html.Partial("_EditCustomerEmployerBody", Model)
+        <div>
+            @Html.FormSubmitButton() @Html.FormCancelButton()
+        </div>
+    }
+
+

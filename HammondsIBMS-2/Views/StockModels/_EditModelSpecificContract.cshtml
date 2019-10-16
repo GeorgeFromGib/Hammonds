@@ -1,0 +1,64 @@
+﻿@model HammondsIBMS_2.ViewModels.ModelView.ModelSpecificContractVM
+@using (Html.BeginForm())
+{
+    @Html.ValidationSummary(true)
+    @Html.HiddenFor(o=>o.ModelId)
+    @Html.HiddenFor(o=>o.ModelSpecificContractId)
+    <fieldset>
+        <table class='edit-table'>
+            <tr>
+                <td>
+                    @Html.LabelFor(model => model.ContractTypeId)
+                </td>
+                <td>
+                    @Html.EditorFor(model => model.ContractTypeId)
+                    @Html.ValidationMessageFor(model => model.ContractTypeId)
+                </td>
+            </tr>
+             <tr>
+                <td>
+                    @Html.LabelFor(model => model.PeriodInMonths)
+                </td>
+                <td>
+                    @Html.EditorFor(model => model.PeriodInMonths)
+                    @Html.ValidationMessageFor(model => model.PeriodInMonths)
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    @Html.LabelFor(model => model.NormalTermAmount)
+                </td>
+                <td>
+                    @Html.EditorFor(model => model.NormalTermAmount)
+                    @Html.ValidationMessageFor(model => model.NormalTermAmount)
+                </td>
+            </tr>
+             <tr>
+                <td>
+                    @Html.LabelFor(model => model.Default)
+                </td>
+                <td>
+                    @Html.EditorFor(model => model.Default)
+                    @Html.ValidationMessageFor(model => model.Default)
+                </td>
+            </tr>
+        </table>
+    </fieldset>
+    <div>
+        @Html.FormSubmitButton() @Html.FormCancelButton()
+
+    </div>
+}
+
+<script type="text/javascript">
+    $(function() {
+        $('#ContractTypeId').on('change', function (event,e) {
+            var contractId = e.value;
+            $.get('@Url.Action("_GetContractTypeDetails")', { id: contractId }, function (data) {
+                $('#PeriodInMonths').data('tTextBox').value(data.PeriodInMonths);
+                $('#NormalTermAmount').data('tTextBox').value(data.NormalTermAmount);
+                $('#Default').prop('checked', data.Default);
+            });
+        });
+    });
+</script>

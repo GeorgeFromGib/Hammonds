@@ -1,0 +1,23 @@
+﻿@model HammondsIBMS_Domain.Entities.Accounts.CustomerAccount
+<fieldset>
+    <table>
+        <tr>
+            <td>
+                <strong>@Html.DisplayFor(m => m.ContractUnitDescription)
+                </strong>
+            </td>
+            <td>
+                @*@Html.ActionWindowButton(new ButtonParameters(ButtonIcon.Document,"View/Print Sales Document"),
+                                                new ActionParameters("PrintViewPurchaseAccountDocument",new {id=Model.CustomerAccountId}),
+                                                new ActionButtonWindowParameters("PrintViewPurchaseDocument","Sales"))*@
+            </td>
+            <td class="buttonspace">
+                @*@Html.ActionButton(new ButtonParameters(ButtonIcon.Return).OfType(ButtonType.ImageText,"Accounts List").Role(ButtonRole.Info).IconColor(ButtonIconColor.White).Height(ButtonHeight.Normal),
+                                   Url.Action("Edit","Customer", new { id = Model.CustomerId }))*@
+                @Ajax.ActionButton(new ButtonParameters(ButtonIcon.Return, ButtonType.ImageText, "Accounts List",ButtonRole.Info,ButtonIconColor.White, ButtonHeight.Normal, true,null),
+                                   new ActionParameters("_DisplayCustomerAccounts", new { customerId = Model.CustomerId }),
+                                   new AjaxOptions { UpdateTargetId = "ContractUnitsArea" })
+            </td>
+        </tr>
+    </table>
+</fieldset>

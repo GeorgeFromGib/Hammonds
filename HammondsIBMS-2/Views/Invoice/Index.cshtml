@@ -1,0 +1,27 @@
+﻿@model IEnumerable<HammondsIBMS_Domain.Entities.Invoicing.Invoice>
+
+@Html.ContentTitle("Invoices")
+
+@{
+    Html.Telerik().Grid(Model)
+        .Name("Grid")
+
+        .Columns(columns =>
+                     {
+
+
+                         columns.Bound(o => o.InvoiceId);
+                         columns.Bound(o => o.Customer.SurnameFirstName);
+                         columns.Bound(o => o.BillCycle.Formated).Title("BillCycle");
+                         columns.Bound(o => o.InvoiceDate);
+                         columns.Bound(o => o.InvoicedTotal);
+                         columns.Bound(o => o.PreviousBalance);
+                         columns.Bound(o => o.InvoiceBalance);
+
+
+
+                     })
+        .Pageable()
+        .Sortable()
+        .Render();
+}

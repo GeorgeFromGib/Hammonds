@@ -1,0 +1,79 @@
+﻿@using HammondsIBMS_2.Helpers.Html
+@using HammondsIBMS_2.ViewModels.StockView
+@model HammondsIBMS_2.ViewModels.ModelView.ModelVM
+<script type="text/javascript">
+    function ServiceStockModelsGrid_onDataBinding(e) {
+        e.data = { showInStockOnly: $('#ServiceShowInStockOnly:checked').val() };
+
+    }
+
+    $('#ServiceShowInStockOnly').click(function () {
+        RebindTelerikGrid('StockModelsGrid');
+    });
+</script>
+<div id="ModelStockArea">
+    <fieldset>
+        <table>
+            <tr>
+                <td>
+                    <strong>Currently in Stock : <span id="stockNo">@Html.Action("_StockNoForModel", new { id = Model.ModelId })</span></strong>
+                </td>
+               
+            </tr>
+        </table>
+    </fieldset>
+    <fieldset>
+    <table>
+        <tr>
+            <td>
+                @Html.CheckBoxLabelled("ServiceShowInStockOnly", true,"Show In Stock Only")
+            </td>
+             <td class="buttonspace">
+                    @Html.ActionDialogFormButton(new ButtonParameters(ButtonIcon.Add, ButtonType.ImageText, "Add Stock"),
+                                   new ActionParameters("_AddStockForModel", new { id = Model.ModelId }),
+                                   new ActionDialogFormParamters("Add Stock", "ModelStockArea", Url.Action("_AddStockForModel"), null, "UpdateStockDisplay"))
+                </td>
+        </tr>
+    </table>
+
+        @{
+            Html.Telerik().Grid<StockVM>()
+                .Name("StockModelsGrid")
+                .DataKeys(keys => keys.Add(o => o.StockId))
+                .DataBinding(databind => databind.Ajax()
+                                             .Select("_InStockForModelGridBind", "StockModels", new { id = Model.ModelId })
+                )
+                .Columns(columns =>
+                             {
+
+                                 columns.Bound(o => o.SerialNumber);
+                                 columns.Bound(o => o.Identifier);
+                                 columns.Bound(o => o.LandedCost).Format("{0:£#0.00}");
+                                 columns.Bound(o => o.ProductLifeCycle).Title("Lifecycle St.");
+                                 columns.Bound(o => o.InvoiceStatus).Title("Invoice St.");
+                                 columns.Bound(o => o.StockId).Title("").Sortable(false).Width(17)
+                                     .ClientTemplate("<div class='commandColumn'>" + @Html.ActionDialogFormButton(new TelerikButtonParameters(ButtonIcon.Edit),
+                                                                                                                  new ActionParameters("_EditStockForModel", new { id = "<#= StockId #>" }),
+                                                                                                                  new ActionDialogFormParamters("Edit Stock", null, "_EditStockForModel", null, "UpdateStockDisplay"))
+                                                                                         .ToHtmlString()
+
+                                                     + "</div>");
+
+
+
+
+                             })
+                .ClientEvents(events => events.OnDataBinding("ServiceStockModelsGrid_onDataBinding"))
+                .Editable(editing => editing.Mode(GridEditMode.PopUp))
+                .Pageable()
+                .Sortable()
+                .Render();
+        }
+    </fieldset>
+</div>
+<script type="text/javascript">
+    function UpdateStockDisplay() {
+        RebindTelerikGrid('StockModelsGrid');
+        AjaxUpdate('@Url.Action("_StockNoForModel", new { id = Model.ModelId })', 'stockNo');
+    }
+</script>

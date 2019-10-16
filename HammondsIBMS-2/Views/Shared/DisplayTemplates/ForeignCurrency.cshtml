@@ -1,0 +1,5 @@
+﻿@model HammondsIBMS_Domain.Values.ForeignCurrency
+
+@Html.Raw(Model.Symbol + Model.AmountNative.ToString("F2") + "  (" + Model.AmountGBP.ToString("C2")+")")
+
+    

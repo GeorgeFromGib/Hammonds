@@ -1,0 +1,62 @@
+﻿@using HammondsIBMS_Domain.Entities.Accounts
+@model HammondsIBMS_2.ViewModels.Contract.CreateContractUnitVM
+@using (Html.BeginForm("_AddCustomerAccount", "Contract"))
+{ 
+    @Html.ValidationSummary(false)
+    <fieldset>
+        @Html.HiddenFor(o => o.CustomerId)
+        @Html.HiddenFor(o => o.StockId)
+        @Html.HiddenFor(o=>o.IsStockInAccountAlready)
+        <table class="edit-table">
+            <tr>
+                <td style="width:150px">
+                    @Html.Label("Contract Unit Type")
+                </td>
+                <td>
+                    @(Html.Telerik().DropDownListFor(o => o.ContractUnitType)
+           .BindTo(new List<DropDownItem>(Enum.GetNames(typeof(AccountType)).Select(c => new DropDownItem { Value = c, Text = c })))
+           .ClientEvents(e => e.OnChange("ContractTypeChange")))
+                </td>
+            </tr>
+            <tr>
+                <td>@Html.LabelFor(o => o.StartDate)
+                </td>
+                <td>@Html.EditorFor(o => o.StartDate)
+                </td>
+            </tr>
+            
+        </table>
+        <hr/>
+        <div id="ContractUnitTypeOptions">
+            @Html.Action("_AddContractUnitTypeOptions", Model)
+        </div>
+       
+    </fieldset>
+    <div>
+        @Html.FormSubmitButton("_AddCuststomerAccountOK")
+        @Html.FormCancelButton()
+    </div>
+}
+<script type="text/javascript">
+
+    $(function () {
+        EnableButton("_AddCuststomerAccountOK", false);
+        
+         $('#_ContractUnitStockFilterBox').live('selectionChanged', function (event, e) {
+            $('#StockId').val(e.value);
+            $.get('@Url.Action("_IsStockInAccount")', { id: e.value }, function (data) {
+                $('#IsStockInAccountAlready').val(data);
+            });
+            EnableButton("_AddCuststomerAccountOK", true);
+        });
+    });
+
+    function ContractTypeChange(e) {
+        $.get('@(Url.Action("_AddContractUnitTypeOptions"))', $('form').serialize(), function (result) {
+            $('#ContractUnitTypeOptions').slideUp('fast').html(result).slideDown('fast');
+            ClearModalWindowSize();
+        });
+
+    }
+
+</script>

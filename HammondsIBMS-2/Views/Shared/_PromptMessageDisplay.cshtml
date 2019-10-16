@@ -1,0 +1,25 @@
+﻿@using HammondsIBMS_2.ViewModels
+@model PromptVM
+ <div style="text-align: center; margin-left: 10px; margin-right: 10px;">
+     @foreach (var prompt in Model.Prompts)
+     {
+         var alertCss = "alert ";
+         {
+             switch (prompt.AlertLevel)
+             {
+                 case PromptMessageAlertLevel.Info:
+                     alertCss += "alert-info";
+                     break;
+                 case PromptMessageAlertLevel.Warning:
+                     alertCss += ""; //old value=text-warning
+                     break;
+                 case PromptMessageAlertLevel.Danger:
+                     alertCss += "alert-error"; //old value=text-error
+                     break;
+                 default:
+                     throw new ArgumentOutOfRangeException();
+             }
+         }
+         @:<div class="@alertCss"><strong>@Html.DisplayFor(o => prompt.Message)</strong></div>
+            }
+ </div>

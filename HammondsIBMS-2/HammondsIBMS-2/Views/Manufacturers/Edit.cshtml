@@ -1,0 +1,31 @@
+﻿@model HammondsIBMS_2.ViewModels.Manufacturer.ManufacturerVM
+@using (Html.BeginForm())
+{
+    @Html.ValidationSummary(true)
+    <fieldset>
+        <table class='edit-table'>
+            @Html.HiddenFor(model => model.ManufacturerId)
+            <tr>
+                <td>
+                    @Html.LabelFor(model => model.Name)
+                </td>
+                <td>
+                    @Html.EditorFor(model => model.Name)<br />
+                    @Html.ValidationMessageFor(model => model.Name)
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    @Html.LabelFor(model => model.Retired)
+                </td>
+                <td>
+                    @Html.EditorFor(model => model.Retired)<br />
+                    @Html.ValidationMessageFor(model => model.Retired)
+                </td>
+            </tr>
+        </table>
+    </fieldset>
+    <div>
+        @Html.FormSubmitButton() @Html.FormCancelButton()
+    </div>
+}

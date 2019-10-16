@@ -1,0 +1,14 @@
+﻿@using HammondsIBMS_2.Helpers.Html
+@using HammondsIBMS_2.ViewModels
+@model PromptVM
+@Html.ValidationSummary(false)
+@using (Html.BeginForm())
+{
+    @Html.HiddenFor(o=>o.RecordIndex)
+    @Html.HiddenFor(o=>o.SecondIndex)
+    <fieldset>
+        @Html.Partial("_PromptMessageDisplay",Model)
+    </fieldset>
+
+     @Html.Partial("_PromptButtons",Model)
+}

@@ -1,0 +1,5 @@
+﻿@using HammondsIBMS_Domain.Entities.Supplier
+
+@model int
+
+@Html.Raw(((List<Supplier>)ViewBag.Suppliers).Single(s=>s.SupplierId==Model).Name)

@@ -1,0 +1,100 @@
+﻿@using HammondsIBMS_2.ViewModels.StockInvoice
+@model SelectStockForInvoiceVM
+@using (Html.BeginForm())
+{
+    @Html.HiddenFor(m => m.StockInvoiceId)
+    <fieldset>
+        <div style="max-height: 300px; width:600px;overflow-y: scroll">
+        <table cellspacing="0" class="t-grid">
+            <thead class="t-grid-header">
+                <tr>
+                    <th class="t-header">
+                        Select
+                    </th>
+                    <th class="t-header">
+                        Serial
+                    </th>
+                    <th class="t-header">
+                        HTV-Identifier
+                    </th>
+                    <th class="t-header">
+                        Model
+                    </th>
+                    <th class="t-header">
+                        Arrived
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @{ var idx = 0; }
+                @foreach (var item in Model.SelectedStock)
+                {
+                
+                    <tr id="row-@item.StockId">
+                        <td>
+                            @Html.Hidden(string.Format("SelectedStock[{0}].StockId", idx), item.StockId)
+                            @*@Ajax.ActionLink("Select", "AvailableListSelected", new { id = item.StockId }, new AjaxOptions { UpdateTargetId = "InvoiceItemsDisplay", OnBegin = "onComplete(" + item.StockId + ")" })*@
+                            @Html.CheckBox(string.Format("SelectedStock[{0}].IsSelected", idx), item.IsSelected)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.SerialNumber)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Identifier)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Model)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.LastEntry)
+                        </td>
+                        @{idx++; }
+                    </tr>
+                
+                }
+            </tbody>
+        </table>
+        </div>
+    </fieldset>
+    <div>
+        @Html.FormSubmitButton() @Html.FormCancelButton()
+    </div>
+}
+<script type="text/javascript">
+    //    $(function () {
+    //        $(':checkbox').live('click', function () {
+    //            var txtbox = $('#Cost_' + $(this).val());
+    //            if ($(this).is(':checked')) {
+    //                $(txtbox).removeAttr('disabled');
+    //                $(txtbox).focus();
+    //            } else
+    //                $(txtbox).attr('disabled', 'disabled');
+    //        });
+    //    });
+
+
+
+    function AddSelected() {
+        var Data = [];
+        $(':checked').each(function (index) {
+            var stkId = $(this).val();
+            var mData = new Object({ StockId: stkId, Cost: $('#Cost_' + stkId).val() });
+            Data.push(mData);
+        });
+        var $jsonData = JSON.stringify(Data);
+
+        $.ajax({
+            url: '@Url.Action("_AddSelectedStockItems")',
+            data: JSON.stringify(Data),
+            type: 'POST',
+            contentType: 'application/json, charset=utf-8',
+            dataType: 'json',
+            success: function (result) {
+                if (result.success)
+                    debugger
+                CloseIfInWindow();
+            }
+        });
+
+    }
+</script>

@@ -1,0 +1,15 @@
+﻿@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_FirstPageLayout.cshtml";
+}
+
+<div class="hero-unit" style="text-align: center">
+    <img src='@Url.Content("~/Content/Site/img/IBMSLogo_Large.png")' style="width: 150px;height:200px;"/>
+    <h4>Hammonds Business Management System</h4>
+    <h5>Work in progress</h5>
+    <br/>
+    <h4>
+        @Html.ActionDialogLink("Build : " +Html.CurrentVersion(),new ActionParameters("_BuildHistory"),new ActionDialogFormParamters("Build History",null,null)) 
+    </h4>
+</div>
+

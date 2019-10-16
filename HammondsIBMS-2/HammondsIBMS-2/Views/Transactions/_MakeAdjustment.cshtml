@@ -1,0 +1,70 @@
+﻿@model HammondsIBMS_2.ViewModels.Transactions.AdjustmentVM
+
+@using (Html.BeginForm())
+{
+    @Html.HiddenFor(m => m.CustomerId)
+    @Html.HiddenFor(m => m.CustomerAccountId)
+    @Html.HiddenFor(m => m.GroupId)    
+    @Html.HiddenFor(m => m.CustomerAccount)    
+    @Html.HiddenFor(m => m.AccountTransactionType)    
+    @Html.HiddenFor(m => m.AccountTransactionTypeId)    
+    @Html.ValidationSummary(true)
+    <fieldset>
+        <table class='edit-table'>
+            <tr>
+                <td>
+                    @Html.LabelFor(model => model.CustomerAccount)
+                </td>
+                <td>
+                   @Html.DisplayFor(model => model.CustomerAccount)<br />
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    @Html.LabelFor(model => model.TransactionDate)
+                </td>
+                <td>
+                    @Html.EditorFor(model => model.TransactionDate)
+                    @Html.ValidationMessageFor(model => model.TransactionDate)
+                </td>
+            </tr>
+           
+            <tr>
+                <td>
+                    @Html.LabelFor(model => model.Amount)
+                </td>
+                <td>
+                    @Html.EditorFor(model => model.Amount)<br />
+                    @Html.ValidationMessageFor(model => model.Amount)
+                </td>
+            </tr>
+
+            <tr>
+                <td>
+                    @Html.LabelFor(model => model.AccountTransactionType)
+                </td>
+                <td>
+                    @Html.DisplayFor(model => model.AccountTransactionType)<br />
+                </td>
+            </tr>
+             <tr>
+                <td>
+                    @Html.LabelFor(model => model.Note)
+                </td>
+                <td>
+                    @Html.EditorFor(model => model.Note)<br />
+                    @Html.ValidationMessageFor(model => model.Note)
+                </td>
+            </tr>
+        </table>
+    </fieldset>
+    <div>
+        @Html.FormSubmitButton() @Html.FormCancelButton()
+
+    </div>
+}
+
+<script type="text/javascript">
+  
+
+</script>

@@ -1,0 +1,54 @@
+﻿@model IEnumerable<HammondsIBMS_Domain.Entities.Contracts.Contract>
+<div id="displayAttachedcontract">
+    <table class="stripeMe">
+        <tr>
+            <th>
+                Contract Type
+            </th>
+            <th>
+                Start Date
+            </th>
+            <th>
+                Expiry Date
+            </th>
+            <th>
+                Expiry
+            </th>
+            <th>
+                Charge
+            </th>
+            <th>
+                Payment Period
+            </th>
+            <th>
+            </th>
+        </tr>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ContractTypeId)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.StartDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ExpiryDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.NoOfDaysLeft)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Charge)
+                </td>
+                <td>
+                    @Html.DisplayFor(modlitem => item.PaymentPeriodId)
+                </td>
+                <td style="width: 50px; text-align: right;">
+@*                    @Html.ActionWindowButton(new ButtonParameters(ButtonIcon.Edit), new ActionParameters("_EditContract", new { id = item.ContractId }), new ActionButtonWindowParameters("EditContract_" + item.ContractId, "Edit Contract", 500, 270))*@
+                    @Html.ActionDialogFormButton(new ButtonParameters(ButtonIcon.Edit), new ActionParameters("_EditContract", new { id = item.ContractId }), new ActionDialogFormParamters("Edit Contract", "displayAttachedcontract", Url.Action("_DisplayAttachedContracts", new { id = item.ContractUnitId })))
+                </td>
+            </tr>
+        }
+    </table>
+</div>

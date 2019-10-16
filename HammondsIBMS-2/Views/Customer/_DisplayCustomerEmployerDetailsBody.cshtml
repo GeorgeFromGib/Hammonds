@@ -1,0 +1,31 @@
+﻿@model HammondsIBMS_Domain.Entities.Customers.Customer 
+<table class="table table-striped table-condensed table-bordered">
+    <tr>
+        <td style="width: 150px">
+            @Html.LabelFor(model => model.CustomerEmployer.Employer.EmployerName)
+        </td>
+        <td>
+            @Html.DisplayFor(model => model.CustomerEmployer.Employer.EmployerName)
+        </td>
+    </tr>
+    <tr>
+        <td>
+            @Html.LabelFor(model => model.CustomerEmployer.ContactPerson)
+        </td>
+        <td>
+            @Html.DisplayFor(model => model.CustomerEmployer.ContactPerson)
+        </td>
+    </tr>
+    <tr>
+        <td>
+            @Html.LabelFor(model => model.CustomerEmployer.ContactNotes)
+        </td>
+        <td>
+            @Html.DisplayFor(model => model.CustomerEmployer.ContactNotes)
+        </td>
+    </tr>
+</table>
+@if(Model.CustomerEmployer!=null)
+{
+    @Html.Action("_DisplayEmployerDetailsBody", Model.CustomerEmployer.EmployerId)
+}

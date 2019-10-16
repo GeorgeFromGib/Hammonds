@@ -1,0 +1,397 @@
+﻿<script type="text/javascript">
+    $(function () {
+        $('#SettleAllInFull').click(function (e) {
+            SettleAllInFull();
+        });
+
+        $('#TenderedAmount').live('change', function () {
+            SettleToTendered();
+        });
+
+        $('.excluded-items').click(function (event, e) {
+            SettleToTendered();
+        });
+
+
+        AdjustBalance();
+
+    });
+
+    function SettleAllInFull() {
+        SetTenderedAmount(GetTotalAmountToSettle()); //.attr('disabled', 'disabled');
+        SettleToTendered();
+    }
+
+    function SettleToggled(e) {
+        var el = $('.rolledTransaction')[e];
+        $(el).find('[id$="Exclude"]:checked').attr('checked', false);
+        var insPmt = 0;
+        if (GetElementPayment(el) == 0)
+            insPmt = GetElementAmnt(el);
+        InsertPayment(el, insPmt, GetElementAmnt(el));
+        SetTenderedAmount(GetTotalPayments());
+        AdjustBalance();
+
+    }
+
+    function Reset() {
+        SetTenderedAmount(0);
+        ClearPayments();
+    }
+
+    function GetTotalPayments() {
+        var pmnt = 0;
+        $('.rolledTransaction').each(function (e, el) {
+            pmnt += GetElementPayment(el);
+        });
+        return pmnt;
+    }
+
+    function GetTotalAmountToSettle() {
+        var amnt = 0;
+        $('.rolledTransaction').each(function (e, el) {
+            if (!IsExcluded(el))
+                amnt += GetElementAmnt(el);
+        });
+        return amnt;
+    }
+
+    function GetElementAmnt(el) {
+        return parseFloat($(el).find('[id$="Amount"]').val());
+    }
+
+    function GetElementPayment(el) {
+        return parseFloat($(el).find('[id$="Payment"]').val());
+    }
+
+    function GetTenderedAmount() {
+        return parseFloat($('#TenderedAmount').val());
+    }
+
+    function SetTenderedAmount(amnt) {
+        $('#TenderedAmount').data("tTextBox").value(amnt);
+    }
+
+    function ClearPayments() {
+        $('.rolledTransaction').each(function (e, el) {
+            InsertPayment(el, 0, GetElementAmnt(el));
+        });
+        AdjustBalance();
+    }
+
+    function SettleToTendered() {
+        ClearPayments();
+        var tAmnt = GetTenderedAmount();
+        if (tAmnt != 0) {
+            // Try to find best match
+            $('.rolledTransaction').each(function (e, el) {
+                if (!IsExcluded(el)) {
+                    var amnt = GetElementAmnt(el);
+                    if (amnt == tAmnt) {
+                        InsertPayment(el, tAmnt, amnt);
+                        tAmnt = 0;
+                    }
+                }
+            });
+            var insAmnt = 0;
+            $('.rolledTransaction').each(function (e, el) {
+                if (tAmnt != 0) {
+                    if (!IsExcluded(el)) {
+                        var amnt = GetElementAmnt(el);
+                        if (tAmnt >= amnt) {
+                            insAmnt = amnt;
+                            tAmnt = (tAmnt - amnt).toFixed(2);
+                        } else if (tAmnt < amnt) {
+                            insAmnt = tAmnt;
+                            tAmnt = 0;
+                        }
+                        InsertPayment(el, insAmnt, amnt);
+                    }
+                }
+            });
+
+
+        }
+        //showCredit(tAmnt);
+        AdjustBalance();
+    }
+
+    function showCredit(tAmnt) {
+        if (tAmnt != 0)
+            AnimShow("#creditrow");
+        else
+        //AnimHide("#creditrow");
+            $('#creditrow').hide();
+
+        $('#credit').html(accounting.formatMoney(tAmnt));
+        $('#CreditedAmount').val(tAmnt);
+    }
+
+    function IsExcluded(el) {
+        return $(el).find('[id$="Exclude"]:checked').val();
+    }
+
+    function InsertPayment(el, amnt, owed) {
+        var bal = owed - amnt;
+        $(el).find('[id$="Payment"]').val(amnt);
+        $(el).find('#s-payment').html(accounting.formatMoney(amnt));
+        $(el).find('[id$="Balance"]').html(accounting.formatMoney(bal));
+        ChangeStatuses(el, amnt, owed);
+
+    }
+
+    function ChangeStatuses(el, amnt, owed) {
+        var bal = owed - amnt;
+        if (bal == 0)
+            ChangeStatusToOK(el);
+        else if (amnt == 0)
+            ChangeStatusToAlert(el);
+        else {
+            ChangeStatusToWarning(el);
+        }
+    }
+
+    function AdjustBalance() {
+        var tAmnt = 0;
+        var tPmnt = 0;
+        var bal = 0;
+        $('.rolledTransaction').each(function (e, el) {
+            var amnt = GetElementAmnt(el);
+            var pmnt = parseFloat($(el).find('[id$="Payment"]').val());
+            bal = bal + (amnt - pmnt);
+            tAmnt += amnt;
+            tPmnt += pmnt;
+        });
+        $('#total-balance').html(accounting.formatMoney(bal));
+        $('#total-amount').html(accounting.formatMoney(tAmnt));
+        $('#total-payment').html(accounting.formatMoney(tPmnt));
+        $('#footer-tendered').html(accounting.formatMoney(GetTenderedAmount()));
+        var tnd = GetTenderedAmount();
+        var crdt = tnd - fpFix(tPmnt);
+        showCredit(crdt);
+    }
+
+    function ChangeStatusToOK(el) {
+        ClearStatus(el).addClass('badge-success');
+    }
+
+    function ChangeStatusToWarning(el) {
+        ClearStatus(el).addClass('badge-warning');
+    }
+
+    function ChangeStatusToAlert(el) {
+        ClearStatus(el).addClass('badge-important');
+    }
+
+    function ClearStatus(el) {
+        return $(el).find(".badge").removeClass('badge-important badge-success badge-warning');
+    }
+    
+   
+</script>
+@model HammondsIBMS_2.ViewModels.Payment.MakePaymentVM
+
+@if (!Model.IsError)
+{
+    <div id="AccountsOK">
+        @using (Html.BeginForm())
+        {
+            @Html.Hidden("h-balance", Model.Balance)
+            @Html.HiddenFor(m => m.CustomerId)
+            @Html.ValidationSummary(true)
+            <fieldset>
+                <table class="edit-table">
+                    <tr>
+                        <td style="width: 150px">
+                            @Html.LabelFor(model => model.Balance)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(model => model.Balance)<br />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            @Html.LabelFor(model => model.PreferredPaymentSourceId)
+                        </td>
+                        <td>
+                            @Html.EditorFor(model => model.PreferredPaymentSourceId)
+                        </td>
+                    </tr>
+                    <tr id="Reference">
+                        <td>
+                            @Html.LabelFor(model => model.Reference)
+                        </td>
+                        <td>
+                            @Html.EditorFor(model => model.Reference)<br />
+                            @Html.ValidationMessageFor(model => model.Reference)
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight: bold">
+                            @Html.LabelFor(model => model.TenderedAmount)
+                        </td>
+                        <td style="font-weight: bold">
+                            @Html.Telerik().CurrencyTextBoxFor(model => model.TenderedAmount).ClientEvents(events => events.OnChange("SettleToTendered")).CurrencySymbol("£")
+                            @*@Html.EditorFor(model => model.TenderedAmount)*@
+                            @Html.ValidationMessageFor(model => model.TenderedAmount)
+                        </td>
+                        <td style="text-align: right">
+                            <div class="btn-group"> 
+                            @Html.ClientButton(new ButtonParameters(ButtonIcon.Asterisk, ButtonType.ImageText, "Auto Settle"), "SettleAllInFull()")@Html.ClientButton(new ButtonParameters(ButtonIcon.FilterClear, ButtonType.ImageText, "Reset"), "Reset()")
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+                @using (Html.Container("Accounts"))
+                {
+                    <table cellspacing="0" class="t-grid table-striped" style="width: 100%">
+                        <thead class="t-grid-header">
+                            <tr>
+                                <th>
+                                </th>
+                                <th style="text-align: left">
+                                    Account No.
+                                </th>
+                                <th style="text-align: left">
+                                    Bill Cycle
+                                </th>
+                                <th class="money-align">
+                                    Amount
+                                </th>
+                                <th class="money-align">
+                                    Payment
+                                </th>
+                                <th class="money-align">
+                                    Balance
+                                </th>
+                                <th>
+                                    Exclude
+                                </th>
+                                <th style="text-align: center">
+                                    Settle
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @for (var i = 0; i < Model.RolledTransactions.Count; i++)
+                            {
+                                <tr class="rolledTransaction">
+                                    <td style="width: 20px">
+                                        <span class="badge badge-important"></span>
+                                    </td>
+                                    <td>
+                                        @Html.HiddenFor(m => m.RolledTransactions[i].CustomerAccountId)
+                                        @Html.DisplayFor(m => m.RolledTransactions[i].CustomerAccountId) (@Html.DisplayFor(m => m.RolledTransactions[i].AccountType))
+                                        @Html.HiddenFor(m => m.RolledTransactions[i].AccountType)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(m => m.RolledTransactions[i].BillCycle) @Html.HiddenFor(m => m.RolledTransactions[i].BillCycle)
+                                        @Html.HiddenFor(m => m.RolledTransactions[i].BillCycleNo)
+                                    </td>
+                                    <td class="money-align">
+                                        @Html.DisplayFor(m => m.RolledTransactions[i].Amount) @Html.HiddenFor(m => m.RolledTransactions[i].Amount)
+                                    </td>
+                                    <td class="money-align">
+                                        <div id="s-payment" style="font-weight: bolder">
+                                            £0.00</div>
+                                        @Html.HiddenFor(m => m.RolledTransactions[i].Payment)
+                                    </td>
+                                    <td class="money-align">
+                                        <div id="Balance">
+                                            @Html.DisplayFor(m => m.RolledTransactions[i].Balance)
+                                        </div>
+                                    </td>
+                                    <td style="text-align: center">
+                                        @Html.CheckBoxFor(m => m.RolledTransactions[i].Exclude, new { @class = "excluded-items" })
+                                    </td>
+                                    <td style="text-align: center">
+                                        @Html.ClientButton(new ButtonParameters(ButtonIcon.Asterisk, ButtonHeight.Mini), "SettleToggled(" + i + ")")
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                        <tr class="footer">
+                            <td>
+                            </td>
+                            <td colspan="2">
+                                Totals
+                            </td>
+                            <td class="money-align">
+                                <div id="total-amount" style="font-weight: normal">
+                                </div>
+                            </td>
+                            <td class="money-align">
+                                <div id="total-payment">
+                                </div>
+                            </td>
+                            <td class="money-align">
+                                <div id="total-balance" style="font-weight: normal">
+                                    £0.00
+                                </div>
+                            </td>
+                            <td>
+                            </td>
+                            <td>
+                            </td>
+                        </tr>
+                        <tr id="creditrow" class="credit">
+                            <td>
+                            </td>
+                            <td>
+                                Credit
+                            </td>
+                            <td colspan="2">
+                                @(Html.Telerik().DropDownListFor(m => m.CreditedAccountId)
+           .BindTo(new SelectList(Model.CustomerAccounts, "CustomerAccountId", "ContractUnitDescription"))
+           .SelectedIndex(Model.CreditedAccountId)
+                                      )
+                                @Html.ValidationMessageFor(model => model.CreditedAccountId)
+                            </td>
+                            <td class="money-align">
+                                <div id="credit">
+                                    £0.00
+                                </div>@Html.HiddenFor(m => m.CreditedAmount)
+                            </td>
+                            <td>
+                            </td>
+                            <td>
+                            </td>
+                        </tr>
+                        <tr style="font-weight: bold">
+                            <td>
+                            </td>
+                            <td colspan="3">
+                                Tendered
+                            </td>
+                            <td class="money-align" style="background-color: darkgrey; color: white;">
+                                <div id="footer-tendered">
+                                    £0.00</div>
+                            </td>
+                            <td>
+                            </td>
+                            <td>
+                            </td>
+                            <td>
+                            </td>
+                        </tr>
+                    </table>
+                }
+            </fieldset>
+            <div>
+                @Html.FormSubmitButton()
+                @Html.FormCancelButton()
+            </div>
+        }
+    </div>
+}
+else
+{
+    <div id="Error" class="error" style="text-align: center">
+        <fieldset>
+            <p>
+                @Html.DisplayFor(m => m.ErrorMessage)
+            </p>
+            @Html.FormCancelButton()
+        </fieldset>
+    </div>
+}

@@ -1,0 +1,100 @@
+﻿@model HammondsIBMS_2.ViewModels.Accounts.AddPurchaseAccountVM
+<div class="well well-small well-noBackground">
+    @Html.ContentTitle(Html.Action("StepperHeader").ToHtmlString())
+    @using (Html.BeginForm(null, null, FormMethod.Post, new { @class = "form-horizontal" }))
+    {
+        @Html.ValidationSummary(true)
+        @Html.HiddenFor(model => model.CustomerAccountId)
+        @Html.HiddenFor(model => model.CustomerId)
+        //@Html.HiddenFor(model => model.StockId)
+        <fieldset>
+            <legend>Payment</legend>
+            <div class="control-group">
+                @Html.LabelFor(model => model.ModelDescription, new { @class = "control-label" })
+                <div class="controls">
+                    <span class="input-xlarge uneditable-input">@Model.ModelDescription</span>
+                </div>
+            </div>
+            <div class="control-group">
+                @Html.LabelFor(model => model.TotalUnits, new { @class = "control-label" })
+                <div class="controls">
+                    <span class="input-xlarge uneditable-input">@Model.TotalUnits.ToString("C")</span>
+                </div>
+            </div>
+            <div class="control-group">
+                @Html.LabelFor(model => model.TotalContracts, new { @class = "control-label" })
+                <div class="controls">
+                    <span class="input-xlarge uneditable-input" >@Model.TotalContracts.ToString("C")</span>
+                </div>
+            </div>
+            <div class="control-group">
+                @Html.LabelFor(model => model.TotalItemCharges, new { @class = "control-label" })
+                <div class="controls">
+                    <span class="input-xlarge uneditable-input" >@Model.TotalItemCharges.ToString("C")</span>
+                </div>
+            </div>
+            <div class="control-group">
+                @Html.LabelFor(model => model.TotalCharge, new { @class = "control-label" })
+                <div class="controls">
+                    <span class="input-xlarge uneditable-input" >@Model.TotalCharge.ToString("C")</span>
+
+                </div>
+            </div>
+            <div class="control-group">
+                @Html.LabelFor(model => model.Payment, new { @class = "control-label" })
+                <div class="controls">
+                    @Html.EditorFor(model => Model.Payment)
+                    <div class="btn-group">
+
+                        @Html.ClientButton(new ButtonParameters(ButtonIcon.Asterisk, ButtonType.ImageText, "Full").Height(ButtonHeight.Small), "settleAllInFull()")@Html.ClientButton(new ButtonParameters(ButtonIcon.FilterClear, ButtonType.ImageText, "Clear").Height(ButtonHeight.Small), "reset()")
+                    </div>
+                </div>
+            </div>
+            <div class="control-group">
+                @Html.LabelFor(model => model.Balance, new { @class = "control-label" })
+                <div class="controls">
+                    <span class="input-xlarge uneditable-input"  data-bind="money:CalcBalance"></span>
+                </div>
+            </div>
+        </fieldset>
+        <div>
+            @Html.Action("StepperControl")
+        </div>
+    }
+</div>
+@Html.Partial("_AddPurchaseAccountClientViewModelSetup")
+
+<script type="text/javascript">
+
+
+    $('#Payment').change(function (event, data) {
+            vm.updatePayment(data.Value);
+        });
+
+    
+    function getFull() {
+        return '@Model.TotalToPay';
+    }
+
+    function settleAllInFull() {
+        updatePayment(getFull());
+    }
+
+    function reset() {
+        updatePayment(0);
+    }
+
+    function updatePayment(val) {
+        getTelerikNumericTextBox('#Payment').value(val);
+        vm.updatePayment(val);
+    }
+
+
+    function getPurchaseAccountData(func) {
+        $.get('@Url.Action("_GetAddPurchaseAccount")', function (data) {
+            func(data);
+        });
+    }
+</script>
+
+

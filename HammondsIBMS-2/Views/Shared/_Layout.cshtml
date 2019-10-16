@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Enable IE9 Standards mode -->
+    <meta http-equiv="X-UA-Compatible" content="IE=9" />
+    <title>@ViewBag.Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="@Url.Content("~/Scripts/2013.2.611/jquery-1.7.1.min.js")" type="text/javascript"></script>
+    @*<script src="@Url.Content("~/Scripts/knockout-2.3.0.js")" type="text/javascript"></script>*@
+@*    <script src="@Url.Content("~/Scripts/GGScripts/ko-formatting.js")" type="text/javascript"></script>*@
+    @(Html.Telerik().StyleSheetRegistrar().DefaultGroup(group => group
+                                                                      .Add("telerik.common.css")
+                                                                      .Add("telerik.metro.css")
+                                                                      .Add("/Bootstrap/css/bootstrap.css")
+                                                                      .Add("/Bootstrap/css/bootstrap-responsive.min.css")
+                                                                      .Add("/site/css/Site.css")
+                                                                      .Combined(false).Compress(false)))
+    <style type="text/css">
+        body
+        {
+            padding-top: 60px;
+            padding-bottom: 40px;
+        }
+        .sidebar-nav
+        {
+            padding: 9px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar navbar-inverse navbar-fixed-top">
+        <div class="navbar-inner">
+            <div class="container-fluid">
+                <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse"><span
+                    class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span>
+                </a><a class="brand" href="#">
+                    <img src="@Url.Content("~/Content/Site/img/IBMSLogo.png")" />
+                    Integrated Management System</a>
+                <div class="btn-group pull-right">
+                    <a class="btn dropdown-toggle" data-toggle="dropdown" href="#"><i class="icon-user">
+                    </i>Username <span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="#">Profile</a></li>
+                        <li class="divider"></li>
+                        <li><a href="#">Sign Out</a></li>
+                    </ul>
+                </div>
+                <div class="nav-collapse">
+                    <ul class="nav" id="mainMenu">
+                        @Html.Action("_MainMenu", "Menu")
+                    </ul>
+                </div>
+                <!--/.nav-collapse -->
+            </div>
+        </div>
+    </div>
+    <div class="container-fluid">
+        <div class="row-fluid">
+            <div class="span2">
+                <div class="well sidebar-nav" id="sideMenuContainer">
+                    @Html.Action("_SideMenu", "Menu", new { id = -1 })
+                </div>
+                <!--/.well -->
+            </div>
+            <!--/span-->
+            <div class="span10 smooth-transition">
+                @RenderBody()
+            </div>
+            <!--/span-->
+        </div>
+        <!--/row-->
+        <hr>
+        <footer>
+            <p style="text-align: center">
+                <img src="@Url.Content("~/Content/Site/img/Hammonds_logo_sml.png")" /></p>
+        </footer>
+    </div>
+    @Html.Telerik().Window().Name("Dummy").Visible(false)
+    <script type="text/javascript">
+        $(function () {
+            RegisterMenu('mainMenu', '@Url.Action("_MainMenuSelection", "Menu")', "OnMainMenuSelection");
+
+            RegisterMenu('sideMenu', '@Url.Action("_SideMenuSelection", "Menu")');
+
+            $(".smooth-transition").css("display", "none");
+            $(".smooth-transition").fadeIn(500);
+
+            $('[rel="tooltip"]').tooltip({placement: 'right'});
+
+            //$(document).ajaxStart($.blockUI).ajaxStop($.unblockUI);
+
+        });
+
+        function OnMainMenuSelection(key) {
+            AjaxUpdate('@Url.Action("_SideMenu", "Menu")' + '/' + key, "#sideMenuContainer");
+        }
+    </script>
+    @(Html.Telerik().ScriptRegistrar().Globalization(true).jQuery(false).DefaultGroup(group => group
+                                                                    .Add("/bootstrap/bootstrap.min.js")
+                                                                    .Add("jquery.unobtrusive-ajax.min.js")
+                                                                    .Add("jquery.validate.min.js")
+                                                                    .Add("jquery.validate.unobtrusive.min.js")
+                                                                    .Add("jquery-ui-1.10.3.custom.min.js")
+                                                                    .Add("knockout-3.0.0.js")
+                                                                    .Add("knockout.mapping-latest.js")
+                                                                    .Add("/GGScripts/ko-formatting.js")
+                                                                    .Add("/GGScripts/Menu.js")
+                                                                    .Add("/GGScripts/Utils.js")
+                                                                    .Add("/GGScripts/DateFormat.js")
+                                                                    .Add("/GGScripts/accounting-min.js")
+                                                                    .Add("/GGScripts/DialogForm.js")
+                                                                    .Add("/GGScripts/FilterForm.js")
+                                                                    .Add("/GGScripts/UI.js")
+                                                                    .Add("/GGScripts/jquery.blockUI.js")
+                                                                    .Add("/GGScripts/jquery.maskedinput-1.3.min.js")
+                                                                    .Combined(false).Compress(true)))
+</body>
+</html>

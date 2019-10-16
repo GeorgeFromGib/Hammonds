@@ -1,0 +1,52 @@
+﻿@model HammondsIBMS_Domain.Values.Address
+<table class="table table-striped table-condensed table-bordered">
+    <tr>
+        <td style="width: 150px">
+            @Html.LabelFor(model => model.AddressLine1)
+        </td>
+        <td >
+            @Html.DisplayFor(model => model.AddressLine1)
+        </td>
+    </tr>
+    <tr>
+        <td>
+            @Html.LabelFor(model => model.AddressLine2)
+        </td>
+        <td>
+            @Html.DisplayFor(model => model.AddressLine2)
+        </td>
+    </tr>
+    <tr>
+        <td>
+            @Html.LabelFor(model => model.AddressLine3)
+        </td>
+        <td>
+            @Html.DisplayFor(model => model.AddressLine3)
+        </td>
+    </tr>
+    <tr>
+        <td>
+            @Html.LabelFor(model => model.City)
+        </td>
+        <td>
+            @Html.DisplayFor(model => model.City)
+        </td>
+    </tr>
+    <tr>
+        <td>
+            @Html.LabelFor(model => model.PostCode)
+        </td>
+        <td>
+            @Html.DisplayFor(model => model.PostCode)
+        </td>
+    </tr>
+    <tr>
+        <td>
+            @Html.LabelFor(model => model.Country)
+        </td>
+        <td>
+            @Html.DisplayFor(model => model.Country)
+        </td>
+    </tr>
+    
+    </table>

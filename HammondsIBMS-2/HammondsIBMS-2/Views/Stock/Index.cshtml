@@ -1,0 +1,51 @@
+﻿@using HammondsIBMS_2.ViewModels.StockView
+@Html.ContentTitle("Stock List")
+<fieldset>
+    <fieldset>
+        <table >
+            <tr>
+                <td>
+                    @Html.FormFilter(Url.Action("_StockFilter"), "rebindStockModelGrid", Url.Action("_ResetStockFilter"))
+                </td>
+                <td class="buttonspace">
+                    @Html.ActionDialogFormButton(new ButtonParameters(ButtonIcon.Add, "Add Stock"),
+                                   new ActionParameters("_AddNewStock", null),
+                                                     new ActionDialogFormParamters("New Stock", null, Url.Action("_AddNewStock"), null, "rebindStockModelGrid"))
+                </td>
+            </tr>
+        </table>
+    </fieldset>
+    @{Html.Telerik().Grid<StockVM>()
+          .Name("StockModelsGrid")
+          .DataKeys(keys => keys.Add(o => o.StockId))
+          .DataBinding(databind => databind.Ajax()
+                                       .Select("_StockGridBind", "Stock")
+                                       .Update("Edit", "Stock"))
+          .Columns(columns =>
+                       {
+
+                           columns.Bound(o => o.ManufacturerName).Title("Manufacturer").Width(100);
+                           columns.Bound(o => o.ModelCode).Width(100);
+                           columns.Bound(o => o.SerialNumber);
+                           columns.Bound(o => o.Identifier);
+                           columns.Bound(o => o.LandedCost).Format("{0:£#0.00}");
+                           columns.Bound(o => o.ProductLifeCycle).Title("Lifecycle St.");
+                           columns.Bound(o => o.InvoiceStatus).Title("Invoice St.");
+                           columns.Bound(o => o.StockId).Title("").Sortable(false).Width(50).ClientTemplate("<div class='commandColumn'>" + Html.ActionDialogFormButton(new TelerikButtonParameters(ButtonIcon.Edit),
+                                                                                                                                            new ActionParameters("_Edit", new { id = "<#= StockId #>" }),
+                                                                                                                                            new ActionDialogFormParamters("Edit Stock", null, "_EditModel", null, "rebindStockModelGrid")).ToHtmlString() +
+                                                                                                                "</div>");
+
+
+                       })
+          .Editable(editing => editing.Mode(GridEditMode.PopUp).TemplateName("_EditStock"))
+          .Pageable()
+          .Sortable()
+          .Render();
+    }
+</fieldset>
+<script type="text/javascript">
+    function rebindStockModelGrid() {
+        RebindTelerikGrid('StockModelsGrid');
+    }
+</script>

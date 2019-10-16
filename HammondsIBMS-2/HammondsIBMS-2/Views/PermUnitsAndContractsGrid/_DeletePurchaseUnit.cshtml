@@ -1,0 +1,74 @@
+﻿@using System.Collections
+@using HammondsIBMS_2.ViewModels
+@model HammondsIBMS_2.ViewModels.Accounts.DeletPurchaseUnitPromptVM
+@using (Html.BeginForm())
+{
+    @Html.ValidationSummary(true)
+    @Html.HiddenFor(m => m.RecordIndex)
+    @Html.HiddenFor(m => m.Model)
+    @Html.HiddenFor(m => m.PurchaseDate)
+    @Html.HiddenFor(m => m.Amount)
+    
+    <fieldset>
+        <table class="edit-table">
+            <tr>
+                <td class="label-width">
+                    @Html.Label("Model to Remove")
+                </td>
+                <td>
+                    @Html.DisplayFor(o => o.Model)<br />
+                </td>
+            </tr>
+            <tr>
+                <td class="label-width">
+                    @Html.LabelFor(o => o.PurchaseDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(o => o.PurchaseDate)<br />
+                </td>
+            </tr>
+
+            <tr>
+                <td class="label-width">
+                    @Html.LabelFor(o => o.Amount)
+                </td>
+                <td>
+                    @Html.DisplayFor(o => o.Amount)<br />
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    @Html.LabelFor(o => o.RemovalDate)
+                </td>
+                <td>
+                    @Html.EditorFor(o => o.RemovalDate)<br />
+                    @Html.ValidationMessageFor(o => o.RemovalDate)
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    @Html.LabelFor(o => o.RefundAmount)
+                </td>
+                <td>
+                    @Html.EditorFor(o => o.RefundAmount)<br />
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    @Html.LabelFor(o => o.ProductLifeCycleId)
+                </td>
+                <td>
+                    @{Html.Telerik().DropDownListFor(o => o.ProductLifeCycleId)
+                              .BindTo(new SelectList((IEnumerable)ViewBag.ChanageableProductLifeCycles
+                                                     , "ProductLifeCycleId", "Description"
+                                                     , Model.ProductLifeCycleId)).Render(); }
+
+                    @Html.ValidationMessageFor(o => o.ProductLifeCycleId)
+                </td>
+            </tr>
+        </table>
+    </fieldset>
+    <div>
+        @Html.Partial("_PromptButtons")
+    </div>
+}

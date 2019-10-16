@@ -1,0 +1,70 @@
+﻿@model HammondsIBMS_2.ViewModels.Accounts.DeletePurchaseContractPromptVM
+
+
+@using (Html.BeginForm())
+{
+    @Html.HiddenFor(model => model.RecordIndex)
+    @Html.HiddenFor(model => model.SheduledExpiryDate)
+    @Html.HiddenFor(model => model.Message)
+    @Html.HiddenFor(model => model.StartDate)
+    @Html.HiddenFor(model => model.Amount)
+    @Html.ValidationSummary(true)
+    <fieldset>
+        <table class='edit-table'>
+            <tr>
+                <td>
+                    @Html.LabelFor(model => model.Message)
+                </td>
+                <td>
+                    @Html.DisplayFor(model => model.Message)<br />
+                    @Html.ValidationMessageFor(model => model.Message)
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    @Html.LabelFor(model => model.StartDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(model => model.StartDate)<br />
+                    @Html.ValidationMessageFor(model => model.StartDate)
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    @Html.LabelFor(model => model.ExpiryDate)
+                </td>
+                <td>
+                    @Html.EditorFor(model => model.ExpiryDate)<br />
+                    @Html.ValidationMessageFor(model => model.ExpiryDate)
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    @Html.LabelFor(model => model.Amount)
+                </td>
+                <td>
+                    @Html.DisplayFor(model => model.Amount)<br />
+                    @Html.ValidationMessageFor(model => model.Amount)
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    @Html.LabelFor(model => model.ProRateRefunded)
+                </td>
+                <td>
+                    @Html.EditorFor(model => model.ProRateRefunded)<br />
+                    @Html.ValidationMessageFor(model => model.ProRateRefunded)
+                </td>
+            </tr>
+
+
+
+
+        </table>
+    </fieldset>
+    <div>
+        @Html.Partial("_PromptButtons")
+
+    </div>
+}
+

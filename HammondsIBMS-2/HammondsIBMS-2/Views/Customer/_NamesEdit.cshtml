@@ -1,0 +1,20 @@
+﻿@model HammondsIBMS_Domain.Entities.Customers.Customer
+<div class="row-fluid">
+    <div class="span6">
+        <div class="control-group">
+            @Html.LabelFor(model => model.Surname, new { @class = "control-label" })
+            <div class="controls">
+                @Html.EditorFor(model => model.Surname)<br />
+                @Html.ValidationMessageFor(model => model.Surname)
+            </div>
+        </div>
+        <div class="control-group">
+            @Html.LabelFor(model => model.FirstName, new { @class = "control-label" })
+            <div class="controls">
+                @Html.EditorFor(model => model.FirstName)<br />
+                @Html.ValidationMessageFor(model => model.FirstName)
+            </div>
+        </div>
+
+    </div>
+</div>

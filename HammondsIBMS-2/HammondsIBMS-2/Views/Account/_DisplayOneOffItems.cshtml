@@ -1,0 +1,35 @@
+﻿
+@using HammondsIBMS_Domain.Entities.Accounts
+@model CustomerAccount
+
+<div id="_DisplayOneOffItems">
+    
+    @{Html.Telerik().Grid<OneOffItem>()
+          .Name("OneOfItemsGrid")
+          .DataKeys(keys => keys.Add(o => o.OneOffItemId))
+          .DataBinding(databind => databind.Ajax()
+              .Select("_GetOneOffItemsForGrid", "Account", new {id = Model.CustomerAccountId}))
+          .Columns(columns =>
+          {
+              columns.Bound(o => o.Description);
+              columns.Bound(o => o.Date).Format("{0:dd/MM/yyyy}");
+              columns.Bound(o => o.Charge).Format("{0:£#0.00}");
+              columns.Bound(o => o.OneOffType.Description).Title("Work Type");
+              columns.Bound(o => o.OneOffItemId).Title("").Sortable(false).Width(30).ClientTemplate("<div class='commandColumn'>" + Html.ActionDialogFormButton(new TelerikButtonParameters(ButtonIcon.Delete),
+                  new ActionParameters("_DeleteOneOffItem", new { id = "<#= OneOffItemId #>" }),
+                  new ActionDialogFormParamters("Remove One-Off Item", null, Url.Action("_DeleteOneOffItem"), null, "_onOneOffUnitDeleted")).ToHtmlString() +
+                                                                                                    "</div>");
+          })
+          .Editable(editing => editing.Mode(GridEditMode.PopUp))
+          .Pageable()
+          .Sortable()
+          .Footer(false)
+          .Render();
+    }
+</div>
+
+<script type="text/javascript">
+    function _onOneOffUnitDeleted() {
+        RebindTelerikGrid('OneOfItemsGrid');
+    }
+</script>

@@ -1,0 +1,60 @@
+﻿@model HammondsIBMS_Domain.Values.ContactInfo
+<table class="edit-table">
+    <tr>
+        <td>
+            @Html.LabelFor(model => model.Tel)
+        </td>
+        <td>
+            @Html.EditorFor(model => model.Tel)<br />
+            @Html.ValidationMessageFor(model => model.Tel)
+        </td>
+        <td>
+            @Html.LabelFor(model => model.Tel2)
+        </td>
+        <td>
+            @Html.EditorFor(model => model.Tel2)<br />
+            @Html.ValidationMessageFor(model => model.Tel2)
+        </td>
+    </tr>
+    <tr>
+        <td>
+            @Html.LabelFor(model => model.Mobile)
+        </td>
+        <td>
+            @Html.EditorFor(model => model.Mobile)<br />
+            @Html.ValidationMessageFor(model => model.Mobile)
+        </td>
+        <td>
+            @Html.LabelFor(model => model.Mobile2)
+        </td>
+        <td>
+            @Html.EditorFor(model => model.Mobile2)<br />
+            @Html.ValidationMessageFor(model => model.Mobile2)
+        </td>
+    </tr>
+    <tr>
+        <td>
+            @Html.LabelFor(model => model.Email)
+        </td>
+        <td>
+            @Html.EditorFor(model => model.Email)<br />
+            @Html.ValidationMessageFor(model => model.Email)
+        </td>
+        <td>
+            @Html.LabelFor(model => model.Email2)
+        </td>
+        <td>
+            @Html.EditorFor(model => model.Email2)<br />
+            @Html.ValidationMessageFor(model => model.Email2)
+        </td>
+    </tr>
+    <tr>
+          <td>
+            @Html.LabelFor(model => model.Url)
+        </td>
+        <td>
+            @Html.EditorFor(model => model.Url)<br />
+            @Html.ValidationMessageFor(model => model.Url)
+        </td>
+    </tr>
+</table>

@@ -1,0 +1,18 @@
+﻿@using HammondsIBMS_2.ViewModels.Menu
+@model HammondsIBMS_2.ViewModels.Menu.SideMenuVM
+<ul class="nav nav-list" id="sideMenu">
+    <li class="nav-header">@Model.Header</li>
+    <li class="divider"></li>
+@foreach (var sm in Model.MenuVMs)
+{
+    if (sm.MenuType == MenuVMType.Divider)
+    {
+        <li class="divider"></li>
+    }
+    else
+    {
+        var smActive = sm.Active ? "active" : "";
+        <li class="@smActive"><a href="@sm.Action" data-index="@sm.Index">@sm.Title </a></li>
+    }
+}
+</ul>

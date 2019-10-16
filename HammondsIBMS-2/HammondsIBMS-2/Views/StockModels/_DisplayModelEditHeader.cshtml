@@ -1,0 +1,30 @@
+﻿@model HammondsIBMS_2.ViewModels.ModelView.ModelVM
+Edit Model : @Html.Raw(Model.Manufacturer) @Html.Raw(Model.ModelCode) (@Html.Raw(Model.Category)) @if(Model.IsObsolete) {<span class="text-warning"><em>[Obsolete!]</em></span>}
+@*<table class="table table-condensed table-bordered">
+    <thead>
+        <tr>
+            <th>
+                @Html.LabelFor(m => m.Manufacturer)
+            </th>
+            <th>
+                @Html.LabelFor(m => m.ModelCode)
+            </th>
+            <th>
+                @Html.LabelFor(m => m.Category)
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+                @Html.DisplayFor(m => m.Manufacturer)
+            </td>
+            <td>
+                @Html.DisplayFor(m => m.ModelCode)
+            </td>
+            <td>
+                @Html.DisplayFor(m => m.Category)
+            </td>
+        </tr>
+    </tbody>
+</table>*@

@@ -1,0 +1,24 @@
+﻿@using HammondsIBMS_Domain.Entities.Accounts
+@model HammondsIBMS_2.ViewModels.Basket.RentalBasketVM
+<div class="well well-small well-noBackground">
+    @Html.ContentTitle(Html.Action("StepperHeader").ToHtmlString())
+
+    @using (Html.BeginForm(null, null, FormMethod.Post, new { @class = "form-horizontal" }))
+    {
+        @Html.ValidationSummary(true)
+        <fieldset>
+            <legend>Rental Date</legend>
+            <div class="control-group">
+                @Html.LabelFor(model => model.StartDate, new { @class = "control-label" })
+                <div class="controls">
+                    @Html.EditorFor(model => model.StartDate)
+                    @Html.ValidationMessageFor(model => model.StartDate)
+                </div>
+            </div>
+        </fieldset>
+        <div>
+            @Html.Action("StepperControl")
+
+        </div>
+    }
+</div>

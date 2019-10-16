@@ -1,0 +1,69 @@
+﻿@using HammondsIBMS_Domain.Entities.Contracts
+
+@Html.ContentTitle("Contract Types")
+<fieldset>
+    <fieldset>
+        <table >
+            <tr>
+                <td>
+
+                </td>
+                <td class="buttonspace">
+                    @Html.ActionDialogFormButton(new ButtonParameters(ButtonIcon.Add, "Add Contract Type"),
+                                   new ActionParameters("_AddContractType", null),
+                                                                                new ActionDialogFormParamters("Add Contract Type", null, Url.Action("_AddContractType"), null, "rebindContractGrid"))
+                </td>
+            </tr>
+        </table>
+    </fieldset>
+@{Html.Telerik().Grid<ContractType>()
+      .Name("ContractGrid")
+      .DataKeys(keys => keys.Add(o => o.ContractTypeId))
+      .DataBinding(databind => databind.Ajax()
+          .Select("ContractTypesGridBind", "Contract"))
+  
+      .Columns(columns =>
+                   {
+                       columns.Bound(o => o.Description);
+                       columns.Bound(o => o.PeriodInMonths);
+                       columns.Bound(o => o.NormalTermAmount).Format("{0:£#0.00}");
+                       columns.Bound(o => o.PurchaseDefault).HtmlAttributes(new { @class = "bool-text-to-icon" });
+                       columns.Bound(o => o.HideFromInvoice).HtmlAttributes(new { @class = "bool-text-to-icon" }); 
+                       columns.Bound(o => o.Expired).HtmlAttributes(new {@class="bool-text-to-icon"});
+                       columns.Bound(o => o.ContractTypeId).Title("").Sortable(false).Width(50).ClientTemplate("<div class='commandColumn'>" + Html.ActionDialogFormButton(new TelerikButtonParameters(ButtonIcon.Edit),
+                                                                                                                                           new ActionParameters("_EditContractType", new { id = "<#= ContractTypeId #>" }),
+                                                                                                                                           new ActionDialogFormParamters("Edit Contract Type", null, "_EditContractType", null, "rebindContractGrid")).ToHtmlString() +
+                                                                                                               "</div>");
+
+                   })
+      .DetailView(detailView => detailView.ClientTemplate(
+        "<table> " +
+            "<tr>" +
+                "<td style='width:50px;vertical-align:text-top'>"+
+                    "Explanation :" +
+                "</td>" +
+                "<td>" +
+                    "<#= Explanation #>" +
+                "</td>" +
+            "</tr>" +
+            "</table>" 
+          
+          ))
+
+      .Editable(editing => editing.Mode(GridEditMode.PopUp))
+      .ClientEvents(events=>events.OnDataBound("ContractTypeGridDataBound"))
+      .Pageable()
+      .Sortable()
+      .Render();
+}
+</fieldset>
+<script type="text/javascript">
+    function rebindContractGrid() {
+        RebindTelerikGrid('ContractGrid');
+
+    }
+    
+    function ContractTypeGridDataBound() {
+        ChangeBoolTextToIcon();
+    }
+</script>

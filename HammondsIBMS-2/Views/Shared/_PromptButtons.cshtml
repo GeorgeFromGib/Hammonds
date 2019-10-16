@@ -1,0 +1,29 @@
+﻿@using HammondsIBMS_2.ViewModels
+@model PromptVM
+ <div style="text-align: center">
+     @if ((Model.Buttons & PromptVM.DialogButtons.Ok) == PromptVM.DialogButtons.Ok)
+     {
+         @Html.FormSubmitButton(new ButtonParameters(ButtonIcon.Ok, ButtonIconColor.White, ButtonRole.Danger, ButtonHeight.Small),"_promptVMSubmit")
+         @Html.Raw(" ");
+     }
+     @if ((Model.Buttons & PromptVM.DialogButtons.Cancel) == PromptVM.DialogButtons.Cancel)
+     {
+         @Html.FormCancelButton()
+     }
+      @if ((Model.Buttons & PromptVM.DialogButtons.ConfirmOk) == PromptVM.DialogButtons.ConfirmOk)
+     {
+         //@Html.CheckBoxLabelled("ConfirmOK",false,"Confirm OK?")
+         @:<input type="checkbox" id="_ConfirmOK" />Confirm Ok?
+         @Html.HiddenFor(m=>m.Buttons)
+         <script type="text/javascript">
+             $(function () {
+                 EnableButton('#_promptVMSubmit', false);
+
+                 $('#_ConfirmOK').click(function (event) {
+                     EnableButton('#_promptVMSubmit', $(this).is(":checked"));
+                 });
+             })
+            
+         </script>
+     }
+ </div>

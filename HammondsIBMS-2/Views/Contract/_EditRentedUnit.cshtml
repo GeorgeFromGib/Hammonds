@@ -1,0 +1,101 @@
+﻿@using System.Collections
+@model HammondsIBMS_2.ViewModels.Contract.RentedUnitVM
+@using (Html.BeginForm())
+{ 
+    @Html.HiddenFor(m => m.CustomerAccountId)
+    @Html.HiddenFor(m=>mUnitIdId)
+    @Html.HiddenFor(m => m.OldStockId)
+    @Html.HiddenFor(m => m.StockId)
+    @Html.ValidationSummary(false)
+    <fieldset>
+        <table class="edit-table">
+            <tr>
+                <td class="label-width">
+ 
+                        @Html.LabelFor(o => o.RentedDate)
+
+                </td>
+                <td>
+
+                        @(ModelUnitIdId==0 ? Html.EditorFor(o => o.RentedDate):Html.DisplayFor(o=>o.RentedDate))<br />
+                        @Html.ValidationMessageFor(o => o.RentedDate)
+
+                </td>
+            </tr>
+            @if (ModelUnitIdId != 0)
+            {
+                <tr>
+                    <td >
+ 
+                            @Html.LabelFor(o => o.ChangedDate)
+ 
+                    </td>
+                    <td>
+
+                            @Html.EditorFor(o => o.ChangedDate)<br />
+                            @Html.ValidationMessageFor(o => o.ChangedDate)
+
+                    </td>
+                </tr>
+            }
+            <tr>
+                <td >
+
+                        @Html.LabelFor(o => o.Amount)
+
+                </td>
+                <td>
+
+                        @Html.EditorFor(o => o.Amount)
+                        @Html.ValidationMessageFor(o => o.Amount)
+
+                </td>
+            </tr>
+            <tr>
+                <td >
+
+                        @Html.LabelFor(o => o.Notes)
+
+                </td>
+                <td>
+
+                        @Html.EditorFor(o => o.Notes)<br />
+                        @Html.ValidationMessageFor(o => o.Notes)
+
+                </td>
+            </tr>
+        </table>
+        @if(ModelUnitIdId==0)
+        {
+            @Html.Partial("_ContractUnitStockFilterBox", Model.StockId)
+            if (Model.OldStockProductCycleId > 0)
+             {
+                 using (Html.Container("Set old stock status to:"))
+                 {
+                     <table class="edit-table">
+                         <tr>
+                             <td class="label-width">
+                                 @(Html.Telerik().DropDownListFor(o => o.OldStockProductCycleId)
+                                .BindTo(new SelectList((IEnumerable) ViewBag.ContractChangeableProductLifeCycle
+                                                       , "ProductLifeCycleId", "Description"
+                                                       , Model.OldStockProductCycleId)))
+                             </td>
+                         </tr>
+                     </table>
+                 }
+             }
+        }
+    </fieldset>
+    <div>
+        @Html.FormSubmitButton()
+        @Html.FormCancelButton()
+    </div>
+    
+}
+<script type="text/javascript">
+    $(function () {
+        $("#_ContractUnitStockFilterBox").live('selectionChanged', function (event, e) {
+            $('[name="StockId"]').val(e.value);
+        });
+    })
+</script>

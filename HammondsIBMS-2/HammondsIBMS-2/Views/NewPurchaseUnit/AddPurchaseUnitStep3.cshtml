@@ -1,0 +1,107 @@
+﻿
+@model HammondsIBMS_2.ViewModels.Basket.PurchaseBasketVM
+<div class="well well-small well-noBackground">
+    @Html.ContentTitle(Html.Action("StepperHeader").ToHtmlString())
+    @using (Html.BeginForm(null, null, FormMethod.Post, new { @class = "form-horizontal" }))
+    {
+        @Html.ValidationSummary(true)
+        <div class="validation-summary-errors"></div>
+        @Html.HiddenFor(model => model.CustomerAccountId)
+        @Html.HiddenFor(model => model.BasketId)
+        <fieldset>
+            <legend>Units & Contracts</legend>
+            <div class="control-group">
+                <label class="control-label">Units/Contracts</label>
+                <div class="controls">
+                    <fieldset>
+                        <table>
+                            <tr>
+                                <td class="contentspace">
+                                    
+                                    @Html.Partial("../Account/_AccountStockSelector")
+
+                                    @Html.Partial("../Account/_UnitsAndContractsGrid",new ViewDataDictionary{{"parentId",Model.BasketId},{"controller","BasketUnitsAndContractsGrid"},{"editUnit",true}})
+                                   
+
+                                </td>
+                            </tr>
+                        </table>
+                    </fieldset>
+                </div>
+            </div>
+            <div class="control-group">
+                @Html.LabelFor(model => model.TotalUnits, new { @class = "control-label" })
+                <div class="controls">
+                    <span class="input-xlarge uneditable-input" id="TotalUnits" data-bind="money: TotalUnits">£0.0</span>
+                </div>
+            </div>
+            <div class="control-group">
+                @Html.LabelFor(model => model.TotalContracts, new { @class = "control-label" })
+                <div class="controls">
+                    <span class="input-xlarge uneditable-input" id="TotalContracts" data-bind="money: TotalContracts">£0.0</span>
+                </div>
+            </div>
+            <div class="control-group">
+                @Html.LabelFor(model => model.TotalCharge, new { @class = "control-label" })
+                <div class="controls">
+                    <span class="input-xlarge uneditable-input" id="TotalCharge" data-bind="money:TotalCharge">£0.0</span>
+
+                </div>
+            </div>
+        </fieldset>
+        <div>
+            @Html.Action("StepperControl")
+        </div>
+    }
+</div>
+
+@*@Html.Partial("_AddPurchaseAccountClientViewModelSetup")*@
+
+<script type="text/javascript">
+
+  
+    
+    
+    $(function () {
+        $('#_AccountStockSelector').live('selectionChanged', function (event, val) {
+            UnitSelected(val.value);
+        });
+
+        $('#UnitsAndContractsGrid').live('onUnitChanged', function(event, val) {
+            OnUnitChanged();
+        });
+
+        UpdateData();
+
+    }
+    );
+
+    function UnitSelected(stockId) {
+        $.post('@Url.Action("_AddPurchaseUnit")', { id: stockId })
+            .success(function () {
+                ClearErrorSummary();
+                $('#UnitsAndContractsGrid').trigger('rebind');
+                OnUnitChanged();
+            })
+            .fail(DisplayJsonErrorInSummary);
+    }
+    
+    function UpdateData() {
+        GetPurchaseAccountData(function (data) {
+            $('#TotalUnits').html(accounting.formatMoney(data.TotalUnits));
+            $('#TotalContracts').html(accounting.formatMoney(data.TotalContracts));
+            $('#TotalCharge').html(accounting.formatMoney(data.TotalCharge));
+        });
+    }
+    
+    function OnUnitChanged() {
+        UpdateData();
+    }
+
+    function GetPurchaseAccountData(func) {
+        $.get('@Url.Action("_GetPurchaseBasketTotals")', function (data) {
+            func(data);
+        });
+    }
+
+</script>

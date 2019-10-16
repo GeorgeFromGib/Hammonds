@@ -1,0 +1,88 @@
+﻿@model HammondsIBMS_2.ViewModels.BillCycleRun.NewBillCycleRunVM
+<fieldset>
+    @if (!Model.IsError)
+    {
+        <div id="okToStart" style="text-align: center">
+            <h4>@Html.DisplayFor(m => m.Message)</h4>
+            <br />
+            @Html.ClientButton(new ButtonParameters(ButtonIcon.Ok, ButtonIconColor.White, ButtonRole.Warning, null), "StartNewBillingCycle()")
+            @Html.FormCancelButton()
+        </div>
+        <div id="billCycleRun" style="text-align: center; display: none">
+            <div id="status">
+                <h4>
+                    Running Billing Cycle : @Html.DisplayFor(m => m.BillCycle)</h4>
+                <h4>
+                    Customers Invoiced out of @Html.DisplayFor(m => m.NoOfCustomersToInvoice) : <span
+                        id="noOfCustomersInvoiced">0</span></h4>
+            </div>
+            <p>
+                @Html.ProgressBar("billingProgress", ButtonRole.Success)
+            </p>
+            @*<div style="height: 10px" id="progessbar">
+            </div>*@
+            <br />
+            <div id="warning" class="error">
+                Warning ! Do not close this browser window while bill cycle process is running
+            </div>
+            <div style="display: none" id="buttons">
+                @Html.FormCancelButton(new ButtonParameters(ButtonIcon.Ok))
+            </div>
+        </div>
+    }
+    else
+    {
+        <div style="text-align: center" class="error">
+            @Html.DisplayFor(m => m.Message)<br />
+            <br />
+            @Html.FormCancelButton()
+        </div>
+    }
+</fieldset>
+<script type="text/javascript">
+
+    var taskId = 0;
+
+    function StartNewBillingCycle() {
+        AnimHide('#okToStart');
+        AnimShow('#billCycleRun');
+        $.get('@Url.Action("_StartBillingCycle")', function (taskId) {
+            ReadProcessStat(taskId);
+        });
+    }
+
+    function ReadProcessStat(taskId) {
+        $.get('@Url.Action("_ReadBillingCycleRunningStatus")', { id: taskId }, function (data) {
+            UpdateInvoicedCount(data.count);
+            UpdateProgress(PercentageDone(data.count));
+            if (data.isRunning)
+                setTimeout(function () { ReadProcessStat(taskId); }, 1000);
+            else {
+                UpdateProgress(100);
+                UpdateInvoicedCount('@(Model.NoOfCustomersToInvoice)');
+                ShowButtons();
+            }
+        });
+    }
+
+    function UpdateProgress(value) {
+        UpdateProgressBar('billingProgress', value);
+    }
+
+    function UpdateInvoicedCount(count) {
+        $('#noOfCustomersInvoiced').html(count);
+    }
+
+    function PercentageDone(count) {
+        var ofTotal = '@(Model.NoOfCustomersToInvoice)';
+        if (count > 0)
+            return (count / ofTotal) * 100;
+        return 0;
+    }
+
+    function ShowButtons() {
+        AnimHide("#warning");
+        AnimShow("#buttons");
+    }
+
+</script>

@@ -1,0 +1,35 @@
+﻿@model HammondsIBMS_Domain.Entities.Contracts.PaymentPeriod
+@using (Html.BeginForm())
+{
+    @Html.ValidationSummary(true)
+    <fieldset>
+        <table class='edit-table'>
+            @Html.HiddenFor(model => model.PaymentPeriodId)
+
+            <tr>
+                <td>
+                    @Html.LabelFor(model => model.Description)
+                </td>
+                <td>
+                    @Html.EditorFor(model => model.Description)<br />
+                    @Html.ValidationMessageFor(model => model.Description)
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    @Html.LabelFor(model => model.PeriodInMonths)
+                </td>
+                <td>
+                    @Html.EditorFor(model => model.PeriodInMonths)
+                    @Html.ValidationMessageFor(model => model.PeriodInMonths)
+                </td>
+            </tr>
+           
+        </table>
+    </fieldset>
+    <div>
+        @Html.FormSubmitButton() @Html.FormCancelButton()
+
+    </div>
+}
+

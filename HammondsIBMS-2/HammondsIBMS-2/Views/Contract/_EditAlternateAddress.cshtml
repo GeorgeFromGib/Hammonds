@@ -1,0 +1,28 @@
+﻿@model HammondsIBMS_2.ViewModels.Contract.AlternateAddressVM
+@using (Html.BeginForm())
+{
+    @Html.ValidationSummary(false)
+    @Html.HiddenFor(o => o.CustomerAccountId)
+    using (Html.Container("Address"))
+    {
+    @Html.EditorFor(o => o.AlternateAddress, "_Address")
+    }
+    using (Html.Container("Instructions"))
+    { 
+    <table class="edit-table">
+        <tr>
+            <td style="width: 150px">
+                @Html.LabelFor(o => o.AlternateAddressInstructions)
+            </td>
+            <td>
+                @Html.EditorFor(o => o.AlternateAddressInstructions)
+                @Html.ValidationMessageFor(o => o.AlternateAddressInstructions)
+            </td>
+        </tr>
+    </table>
+    }
+    <p>
+        @Html.FormSubmitButton()
+        @Html.FormCancelButton()
+    </p>
+}

@@ -1,0 +1,31 @@
+﻿@model HammondsIBMS_2.ViewModels.Stepper.StepperVM2
+<div class="row-fluid">
+    <div class="span4">
+        @{
+            var backButton = new ButtonParameters(ButtonIcon.Backward, ButtonType.ImageText, "Previous Step", Model.CurrentStepNo > 1, null).Height(ButtonHeight.Small);
+            var submitButton = new ButtonParameters(ButtonIcon.Forward, ButtonType.ImageText, "Next Step", Model.CurrentStepNo <= Model.NoOfSteps, null).Height(ButtonHeight.Small);
+            var finishButton = new ButtonParameters(ButtonIcon.Ok, ButtonType.ImageText, "Finish", ButtonRole.Primary, ButtonIconColor.White, ButtonHeight.Normal, true, null).Height(ButtonHeight.Small);
+            
+            if (Model.IsAjax)
+            {
+                @Ajax.ActionButton(backButton,new ActionParameters("StepperMoveToPreviousStep"),new AjaxOptions{UpdateTargetId = Model.UpdateTargetId} )
+            }
+            else
+            {
+                 @Html.ActionButton(backButton, Url.Action("StepperMoveToPreviousStep"));
+            }
+           
+
+            if (Model.CurrentStepNo < Model.NoOfSteps || !Model.CurrentStep.IsLast)
+            {
+                @Html.FormSubmitButton(submitButton)
+            }
+            else
+            {
+                @Html.FormSubmitButton(finishButton)
+            }
+        }
+    </div>
+    <div class="span4" style="text-align: center;line-height: 30px;">Step @Model.CurrentStepNo of @Model.NoOfSteps</div>
+    <div class="span4" style="text-align: right">@Html.ActionButton(new ButtonParameters(ButtonIcon.Cancel, "Cancel").Height(ButtonHeight.Small), Url.Action(Model.ActionOnCancel))</div>
+</div>

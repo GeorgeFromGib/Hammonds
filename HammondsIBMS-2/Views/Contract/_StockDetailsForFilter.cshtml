@@ -1,0 +1,34 @@
+﻿@model HammondsIBMS_Domain.Entities.Stock.Stock
+<table cellspacing="0" class="t-grid">
+    <thead class="t-grid-header">
+    <tr>
+        <th class="t-header">@Html.Label("Manufacturer")
+        </th>
+        <th class="t-header">@Html.LabelFor(m => Model.Model.ModelCode)
+        </th>
+        <th class="t-header">@Html.LabelFor(m => Model.Identifier)
+        </th>
+        <th class="t-header">@Html.LabelFor(m => Model.SerialNumber)
+        </th>
+        <th class="t-header">@Html.Label("Status")
+        </th>
+    </tr>
+    </thead><tbody>
+    <tr>
+        <td>
+            @Html.DisplayFor(m => Model.Model.Manufacturer.Name)
+        </td>
+        <td>
+            @Html.DisplayFor(m => Model.Model.ModelCode)
+        </td>
+        <td>
+            @Html.DisplayFor(m => Model.Identifier)
+        </td>
+        <td>
+            @Html.DisplayFor(m => Model.SerialNumber)
+        </td>
+        <td>
+            @Html.DisplayFor(m => m.ProductLifeCycleStatus.Description)
+        </td>
+    </tr></tbody>
+</table>

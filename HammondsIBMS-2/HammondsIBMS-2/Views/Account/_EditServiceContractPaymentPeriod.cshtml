@@ -1,0 +1,100 @@
+﻿@model HammondsIBMS_2.ViewModels.Contract.EditServiceContractVM
+@using (Html.BeginForm())
+{ 
+    <fieldset>
+        @Html.HiddenFor(o => o.CustomerAccountId)
+        @Html.HiddenFor(o => o.ContractId)
+        @Html.ValidationSummary(true)
+        <table class="edit-table">
+            <tr>
+                <td style="width: 150px">
+                    @Html.LabelFor(m=>m.StartDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(o => o.StartDate)<br />
+                    @Html.ValidationMessageFor(o => o.StartDate)
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    @Html.LabelFor(o => o.Charge)
+                </td>
+                <td>
+                    @Html.DisplayFor(o => o.Charge)
+                    @Html.ValidationMessageFor(o => o.Charge)
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    @Html.LabelFor(o => o.PaymentPeriodId)
+                </td>
+                <td>
+                    @Html.EditorFor(o => o.PaymentPeriodId)
+                    @Html.ValidationMessageFor(o => o.PaymentPeriodId)
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    @Html.LabelFor(o => o.PeriodPaymentAmount)
+                </td>
+                <td>
+                    <div id="PeriodPaymentAmount">
+                        @Html.DisplayFor(o => o.PeriodPaymentAmount)<br />
+                        @Html.ValidationMessageFor(o => o.PeriodPaymentAmount)
+                    </div>
+                </td>
+            </tr>
+        </table>
+        @using (Html.Container("Status"))
+        {
+            <table class="edit-table">
+                <tr>
+                    <td style="width:150px">
+                        @Html.LabelFor(o => o.ContractStatus)
+                    </td>
+                    <td>
+                        <div id="ContractStatus">
+                            @Html.DisplayFor(o => o.ContractStatus)<br />
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        }
+    </fieldset>
+    <p>
+        @Html.FormSubmitButton()
+        @Html.FormCancelButton()
+    </p>
+}
+<script type="text/javascript">
+    $(function () {
+
+
+        $('#PaymentPeriodId').die('change');
+        $('#PaymentPeriodId').live('change', function (event, e) {
+            CallActionAndUpdate('@Url.Action("_ChangeServiceContractPaymentPeriod")');
+        });
+
+        function CallActionAndUpdate(action) {
+            Get(action, Update);
+        }
+
+        function Get(action, func) {
+            $.get(action, $('form').serialize(), function (result) {
+                func(result);
+            });
+        }
+
+        function Update(result) {
+
+            //$('#ContractLengthInMonths').data('tTextBox').value(result.ContractLengthInMonths);
+            //$('#Charge').data('tTextBox').value(result.Charge);
+            //$('#ExpiryDate').html(Date.parseJSON(result.ExpiryDate).format('d/m/Y'));
+            $('#PeriodPaymentAmount').html(accounting.formatMoney(result.PeriodPaymentAmount));
+            //$('#PaymentPeriod_PeriodInMonths').val(result.PaymentPeriod.PeriodInMonths);
+            //$('#PaymentPeriod_Description').val(result.PaymentPeriod.Description);
+            $('#ContractStatus').html(result.ContractStatus.Description);
+            //$('#TimeToExpiry').html(result.TimeToExpiry);
+        }
+    });
+</script>

@@ -1,0 +1,110 @@
+﻿@using HammondsIBMS_2.ViewModels.Contract
+<script type="text/javascript">
+    function OnRentedContractChanged(e) {
+        RebindTelerikGrid('RentedContractVMGrid');
+    }
+
+    function RentedContractVMGrid_onDataBinding(e) {
+        e.data = { showExpired: $('#RentalContractShowExpired:checked').val() };
+
+    }
+
+    function RentedContractVMGrid_onRowDataBound(e) {
+        var dataItem = e.dataItem;
+        var expiryDate = dataItem.ExpiryDate;
+
+        if (expiryDate != null) $(e.row).find("div.commandColumn").hide();
+    }
+
+    $('#RentalContractShowExpired').click(function () {
+        RebindTelerikGrid('RentedContractVMGrid');
+    });
+</script>
+<div id="displayAttachedcontract">
+    <fieldset>@Html.CheckBoxLabelled("RentalContractShowExpired", false, "Show Expired")</fieldset>
+    
+    @{
+        Html.Telerik().Grid<EditRentedContractVM>()
+            .Name("RentedContractVMGrid")
+            .DataKeys(keys => keys.Add(o => o.ContractId))
+            .DataBinding(databind => databind.Ajax()
+                                         .Select("_DisplatRentalContracts", "Contract", new { id = ViewBag.CustomerAccountId }))
+            .ClientEvents(events => events.OnRowDataBound("RentedContractVMGrid_onRowDataBound").OnDataBinding("RentedContractVMGrid_onDataBinding"))                 
+            .Columns(columns =>
+                         {
+
+                             columns.Bound(o => o.StartDate).Format("{0:dd/MM/yyyy}");
+                             columns.Bound(o => o.ExpiryDate).Format("{0:dd/MM/yyyy}");
+                             columns.Bound(o => o.ContractStatus);
+                             columns.Bound(o => o.MonthlyCharge).Format("{0:£#0.00}");
+                             columns.Bound(o => o.PaymentPeriodDescription);
+                             columns.Bound(o => o.PeriodPaymentAmount).Format("{0:£#0.00}");
+                             columns.Bound(o => o.ContractId).Title("").Sortable(false).Width(17).ClientTemplate("<div class='commandColumn'>"+@Html.ActionDialogFormButton(new TelerikButtonParameters(ButtonIcon.Edit), 
+                                                                                                                                                                              new ActionParameters("_EditRentalContract", new { id = "<#= ContractId #>" }),
+                                                                                                                                                                              new ActionDialogFormParamters("Edit Rental Contract", null, "_EditRentalContract", null, "OnRentedContractChanged")).ToHtmlString() +
+                                                                                                                    "</div>");
+
+
+
+                         })
+            .Editable(editing => editing.Mode(GridEditMode.PopUp))
+            .Pageable()
+            .Sortable()
+            .Footer(false)
+            .Render();
+    }
+</div>
+
+   @* <table class="stripeMe">
+        <tr>
+            <th>
+                Contract Type
+            </th>
+            <th>
+                @Html.LabelFor(o => o.StartDate)
+            </th>
+            <th>
+                @Html.LabelFor(o => o.ExpiryDate)
+            </th>
+            <th>
+                @Html.LabelFor(o => o.MonthlyCharge)
+            </th>
+            <th>
+                @Html.LabelFor(o => o.PaymentPeriodId)
+            </th>
+            <th>
+                @Html.LabelFor(o => o.PeriodPaymentAmount)
+            </th>
+            <th>
+            </th>
+        </tr>
+        <tr>
+            <td>
+                Rental
+            </td>
+            <td>
+                @Html.DisplayFor(o => o.StartDate)
+            </td>
+            <td>
+                @Html.DisplayFor(o => o.ExpiryDate)
+            </td>
+            <td>
+                @Html.DisplayFor(o => o.MonthlyCharge)
+            </td>
+            <td>
+                @Html.DisplayFor(o => o.PaymentPeriodId)
+            </td>
+            <td>
+                @Html.DisplayFor(o => o.PeriodPaymentAmount)
+            </td>
+            <td style="width: 50px; text-align: right;">
+                @if (Model.ExpiryDate == null)
+                {
+                    @Html.ActionDialogFormButton(new ButtonParameters(ButtonIcon.Edit),
+                                                       new ActionParameters("_EditRentalContract", new { id = Model.CustomerAccountId }),
+                                                       new ActionDialogFormParamters("Edit Rental", "displayAttachedcontract", Url.Action("_DisplayAttachedContractsForEdit", new { id = Model.CustomerAccountId }))) 
+                }
+            </td>
+        </tr>
+    </table>
+</div>*@

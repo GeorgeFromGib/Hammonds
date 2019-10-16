@@ -1,0 +1,81 @@
+﻿@model IEnumerable<HammondsIBMS_2.ViewModels.Contract.ServiceContractVM>
+<fieldset>
+    <table cellspacing="0" class="t-grid">
+        <thead class="t-grid-header">
+            <tr>
+                <th class="t-header" style="width: 30px;">
+
+                </th>
+                <th class="t-header" >
+                    @Html.Label("Contract")
+                </th>
+                <th class="t-header">
+                    @Html.Label("Starts")
+                </th>
+                <th class="t-header">
+                    @Html.Label("Ends") 
+                </th>
+                <th class="t-header">
+                    @Html.Label("Expires") 
+                </th>
+                <th class="t-header">
+                    @Html.Label("Status") 
+                </th>
+                <th class="t-header">
+                    @Html.Label("Pay Int") 
+                </th>
+                <th class="t-header">
+                    @Html.Label("Pay Int Amnt") 
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+        @foreach (var cont in Model)
+        {
+            var cls = "";
+            if (cont.IsScheduled)
+            {
+                cls = Html.Badge(BadgeType.Info, new IconParameters(ButtonIcon.Timer)).ToHtmlString();
+            }
+            else if (cont.NoOfDaysLeft <= 0)
+            {
+                cls = Html.Badge(BadgeType.Normal, new IconParameters(ButtonIcon.Cancel)).ToHtmlString();
+            }
+            else if (cont.NoOfDaysLeft < 30)
+            {
+                cls = Html.Badge(BadgeType.Warning, new IconParameters(ButtonIcon.Warning)).ToHtmlString();
+            }
+            else if (cont.NoOfDaysLeft < 60)
+            {
+                cls =  Html.Badge(BadgeType.Important, new IconParameters(ButtonIcon.Warning)).ToHtmlString();
+            }
+            <tr>
+                <td >
+                    @Html.Raw(cls)
+                </td>
+                <td>
+                    @Html.DisplayFor(itemmodel => cont.ContractTypeDescription)
+                </td>
+                <td>
+                    @Html.DisplayFor(itemmodel => cont.StartDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(itemmodel => cont.ExpiryDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(itemmodel => cont.NoOfDaysLeft)
+                </td>
+                <td>
+                    @Html.DisplayFor(itemmodel => cont.ContractStatusDescription)
+                </td>
+                <td>
+                    @Html.DisplayFor(itemmodel => cont.PaymentPeriodDescription)
+                </td>
+                <td>
+                    @Html.DisplayFor(itemmodel => cont.PeriodPaymentAmount)
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+</fieldset>

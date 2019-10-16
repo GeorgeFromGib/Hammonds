@@ -1,0 +1,12 @@
+﻿@model decimal
+@{var ctrName = ViewData.TemplateInfo.GetFullHtmlFieldName(string.Empty);}
+@(Html.Telerik().NumericTextBox()
+    .Name(ctrName)
+.Spinners(true)
+    .InputHtmlAttributes(new { style = "width:60px" })
+            .ClientEvents(events => events.OnChange("UpdateNumerical"))
+.MinValue(0)
+.Value((double?)Model)
+)
+<div class="notifyOnChange" id="@(ctrName.Replace('.', '_') + "_CTR")">
+</div>

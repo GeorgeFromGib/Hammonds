@@ -1,0 +1,12 @@
+﻿@model HammondsIBMS_Domain.Entities.Customers.CustomerEmployer
+<div class="well well-small well-noBackground">
+    @Html.ContentTitle("Add Customer")
+
+    @using (Html.BeginForm(null, null, FormMethod.Post, new { @class = "form-horizontal" }))
+    {
+        @Html.Partial("_EditCustomerEmployerBody",Model)
+     
+        @Html.Action("StepperControl")
+    }
+
+</div>

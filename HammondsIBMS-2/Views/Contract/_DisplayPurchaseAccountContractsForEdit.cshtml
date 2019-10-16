@@ -1,0 +1,67 @@
+﻿@using HammondsIBMS_2.ViewModels.Contract
+<script type="text/javascript">
+    function OnServiceContractChanged(e) {
+        RebindServiceContractGrid();
+    }
+
+    function RebindServiceContractGrid() {
+        $('#ServiceContractVMGrid').data('tGrid').rebind();
+    }
+
+    function ServiceContractVMGrid_onDataBinding(e) {
+        e.data = { showExpired: $('#ServiceContractShowExpired:checked').val() };
+
+    }
+
+    function ServiceContractVMGrid_onRowDataBound(e) {
+        if (e.dataItem.IsExpiredToday) $(e.row).find("div.commandColumn").hide();
+    }
+
+    $('#ServiceContractShowExpired').click(function () {
+        RebindServiceContractGrid();
+    });  
+</script>
+<div id="displayAttachedcontract">
+    <fieldset>@Html.CheckBoxLabelled("ServiceContractShowExpired", false, "Show Expired")</fieldset>
+    @{
+        Html.Telerik().Grid<ServiceContractVM>()
+            .Name("ServiceContractVMGrid")
+            .DataKeys(keys => keys.Add(o => o.ContractId))
+            .DataBinding(databind => databind.Ajax()
+                                         .Select("_DisplayServiceContracts", "Contract", new { id = ViewBag.CustomerAccountId }))
+            .ClientEvents(events => events.OnRowDataBound("ServiceContractVMGrid_onRowDataBound").OnDataBinding("ServiceContractVMGrid_onDataBinding"))
+            .Columns(columns =>
+                         {
+                             columns.Bound(o => o.ContractTypeDescription);
+                             columns.Bound(o => o.StartDate).Format("{0:dd/MM/yyyy}");
+                             columns.Bound(o => o.ExpiryDate).Format("{0:dd/MM/yyyy}");
+                             columns.Bound(o => o.TimeToExpiry);
+                             columns.Bound(o => o.ContractStatusDescription);
+                             columns.Bound(o => o.Charge).Format("{0:£#0.00}");
+                             columns.Bound(o => o.PaymentPeriodDescription);
+                             columns.Bound(o => o.PeriodPaymentAmount).Format("{0:£#0.00}");
+                             columns.Bound(o => o.ContractId).Title("").Sortable(false).Width(80)
+                                 .ClientTemplate("<div class='commandColumn'>" /*+ Html.ActionDialogFormButton(  new ButtonParameters(ButtonIcon.Edit),
+                                                                                                                new ActionParameters("_EditServiceContract", new { id = "<#= ContractId #>" }),
+                                                                                                                new ActionDialogFormParamters("Edit Service Contract", null, 
+                                                                                                                    "_EditServiceContract", null, "OnServiceContractChanged")).ToHtmlString()*/
+                                                                               + @Html.ActionDialogFormButton( new TelerikButtonParameters(ButtonIcon.Edit), 
+                                                                                                              new ActionParameters("_EditServiceContractPaymentPeriod",new {id="<#= ContractId #>"}),
+                                                                                                              new ActionDialogFormParamters("Change Payment Period", null, "_EditServiceContractPaymentPeriod", null, "OnServiceContractChanged")).ToHtmlString()
+                                                                               + Html.ActionDialogFormButton( new TelerikButtonParameters(ButtonIcon.Delete), 
+                                                                                                               new ActionParameters("_ExpireServiceContract", new { id = "<#= ContractId #>" }),
+                                                                                                               new ActionDialogFormParamters("Expire Contract",null,
+                                                                                                                   "_ExpireServiceContract",null,"OnServiceContractChanged")).ToHtmlString() 
+                                                                               + "</div>");  
+
+
+
+                         })
+            .Editable(editing => editing.Mode(GridEditMode.PopUp))
+            .Pageable()
+            .Sortable()
+            .Footer(false)
+            .Render();
+    }
+</div>
+

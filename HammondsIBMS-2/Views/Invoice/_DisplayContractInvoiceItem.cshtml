@@ -1,0 +1,35 @@
+﻿@model HammondsIBMS_Domain.Entities.Invoicing.CustomerAccountInvoiceItem
+<table class="filter">
+    <tr>
+        <td>
+            <table class="noborder stripeMe">
+                <tr class="t-grouping-row">
+                    <td colspan="4">
+                        <p class="t-reset">
+                            <span class="t-icon t-collapse"></span>@Html.DisplayFor(o => o.CustomerAccountDetails)
+                        </p>
+                    </td>
+                </tr>
+                @foreach (var cItem in Model.AttachedContractItems)
+                {
+                    <tr>
+                        <td class="t-group-cell" style="width: 30px">
+                        </td>
+                        <td >
+                            @Html.DisplayFor(itemmodel => cItem.Description)
+                        </td>
+                        <td class="money-align" style="width:50px">
+                            @Html.LabelFor(itemmodel => cItem.Amount)
+                        </td>
+                        <td style="width:90px" class="money-align">
+                            @Html.DisplayFor(itemmodel => cItem.Amount)
+                        </td>
+                    </tr>
+                }
+                <tr class="footer">
+                    <td colspan="2"></td><td class="money-align">Total </td><td class="money-align">@Html.DisplayFor(o=>o.Amount)</td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+</table>

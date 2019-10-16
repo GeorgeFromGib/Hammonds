@@ -1,0 +1,124 @@
+﻿@using HammondsIBMS_2.ViewModels.Collections
+@using HammondsIBMS_2.ViewModels.Contract
+@model DisplayCollectionVM
+
+<div id="CollectionsContainer">
+
+    <fieldset>
+        <fieldset>
+            <table>
+                <tr>
+                    <td id="AccountsBalance">
+                        <div id="AccountsBalanceDisplay">
+                            @*@Html.Action("_CustomerAccountsBalance", "Transactions", new { id = Model.CustomerId })*@
+                        </div>
+                    </td>
+                    <td class="buttonspace">
+                        @Ajax.ActionButton(new ButtonParameters(ButtonIcon.Add, ButtonType.ImageText, "Receive Payment").Enable(Model.HasAccounts),
+                            new ActionParameters("_ReceiveCollections", "Collections", new { customerId = Model.CustomerId }), 
+                            new AjaxOptions{UpdateTargetId = "CollectionsContainer"})
+                        @Html.ActionDialogFormButton(new ButtonParameters(ButtonIcon.Add,ButtonType.ImageText, "Make Adjustment"),
+                            new ActionParameters("_MakeAdjustment","Collections",new { customerId = Model.CustomerId }),
+                            new ActionDialogFormParamters("Make Adjustment",null,Url.Action("_MakeAdjustment"),null,null) )
+
+                    </td>
+                </tr>
+            </table>
+        </fieldset>
+        @if (Model.HasRentals)
+        {
+            <fieldset>
+                <legend>Rental Dates</legend>
+                @{
+                    Html.Telerik().Grid<RentedUnitVM>()
+                        .Name("RentedUnitCollectionsVMGrid")
+                        .DataKeys(keys => keys.Add(o => o.UnitId))
+                        .DataBinding(databind => databind.Ajax()
+                            .Select("_GetPaidUntilForRentals", "Collections", new { customerId = Model.CustomerId }))
+                        //.ClientEvents(events => events.OnRowDataBound("Grid_onRowDataBound").OnDataBinding("Grid_onDataBinding"))                 
+                        .Columns(columns =>
+                        {
+                         
+                            columns.Bound(o => o.StockDescription);
+                            columns.Bound(o => o.Identifier);
+                            columns.Bound(o => o.RentedDate).Format("{0:dd/MM/yyyy}");
+                            columns.Bound(o => o.RemovalDate).Format("{0:dd/MM/yyyy}");
+                            columns.Bound(o => o.PaidUntil).Format("{0:dd/MM/yyyy}"); ;
+                            columns.Bound(o => o.Amount).Format("{0:£#0.00}");
+                           
+                        })
+                        //.Editable(editing => editing.Mode(GridEditMode.PopUp))
+                        .Pageable()
+                        .Sortable()
+                        .Footer(false)
+                        .Render();
+                }
+            </fieldset>
+        }
+        <fieldset>
+            <legend>Outstanding Amounts</legend>
+            @{
+                Html.Telerik().Grid<CollectionVM>()
+                    .Name("CollectionsGrid")
+                    .DataBinding(dataBinding => dataBinding
+                        .Ajax()
+                        .Select("_DisplayOutstandingAmounts", "Collections", new { customerId = Model.CustomerId }))
+                    .Columns(columns =>
+                    {
+
+                        //columns.Bound(o => o.PaymentDate).Format("{0:dd/MM/yyyy}");
+                        //columns.Bound(o => o.PaymentId);
+                        columns.Bound(o => o.AccountNoAndType);
+                        columns.Bound(o => o.AccountTransactionTypeDescription);
+                        columns.Bound(o => o.Note);
+                        columns.Bound(o => o.Amount).Format("{0:£#0.00}");
+                    })
+                    //.DetailView(detailView => detailView.ClientTemplate(
+                    //    Html.Telerik().Grid<PaymentItemVM>()
+                    //        .Name("Grid_<#= PaymentId #>")
+                    //        .DataBinding(dataBinding => dataBinding
+                    //                                        .Ajax()
+                    //                                        .Select("_PaymentsItemsGridBind", "Payment", new { id = "<#= PaymentId #>" }))
+                    //        .Columns(columns =>
+                    //                     {
+
+                    //                         columns.Bound(o => o.Type);
+                    //                         columns.Bound(o => o.AccountDescription);
+                    //                         columns.Bound(o => o.BillCycle);
+                    //                         columns.Bound(o => o.Description);
+                    //                         columns.Bound(o => o.Amount).Format("{0:£#0.00}");
+                    //                     })
+                    //        .Sortable()
+                    //        .Footer(false)
+                    //        .ToHtmlString()))
+                    .Pageable()
+                    .Sortable()
+                    .Render();
+            }
+        </fieldset>
+    </fieldset>
+</div>
+
+<script type="text/javascript">
+    $(function() {
+        //UpdateBalance(e);
+        $('#CustomerTabStrip').live('clicked', function (event, e) {
+            //debugger;
+            var text = $(e.item).find("> .t-link").text();
+            if(text=='Collections')
+                PaymentUpdate();
+        });
+    });
+
+    function PaymentUpdate() {
+        if('@Model.HasRentals'=='true')
+            RebindTelerikGrid('RentedUnitCollectionsVMGrid');
+        RebindTelerikGrid('CollectionsGrid');
+        UpdateBalance();
+    }
+
+    function UpdateBalance(e) {
+        AjaxUpdate('@Url.Action("_CustomerAccountsBalance", "Transactions", new { id = Model.CustomerId})', 'AccountsBalanceDisplay');
+    }
+
+</script>

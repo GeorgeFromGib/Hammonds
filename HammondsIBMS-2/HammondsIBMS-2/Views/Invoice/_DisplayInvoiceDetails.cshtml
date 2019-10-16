@@ -1,0 +1,112 @@
+﻿@model HammondsIBMS_Domain.Entities.Invoicing.Invoice
+@using (Html.Container("Invoice & Customer Details"))
+{
+    <table cellspacing="0" class="t-grid">
+        <thead class="t-grid-header">
+            <tr>
+                <th class="t-header">
+                    Invoice No.
+                </th>
+                <th class="t-header">
+                    @Html.LabelFor(o => o.BillCycle)
+                </th>
+                <th class="t-header">
+                    @Html.LabelFor(o => o.InvoiceDate)
+                </th>
+                <th class="t-header">
+                    @Html.LabelFor(o => o.Customer.SurnameFirstName)
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>
+                    @Html.DisplayFor(o => o.InvoiceId)
+                </td>
+                <td>
+                    @Html.DisplayFor(o => o.BillCycle)
+                </td>
+                <td>
+                    @Html.DisplayFor(o => o.InvoiceDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(o => o.Customer.SurnameFirstName)
+                </td>
+            </tr>
+        </tbody>
+    </table>
+}
+@if (Model.PostedItems.Count > 0)
+{
+    using (Html.Container("Posted Adjustments"))
+    {
+    <table class="stripeMe">
+        @foreach (var item in Model.PostedItems)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(o => item.CustomerAccountDetails)
+                </td>
+                <td>
+                    @Html.DisplayFor(o => item.Description)
+                </td>
+                <td>
+                    @Html.DisplayFor(o => item.PostedDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(o => item.Amount)
+                </td>
+            </tr>
+        }
+    </table>
+    }
+}
+@using (Html.Container("Invoiced Accounts"))
+{
+    <table>
+        @foreach (var item in Model.InvoiceItems)
+        {
+            <tr>
+                <td>
+                    @Html.Action("_DisplayContractInvoiceItem", new { id = item.InvoiceItemId })
+                </td>
+            </tr>
+        }
+    </table>
+}
+@using (Html.Container("Balances"))
+{
+    <div style="margin-right: 15px">
+    <table >
+        <tbody>
+            <tr>
+
+                <td class="money-align" >
+                    Invoice Total
+                </td>
+                <td style="width:90px" class="money-align">
+                    @Html.DisplayFor(o => o.InvoicedTotal)
+                </td>
+            </tr>
+            <tr>
+
+                <td class="money-align">
+                    Previous Balance
+                </td>
+                <td class="money-align">
+                    @Html.DisplayFor(o => o.PreviousBalance)
+                </td>
+            </tr>
+            <tr>
+      
+                <td class="money-align">
+                    Invoice Balance
+                </td>
+                <td class="money-align" style="background-color: darkgrey; color: white;">
+                    @Html.DisplayFor(o => o.InvoiceBalance)
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    </div>
+}

@@ -1,0 +1,30 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<siteMap xmlns="http://schemas.microsoft.com/AspNet/SiteMap-File-1.0" >
+    <siteMapNode url="" title="Home"  description="">
+      <siteMapNode url="" title="Administration"  description="" >
+        <siteMapNode url="~/Database" title="Reset Database" description="" />
+        <siteMapNode url="~/Misc" title="Miscellaneous Settings" description="" />
+        <siteMapNode url="~/Contract/ContractTypes" title="Contract Types" description="" />
+        <siteMapNode url="~/ItemCharge" title="Item Charges" description="" />
+        <!--<siteMapNode url="~/Contract/PaymentPeriods" title="Payment Periods" description="" />-->
+        <!--<siteMapNode url="~/DocumentTemplate" title="Document Templates" description="" />-->
+        <siteMapNode url="~/Employer/Index" title="Employers" description="" />
+      </siteMapNode>
+      <siteMapNode url="" title="Inventory"  description="" >
+        <siteMapNode url="~/StockModels/Index" title="Models" description="" />
+        <siteMapNode url="~/Stock/Index" title="Stock List" description="" />
+        <siteMapNode url="~/" title="DIVIDER" description="" />
+        <siteMapNode url="~/StockInvoice/Index" title="Stock Invoices" description="" />
+        <siteMapNode url="~/" title="DIVIDER" description="" />
+        <siteMapNode url="~/Manufacturers/Index" title="Manufactures" description=""  />
+        <siteMapNode url="~/Suppliers/Index" title="Suppliers" description="" />
+      </siteMapNode>
+      <siteMapNode url="" title="CRM" description="" >
+        <siteMapNode url="~/Customer/Index" title="Customers" description="" />
+      </siteMapNode>
+      <!--<siteMapNode url="" title="Billing" description="" >
+        <siteMapNode url="~/BillCycle/Index" title="Bill Cycles" description="" />
+        <siteMapNode url="~/Invoice/Index" title="Invoices" description="" />
+      </siteMapNode>-->
+    </siteMapNode>
+</siteMap>

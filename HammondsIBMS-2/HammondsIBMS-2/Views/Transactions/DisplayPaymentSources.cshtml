@@ -1,0 +1,26 @@
+﻿
+@model IEnumerable<HammondsIBMS_Domain.Entities.Invoicing.PaymentSource>
+
+@Html.ContentTitle("Payment Types")
+
+@{Html.Telerik().Grid(Model)
+      .Name("Grid")
+      .DataKeys(keys => keys.Add(o => o.PaymentSourceId))
+      .ToolBar(tool=>tool.Insert().ButtonType(GridButtonType.ImageAndText))
+      .DataBinding(databind => databind.Server()
+          .Insert("AddPaymentSource","IBMSAccounts")
+          .Update("UpdatePaymentSource", "IBMSAccounts"))
+      .Columns(columns =>
+          {
+              columns.Command(commands =>
+              {
+                  commands.Edit().ButtonType(GridButtonType.Image);
+              }).Width(50);
+              columns.Bound(o => o.Description);
+          })
+      .Editable(editing => editing.Mode(GridEditMode.PopUp))
+      .Pageable()
+      .Sortable()
+      .Render();
+}
+

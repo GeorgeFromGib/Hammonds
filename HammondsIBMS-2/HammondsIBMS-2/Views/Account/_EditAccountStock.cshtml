@@ -1,0 +1,44 @@
+﻿@using System.Collections
+@model HammondsIBMS_2.ViewModels.Contract.EditCustomerAccountStockVM
+@Html.ValidationSummary(false)
+@using (Html.BeginForm())
+{ 
+    @Html.HiddenFor(m => m.CustomerAccountId)
+    @Html.HiddenFor(m => m.OldStockId)
+    @Html.HiddenFor(m => m.StockId)
+    @Html.HiddenFor(m => m.NewStockCustomerAccountId)
+    @Html.ValidationMessageFor(m => m.NewStockCustomerAccountId, " ");
+    @Html.HiddenFor(m => m.UnitId)
+
+    <fieldset>
+        @Html.Partial("_AccountStockFilterBox", Model.StockId)
+        @using (Html.Container("Set old stock status to:"))
+        {
+            <table>
+                <tr>
+                    <td>
+                        @(Html.Telerik().DropDownListFor(o => o.OldStockProductCycleId)
+                    .BindTo(new SelectList((IEnumerable)ViewBag.ContractChangeableProductLifeCycle
+                        , "ProductLifeCycleId", "Description"
+                        , Model.OldStockProductCycleId)))
+                    </td>
+                </tr>
+            </table>
+        }
+    </fieldset>
+    <div>
+        @Html.FormSubmitButton()
+        @Html.FormCancelButton()
+    </div>
+    
+}
+<script type="text/javascript">
+    $(function () {
+        $("#_AccountStockFilterBox").live('selectionChanged', function (event, e) {
+            $('[name="StockId"]').val(e.value);
+            $.get('@Url.Action("_GetStockCustomerAccountId")', { id: e.value }, function (data) {
+                $('#NewStockCustomerAccountId').val(data);
+            });
+        });
+    })
+</script>

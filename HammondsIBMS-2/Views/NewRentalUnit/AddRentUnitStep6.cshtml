@@ -1,0 +1,51 @@
+﻿@model HammondsIBMS_2.ViewModels.Basket.AcceptBasketVM
+<div class="well well-small well-noBackground">
+    @Html.ContentTitle(Html.Action("StepperHeader").ToHtmlString())
+    @using (Html.BeginForm(null, null, FormMethod.Post, new { @class = "form-horizontal" }))
+    {
+        @Html.HiddenFor(model=>model.CustomerAccountId)
+        @Html.HiddenFor(model=>model.FullPayment)
+        @Html.HiddenFor(model=>model.AmountPayed)
+        @Html.ValidationSummary(true)
+     
+        <fieldset>
+            <legend>View/Confirm</legend>
+             <div class="control-group">
+                @Html.Label("")
+                 <div class="controls">
+@*                     @Html.ActionButton(new ButtonParameters(ButtonIcon.Document,"View/Print Sales Document"),Url.Action("PrintViewPurchaseAccountDocument",new {id=Model.CustomerAccountId}),new { target = "_blank" })*@
+                     @Html.ActionWindowButton(new ButtonParameters(ButtonIcon.Document,"View/Print Rent Document").Enable(false),
+                                                new ActionParameters("PrintViewRentAccountDocument",new {id=Model.CustomerAccountId}),
+                                                new ActionButtonWindowParameters("PrintViewRentDocument","Rent",650,600))
+                 </div>
+            </div>
+            <div class="control-group">
+                @Html.LabelFor(model => model.AcceptContract, new { @class = "control-label" })
+                <div class="controls">
+                    @Html.EditorFor(model => model.AcceptContract)
+                    @Html.ValidationMessageFor(model => model.AcceptContract)
+                </div>
+            </div>
+            @if (Model.FullPayment && Model.AmountPayed > 0)
+            {
+                <div class="control-group">
+                    @Html.LabelFor(model => model.AmountPayed, new {@class = "control-label"})
+                    <div class="controls">
+                    <span class="input-xlarge uneditable-input" >@Model.AmountPayed.ToString("C")</span>
+                </div>
+                </div>
+                <div class="control-group">
+                    @Html.LabelFor(model => model.PaymentReceived, new {@class = "control-label", style = "white-space:nowrap"})
+                    <div class="controls">
+                        @Html.EditorFor(model => model.PaymentReceived)
+                        @Html.ValidationMessageFor(model => model.PaymentReceived)
+                    </div>
+                </div>
+            }
+        </fieldset>
+        <div>
+            @Html.Action("StepperControl")
+        </div>
+    }
+</div>
+

@@ -1,0 +1,45 @@
+﻿@model HammondsIBMS_2.ViewModels.Customer.CustomerDocumentVM
+@using (Html.BeginForm())
+{
+    <fieldset>
+        @Html.ValidationSummary(false)
+        @Html.HiddenFor(o => o.DocumentId)
+        @Html.HiddenFor(o => o.CustomerId)
+        @Html.HiddenFor(o => o.FilePath)
+        <table class="edit-table">
+            <tr>
+                <td style="width: 150px">
+                    @Html.LabelFor(o => o.Title)
+                </td>
+                <td>
+                    @Html.EditorFor(o => o.Title)<br />
+                    @Html.ValidationMessageFor(o => o.Title)
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    @Html.Label("Document")
+                </td>
+                <td>
+                    @Html.Partial("EditorTemplates/_DocumentUpload", null, new ViewDataDictionary { { "BlockSubmit", true } })
+                </td>
+            </tr>
+        </table>
+    </fieldset>
+
+    <div>
+        @Html.FormSubmitButton()
+        @Html.FormCancelButton()
+    </div>
+}
+<script type="text/javascript">
+    $(function () {
+
+        $('#DocumentUpload').live('OnSuccess', function (event, e) {
+            var title = $('#Title');
+            if ($(title).val() == '')
+                $(title).val(e.files[0].name);
+        });
+
+    });
+</script>

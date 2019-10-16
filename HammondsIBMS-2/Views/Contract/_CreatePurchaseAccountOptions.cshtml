@@ -1,0 +1,13 @@
+﻿@model HammondsIBMS_2.ViewModels.Contract.CreateContractUnitVM
+@Html.Partial("_ContractUnitStockFilterBox", Model.StockId)
+@Html.ValidationMessageFor(o => o.StockId)
+@*<script type="text/javascript">
+    $(function () {
+        $('#_ContractUnitStockFilterBox').live('selectionChanged', function (event, e) {
+            $('#StockId').val(e.value);
+            $.get('@Url.Action("_IsStockInAccount")', { id: e.value }, function (data) {
+                $('#IsStockInAccountAlready').val(data);
+            });
+        });
+    })
+</script>*@

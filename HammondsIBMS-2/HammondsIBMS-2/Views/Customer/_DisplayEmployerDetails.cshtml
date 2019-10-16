@@ -1,0 +1,24 @@
+﻿<fieldset>
+    <div id="EmployerDetails">
+        @model HammondsIBMS_Domain.Entities.Customers.Customer
+        <table>
+            <tr>
+                <td class="contentspace">
+                    <div id="EmployerDisplay">
+                        @Html.Action("_DisplayCustomerEmployerDetailsBody", new { id = Model.CustomerId })
+                    </div>
+                </td>
+                <td class="buttonspace">
+                     @Html.ActionDialogFormButton(new ButtonParameters(ButtonIcon.Edit, ButtonType.ImageText, "Edit"),
+                                             new ActionParameters("_EditCustomerEmployer", null, new { id = Model.CustomerId }),
+                                                      new ActionDialogFormParamters("Edit Details", null, Url.Action("_EditCustomerEmployer", new { id = Model.CustomerId}), null,"UpdateEmployerDisplay"))
+                </td>
+            </tr>
+        </table>
+    </div>
+</fieldset>
+<script type="text/javascript">
+    function UpdateEmployerDisplay() {
+        AjaxUpdate('@Url.Action("_DisplayCustomerEmployerDetailsBody", new { id = Model.CustomerId })', 'EmployerDisplay');
+    }
+</script>

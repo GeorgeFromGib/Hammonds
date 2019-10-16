@@ -1,0 +1,48 @@
+﻿@using HammondsIBMS_2.Controllers
+@{
+    var showFileList = ViewData["HideFileList"]==null;
+    var blockSubmit = ViewData["BlockSubmit"] != null;
+}
+@{Html.Telerik().Upload()
+        .Name("DocumentUpload")
+        .Async(async => async.Save("UploadDocumentFile", "Document"))
+        .ClientEvents(events => events.OnSuccess("___OnSuccess").OnUpload("___onUpload").OnSelect("___onSelect"))
+        .Multiple(false).ShowFileList(showFileList)
+        .Render();
+}
+<script type="text/javascript">
+    $(function () {
+        showSubmit(false);
+    });
+
+
+    function ___OnSuccess(e) {
+        $('#FilePath').val(e.response.Path);
+        $('#DocumentUpload').trigger('OnSuccess', e);
+        showSubmit(true);
+
+    }
+
+    function ___onUpload(e) {
+        $('#DocumentUpload').trigger('OnUpload',e);
+    }
+
+    function ___onSelect(e) {
+        $("ul.t-upload-files").remove();
+        $('#DocumentUpload').trigger('OnSelect',e);
+        showSubmit(false);
+    }
+
+    function showSubmit(show) {
+        @{
+            if (blockSubmit)
+            {
+                <text>
+                    $('#DocumentUpload').trigger('showSubmit',show)
+                    EnableButton('__FormSubmit', show);
+                </text>
+            }
+        }
+        
+    }
+</script>

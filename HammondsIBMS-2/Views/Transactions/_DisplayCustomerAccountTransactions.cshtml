@@ -1,0 +1,37 @@
+﻿@using HammondsIBMS_2.ViewModels.IBMSAccounts
+<fieldset>
+    <fieldset>
+        <div id="UnitDetails">
+            @Html.Action("_CustomerAccountsBalance", new { id = ViewBag.CustomerId })
+        </div>
+    </fieldset>
+    <fieldset>
+        <legend>History</legend>
+
+        @{
+            Html.Telerik().Grid<AccountTransactionVM>()
+                .Name("TransactionGrid")
+                .DataBinding(dataBinding => dataBinding
+                                                .Ajax()
+                                                .Select("_CustomerAccountTransactionsGridBind", "Transactions", new { id = ViewBag.CustomerId }))
+                .Columns(columns =>
+                             {
+
+                                 columns.Bound(o => o.TransactionDate).Format("{0:dd/MM/yyyy}");
+                                 columns.Bound(o => o.AccountTransactionInputType);
+                                 columns.Bound(o => o.AccountTransactionType);
+                                 columns.Bound(o => o.CustomerAccountId);
+                                 columns.Bound(o => o.Note);
+                                 columns.Bound(o => o.Amount).Format("{0:£#0.00}").HtmlAttributes(new { @class = "money-align" })
+                                     .Aggregate(aggregates => aggregates.Sum())
+                                     .ClientGroupFooterTemplate("<div class='money-align'>Total: <#= $.telerik.formatString('{0:£0.00}', Sum) #></div>");
+
+
+                             })
+                .Groupable(settings => settings.Groups(groups => groups.AddDescending(o => o.CustomerAccountId)).Visible(true))
+                .Pageable()
+                .Sortable()
+                .Render();
+        }
+    </fieldset>
+</fieldset>

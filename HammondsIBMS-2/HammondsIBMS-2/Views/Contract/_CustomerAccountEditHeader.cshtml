@@ -1,0 +1,16 @@
+﻿@model HammondsIBMS_Domain.Entities.Accounts.CustomerAccount
+<fieldset>
+    <table>
+        <tr>
+            <td>
+                <strong>Account : @Html.DisplayFor(m => m.CustomerAccountId) - (@Html.DisplayFor(m => m.ContractUnitType))
+                </strong>
+            </td>
+            <td class="buttonspace">
+                @Ajax.ActionButton(new ButtonParameters(ButtonIcon.Return, ButtonType.ImageText, "Accounts List",ButtonRole.Info,ButtonIconColor.White, ButtonHeight.Normal, true,null),
+                                                                                            new ActionParameters("_DisplayCustomerAccounts", new { id = Model.CustomerId }),
+                                                                                            new AjaxOptions { UpdateTargetId = "ContractUnitsArea" })
+            </td>
+        </tr>
+    </table>
+</fieldset>

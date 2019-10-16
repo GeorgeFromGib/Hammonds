@@ -1,0 +1,46 @@
+﻿@using System.Collections
+@model HammondsIBMS_2.ViewModels.Contract.DeleteRentedUnitVM
+@using (Html.BeginForm())
+{
+
+    @Html.HiddenFor(m => m.UnitId)
+    @Html.ValidationSummary(false)
+    <fieldset>
+        <table class="edit-table">
+            <tr>
+                <td class="label-width">
+                    @Html.LabelFor(o => o.StockDescription)
+                </td>
+                <td>
+                    @Html.DisplayFor(o => o.StockDescription)<br />
+                </td>
+            </tr>
+            <tr>
+                <td >
+                    @Html.LabelFor(o => o.RemovalDate)
+                </td>
+                <td>
+                    @Html.EditorFor(o => o.RemovalDate)<br />
+                    @Html.ValidationMessageFor(o => o.RemovalDate)
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    @Html.LabelFor(o => o.ProductCycleLifeId)
+                </td>
+                <td>
+                    @{Html.Telerik().DropDownListFor(o => o.ProductCycleLifeId)
+                              .BindTo(new SelectList((IEnumerable)ViewBag.ContractChangeableProductLifeCycle
+                                                     , "ProductLifeCycleId", "Description"
+                                                     , Model.ProductCycleLifeId)).Render(); }
+
+                    @Html.ValidationMessageFor(o => o.ProductCycleLifeId)
+                </td>
+            </tr>
+        </table>
+    </fieldset>
+    <div>
+        @Html.FormSubmitButton()
+        @Html.FormCancelButton()
+    </div>
+}

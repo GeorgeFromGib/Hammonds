@@ -1,0 +1,50 @@
+﻿
+@using HammondsIBMS_2.ViewModels.Customer
+<script type="text/javascript">
+    function OnEditDocument() {
+        RebindTelerikGrid('DocumnetsGrid');
+    }
+</script>
+<fieldset>
+<fieldset>
+      <table>
+      <tr>
+          <td>
+          </td>
+          <td class="buttonspace">@Html.ActionDialogFormButton(new ButtonParameters(ButtonIcon.Add, ButtonType.ImageText, "Add Document"),
+                                   new ActionParameters("_AddDocument", new { id=ViewBag.CustomerId }),
+                                   new ActionDialogFormParamters("Add Document", null, Url.Action("_AddDocument"), null, "OnEditDocument"))</td>
+          
+      </tr>
+      </table>
+
+</fieldset>
+    @{
+        Html.Telerik().Grid<CustomerDocumentVM>()
+            .DataKeys(dataKeys => dataKeys.Add(c => c.DocumentId))
+            .Name("DocumnetsGrid")
+            .DataBinding(dataBinding => dataBinding
+                                            .Ajax()
+                                            .Select("_GetCustomerDocuments", "Customer", new {id = ViewBag.CustomerId})
+                                            .Delete("_DeleteCustomerDocument", "Customer"))
+            .Columns(columns =>
+                         {
+
+                             columns.Bound(o => o.DocumentId).Title("").Sortable(false).Width(17).ClientTemplate("<div class='commandColumn'>" + @Html.ActionButton(new TelerikButtonParameters(ButtonIcon.Search), Url.Action("_ViewCustomerDocument", new {id = "<#= DocumentId #>"})).ToHtmlString()
+                                                                                                                 + "</div>");
+                             columns.Bound(o => o.Title);
+                             columns.Bound(o => o.DocumentId).Title("").Sortable(false).Width(17).ClientTemplate("<div class='commandColumn'>" + @Html.ActionDialogFormButton(new TelerikButtonParameters(ButtonIcon.Edit), 
+                                                                                                                                                                              new ActionParameters("_EditCustomerDocument", new {id = "<#= DocumentId #>"}),
+                                                                                                                                                                              new ActionDialogFormParamters("Edit Document", null, Url.Action("_EditCustomerDocument", new {id = "<#= DocumentId #>"}), null, "OnEditDocument")).ToHtmlString()
+                                                                                                                 + "</div");
+                             columns.Command(o =>
+                                                 {
+                                                     o.Delete().ButtonType(GridButtonType.Image);
+                                                 }).Width(30);
+
+                         })
+            .Pageable()
+            .Sortable()
+            .Render();
+    }
+</fieldset>

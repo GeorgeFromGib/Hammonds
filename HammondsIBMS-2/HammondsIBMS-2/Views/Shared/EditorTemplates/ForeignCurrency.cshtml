@@ -1,0 +1,15 @@
+﻿@model HammondsIBMS_Domain.Values.ForeignCurrency
+
+@{var ctrName = ViewData.TemplateInfo.GetFullHtmlFieldName("AmountNative");}       
+
+@(Html.Telerik().CurrencyTextBox()
+        .Name(ctrName)
+        .InputHtmlAttributes(new { style = "width:100%", @class="foreignCurrency"})
+        .MinValue(0)
+        .CurrencySymbol(Model.Symbol??"£")
+                .ClientEvents(events => events.OnChange("UpdateForeignCurrency"))
+        .Value(Model.AmountNative))
+
+<div id="@(ctrName.Replace('.','_') +"_CTR")" class="foreignCurrency notifyOnChange" data-exhrate='@(Model.ExchangeRate)'>
+    @Html.Raw("  (" + Model.AmountGBP.ToString("C2") + ")")
+</div>

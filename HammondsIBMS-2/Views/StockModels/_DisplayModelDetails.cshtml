@@ -1,0 +1,63 @@
+﻿@using HammondsIBMS_2.Helpers.Html
+@model HammondsIBMS_2.ViewModels.ModelView.ModelVM
+<fieldset>
+    <strong>Currently in Stock : <span id="stockNo">@Html.Action("_StockNoForModel", new { id = Model.ModelId })</span></strong>
+</fieldset>
+
+<fieldset>
+    <table>
+        <tr>
+            <td style="vertical-align: top; width: 320px">
+                <table>
+                    <tr>
+                        <td>
+                            <span class="image-wrap" id="modelImageContainer">
+                                <img id="modelImage"   src='@Url.Action("_ReturnModelImage", new { id = Model.ModelId })' alt="Init" style="height:200px;width:200px;" />
+                            </span>
+                        </td>
+                        <td style="vertical-align: text-top">
+                            @Html.ActionDialogFormButton(new ButtonParameters(ButtonIcon.Edit, ButtonType.ImageText, "Edit",true,"60px"),
+                                   new ActionParameters("_EditModelImage", new { id = Model.ModelId }),
+                                   new ActionDialogFormParamters("Edit Image", null, "_EditModelImage", null, "ChangeModelImage"))<br />
+                            <br />
+                             @Html.ActionDialogFormButton(new ButtonParameters(ButtonIcon.ZoomIn, ButtonType.ImageText, "Zoom",true,"60px"),
+                                   new ActionParameters("_DisplayExpandedImage", new { id = Model.ModelId }),
+                                   new ActionDialogFormParamters("Model Image",null,null))
+                           @* @Html.ActionWindowButton(new ButtonParameters(ButtonIcon.ZoomIn, ButtonType.ImageText, "Zoom", true, "MAX"),
+                               new ActionParameters("_DisplayExpandedImage", new { id = Model.ModelId }),
+                               new ActionButtonWindowParameters("ExpandedImage", "Image", 440, 420))*@
+                        </td>
+                    </tr>
+                </table>
+            </td>
+            <td>
+                <table>
+                    <tr>
+                        <td id="ModelDetailsArea">
+                            @Html.Action("_DisplayModelDetailsBody", new { id = Model.ModelId })
+                        </td>
+                        <td class="buttonspace">
+                            @Html.ActionDialogFormButton(new ButtonParameters(ButtonIcon.Edit, ButtonType.ImageText, "Edit"), new ActionParameters("_EditModelDetails", new { id = Model.ModelId }),
+                                   new ActionDialogFormParamters("Edit Model Details", null, "_EditModelDetails", null, "UpdateModelDetails"))
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+
+</fieldset>
+ 
+<script type="text/javascript">
+    function ChangeModelImage() {
+        $.get('@Url.Action("_ReturnModelImageJson", new { id = Model.ModelId })', function (data) {
+            $('#modelImage').attr('src', 'data:' + data.type + ';base64,' + data.base64image);
+        });
+    }
+
+    function UpdateModelDetails() {
+        AjaxUpdate('@Url.Action("_DisplayModelDetailsBody", new { id = Model.ModelId })', '#ModelDetailsArea');
+        $('#ModelDetailsArea').change();
+    }
+
+</script>

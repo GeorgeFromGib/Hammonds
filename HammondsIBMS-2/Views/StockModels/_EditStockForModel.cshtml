@@ -1,0 +1,52 @@
+﻿@model HammondsIBMS_2.ViewModels.StockView.StockEditVM
+@Html.ValidationSummary(true)
+@using (Html.BeginForm())
+{
+    @Html.HiddenFor(m => m.StockId)
+    @Html.HiddenFor(m => m.ModelId)
+    @Html.HiddenFor(m => m.InvoiceStatusId)
+    @Html.HiddenFor(m => m.ProductLifeCycleId)
+    @Html.HiddenFor(m => m.ManufacturerAndModel)
+    <fieldset>
+        <table class="edit-table">
+            <tr>
+                <td>
+                    @Html.LabelFor(model => model.ManufacturerAndModel)
+                </td>
+                <td>
+                    @Html.DisplayFor(model => model.ManufacturerAndModel)<br />
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    @Html.LabelFor(model => model.SerialNumber)
+                </td>
+                <td>
+                    @Html.EditorFor(model => model.SerialNumber)<br />
+                    @Html.ValidationMessageFor(model => model.SerialNumber)
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    @Html.LabelFor(model => model.Identifier)
+                </td>
+                <td>
+                    @Html.EditorFor(model => model.Identifier)<br />
+                    @Html.ValidationMessageFor(model => model.Identifier)
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    @Html.LabelFor(model => model.LandedCost)
+                </td>
+                <td>
+                    @Html.EditorFor(model => model.LandedCost)
+                    @Html.ValidationMessageFor(model => model.LandedCost)
+                </td>
+            </tr>
+        </table>
+    </fieldset>
+    <div>@Html.FormSubmitButton() @Html.FormCancelButton()</div>
+    
+    
+}

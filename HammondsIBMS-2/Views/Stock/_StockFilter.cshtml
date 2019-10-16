@@ -1,0 +1,31 @@
+﻿@model HammondsIBMS_2.ViewModels.ModelView.StockFilterVM
+<table>
+    @Html.HiddenFor(m=>m.IsFiltered)
+    <tr>
+        <td >
+            @Html.LabelFor(model => model.SerialNumber)
+        </td>
+        <td class="focus">
+            @Html.EditorFor(model => model.SerialNumber)
+        </td>
+        <td>
+            @Html.LabelFor(model => model.ModelCode)
+        </td>
+        <td>
+            @Html.EditorFor(model => model.ModelCode)
+        </td>
+        <td>
+            @Html.LabelFor(model => model.HTVIdentifier)
+        </td>
+        <td>
+            @Html.EditorFor(model => model.HTVIdentifier)
+        </td>
+        <td style="text-align: left">
+            @Html.CheckBox("IncludeInStockOnly",Model.IncludeinStockOnly)
+        </td>
+        <td>
+            In Stock
+        </td>
+      
+    </tr>
+</table>

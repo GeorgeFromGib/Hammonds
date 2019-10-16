@@ -1,0 +1,18 @@
+﻿@using HammondsIBMS_2.Helpers.Html
+@model HammondsIBMS_2.ViewModels.Manufacturer.DeleteManufacturerVM
+@using (Html.BeginForm())
+{
+    @Html.HiddenFor(m => m.ManufacturerId)
+    @Html.HiddenFor(m => m.MakeObsolete)
+    <div class="alert">
+        <div style="text-align: center;">
+            <h4 class="error">@Html.DisplayFor(m => m.DeleteMessage)</h4>
+            <h4>@Html.DisplayFor(m => m.Prompt)</h4>
+        </div>
+    </div>
+
+    <div style="text-align: center">
+        @Html.FormSubmitButton(new ButtonParameters(ButtonIcon.Ok, ButtonIconColor.White, ButtonRole.Danger, ButtonHeight.Normal))
+        @Html.FormCancelButton()
+    </div>
+}

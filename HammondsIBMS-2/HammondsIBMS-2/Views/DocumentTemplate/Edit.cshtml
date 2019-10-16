@@ -1,0 +1,45 @@
+﻿@model HammondsIBMS_2.ViewModels.DocumentTemplates.DocumentTemplateVM
+@using (Html.BeginForm())
+{
+    @Html.ValidationSummary(false)
+    <fieldset>
+        <table class='edit-table'>
+            @Html.HiddenFor(model => model.DocumentTemplateId)
+            <tr>
+                <td>
+                    @Html.LabelFor(model => model.Title)
+                </td>
+                <td>
+                    @Html.DisplayFor(model => model.Title)<br />
+                    @Html.ValidationMessageFor(model => model.Title)
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    @Html.LabelFor(model => model.Body)
+                </td>
+                <td>
+                    @{Html.Telerik().EditorFor(model=>model.Body)
+                          .HtmlAttributes(new { style = "width:700px;" })
+                          .Tools(tools=>tools.Snippets(snippets=>
+                              {
+                                  foreach (SelectListItem it in ViewBag.AvailableFields)
+                                  {
+                                      if (it.Value != "0") snippets.Add(it.Text,  it.Value );
+                                  }
+                              }
+                              ).ViewHTML())
+                          .Render(); }
+                    @*@Html.EditorFor(model => model.TemplateBody)<br/>*@
+                 @*   @Html.ValidationMessageFor(model => model.Body)*@
+                </td>
+            </tr>
+           
+        </table>
+    </fieldset>
+    <div>
+        @Html.FormSubmitButton() @Html.FormCancelButton()
+
+    </div>
+}
+

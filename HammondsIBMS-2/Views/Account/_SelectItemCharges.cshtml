@@ -1,0 +1,58 @@
+﻿@using System.Collections
+@using HammondsIBMS_Domain.Entities.Accounts
+@model HammondsIBMS_2.ViewModels.AddOneOffItemsVM
+@using (Html.BeginForm(null, null, FormMethod.Post, new { @class = "form-horizontal" }))
+{
+    <fieldset>
+        <div class="control-group">
+            <label class="control-label">Preset Items</label>
+            <div class="controls">
+                           </div> @{ Html.Telerik().DropDownList()
+                       .Name("AvaiableOneOffChargesDropDown")
+                       .BindTo(new SelectList(Model.AvailableOneOfCharges.Select(c => new { ItemChargeId = c.ItemChargeId, Description = c.Description + " " + (c.ItemChargeId == -1 ? "" : c.Amount.ToString("C")) }), "ItemChargeId", "Description", "-1")).Render(); }
+
+        </div>
+        <div class="control-group">
+            <label class="control-label">Items</label>
+            <div class="controls">
+                @{ Html.Telerik().Grid<OneOffItem>()
+                    .Name("SelectItemChargesGrid")
+                    .DataKeys(keys => keys.Add(o => o.OneOffItemId))
+                    .DataBinding(databinding => databinding.Ajax().Select("_GetTempOneOffItems", "Account").Delete("_DeleteTempOneOffItems","Account"))
+                    .Columns(columns =>
+                        {
+                            columns.Bound(o => o.Description);
+                            columns.Bound(o => o.Charge);
+                            columns.Command(commands =>
+                            {
+                                //commands.Edit().ButtonType(GridButtonType.Image);
+                                commands.Delete().ButtonType(GridButtonType.Image);
+                            }).Title("");
+                                                            
+
+                            columns.Bound(o => o.OneOffItemId).Title("").Sortable(false).Width(80)
+                                             .ClientTemplate("<div class='commandColumn'>" + @Html.ActionDialogFormButton(new TelerikButtonParameters(ButtonIcon.Delete),
+                                                                                                                          new ActionParameters("_DeleteTempOneOffItem", new { id = "<#= OneOffItemId #>" }),
+                                                                                                                          new ActionDialogFormParamters("Delete Item", null,
+                                                                                                                                                        "_AddAccountDeleteItemCharge", null, "OnItemChargesChanged")).ToHtmlString()
+                                                             + "</div>");
+                        })
+                    .Pageable(pager => pager.Enabled(false))
+                    .Footer(false)
+                    .Render();
+                }
+            </div>
+        </div>
+    </fieldset>
+
+    <div>
+        @Html.FormSubmitButton() @Html.FormCancelButton()
+    </div>
+}
+
+<script type="text/javascript">
+
+    $(function () {
+        GridCheckBoxRepositoryHandler('selectedRepository', 'SelectItemChargesGrid', '', 'ItemChargeId');
+    });
+</script>

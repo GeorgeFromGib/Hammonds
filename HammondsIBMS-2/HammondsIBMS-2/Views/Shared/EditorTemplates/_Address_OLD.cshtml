@@ -1,0 +1,57 @@
+﻿@model HammondsIBMS_Domain.Values.Address
+<table class='edit-table'>
+    <tr>
+        <td style="width:150px">
+            @Html.LabelFor(model => model.AddressLine1)
+        </td>
+        <td>
+            @Html.EditorFor(model => model.AddressLine1)<br />
+            @Html.ValidationMessageFor(model => model.AddressLine1)
+        </td>
+    </tr>
+    <tr>
+        <td>
+            @Html.LabelFor(model => model.AddressLine2)
+        </td>
+        <td>
+            @Html.EditorFor(model => model.AddressLine2)<br />
+            @Html.ValidationMessageFor(model => model.AddressLine2)
+        </td>
+    </tr>
+    <tr>
+        <td>
+            @Html.LabelFor(model => model.AddressLine3)
+        </td>
+        <td>
+            @Html.EditorFor(model => model.AddressLine3)<br />
+            @Html.ValidationMessageFor(model => model.AddressLine3)
+        </td>
+    </tr>
+    <tr>
+        <td>
+            @Html.LabelFor(model => model.City)
+        </td>
+        <td>
+            @Html.EditorFor(model => model.City)<br />
+            @Html.ValidationMessageFor(model => model.City)
+        </td>
+    </tr>
+    <tr>
+        <td>
+            @Html.LabelFor(model => model.PostCode)
+        </td>
+        <td>
+            @Html.EditorFor(model => model.PostCode)<br />
+            @Html.ValidationMessageFor(model => model.PostCode)
+        </td>
+    </tr>
+    <tr>
+        <td>
+            @Html.LabelFor(model => model.Country)
+        </td>
+        <td>
+            @Html.EditorFor(model => model.Country)<br />
+            @Html.ValidationMessageFor(model => model.Country)
+        </td>
+    </tr>
+</table>

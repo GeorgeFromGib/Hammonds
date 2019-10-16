@@ -1,0 +1,67 @@
+﻿@using HammondsIBMS_Domain.Entities.Contracts
+@model PurchaseAccount
+@Html.Partial("_CustomerAccountEditHeader", Model)
+<fieldset>
+    <legend>Unit Details</legend>
+    <table >
+        <tr>
+            <td class="contentspace">
+                <div id="UnitDetails">
+                    @Html.Action("_DisplayContractUnitPurchaseStock", new { id = Model.CustomerAccountId })
+                </div>
+            </td>
+            <td class="buttonspace">
+                @Html.ActionDialogFormButton(new ButtonParameters(ButtonIcon.Edit, ButtonType.ImageText, "Edit"),
+                                   new ActionParameters("_EditContractUnitPurchaseStock", new { id = Model.CustomerAccountId }),
+                                   new ActionDialogFormParamters("Change Contract Stock Unit", "UnitDetails", Url.Action("_DisplayContractUnitPurchaseStock", new { id = Model.CustomerAccountId })))
+            </td>
+        </tr>
+    </table>
+</fieldset>
+<fieldset>
+    <legend>Attached Contract Items</legend>
+    <table >
+        <tr>
+            <td class="contentspace">
+                <div id="AttachedContractDetails">
+                    @Html.Action("_DisplayServiceContractsForEdit", new { id = Model.CustomerAccountId })
+                </div>
+            </td>
+            <td class="buttonspace">
+                @Html.ActionDialogFormButton(new ButtonParameters(ButtonIcon.Add, ButtonType.ImageText, "Add"),
+                                   new ActionParameters("_AddContract", new { id = Model.CustomerAccountId }),
+                                   new ActionDialogFormParamters("Add Contract", "AttachedContractDetails", Url.Action("_DisplayServiceContractsForEdit", new { id = Model.CustomerAccountId }),null))
+            </td>
+        </tr>
+    </table>
+</fieldset>
+<fieldset>
+    <legend>Alternate Address</legend>
+    <table >
+        <tr>
+            <td class="contentspace">
+                <div id="AlternateAddressDetails">
+                    @Html.Action("_DisplayAlternateAddress", new { id = Model.CustomerAccountId })
+                </div>
+            </td>
+            <td class="buttonspace">
+                @Html.ActionDialogFormButton(new ButtonParameters(ButtonIcon.Edit, ButtonType.ImageText, "Edit"),
+                                                    new ActionParameters("_EditAlternateAddress", new { id = Model.CustomerAccountId }),
+                                                                      new ActionDialogFormParamters("Edit Alternate Address","AlternateAddressDetails", Url.Action("_DisplayAlternateAddress", new { id = Model.CustomerAccountId }),null))
+            </td>
+        </tr>
+    </table>
+</fieldset>
+@*<script type="text/javascript">
+
+    $('#_ContractUnitStockFilterBox').live('onOK', function (event, e) {
+        $("[name='StockId']").val(e);
+        $.post('/Contract/_UpdateContractUnitModel', { Stockid: e,CustomerAccountId:@(Html.Raw(Model.CustomerAccountId.ToString())) }, function (data) {
+            $('#UnitDetails').html(data);
+            $("[name='StockId']").val(e);
+        });
+    });
+
+
+
+</script>*@ 

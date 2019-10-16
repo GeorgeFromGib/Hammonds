@@ -1,0 +1,49 @@
+﻿@model HammondsIBMS_Domain.Values.Address
+<div class="row-fluid">
+    <div class="span6">
+        <div class="control-group">
+            @Html.LabelFor(model => model.AddressLine1, new { @class = "control-label" })
+            <div class="controls">
+                @Html.EditorFor(model => model.AddressLine1)<br />
+                @Html.ValidationMessageFor(model => model.AddressLine1)
+            </div>
+        </div>
+        <div class="control-group">
+            @Html.LabelFor(model => model.AddressLine2, new { @class = "control-label" })
+            <div class="controls">
+                @Html.EditorFor(model => model.AddressLine2)<br />
+                @Html.ValidationMessageFor(model => model.AddressLine2)
+            </div>
+        </div>
+        <div class="control-group">
+            @Html.LabelFor(model => model.AddressLine3, new { @class = "control-label" })
+            <div class="controls">
+                @Html.EditorFor(model => model.AddressLine3)<br />
+                @Html.ValidationMessageFor(model => model.AddressLine3)
+            </div>
+        </div>
+    </div>
+    <div class="span6">
+        <div class="control-group">
+            @Html.LabelFor(model => model.City, new { @class = "control-label" })
+            <div class="controls">
+                @Html.EditorFor(model => model.City)<br />
+                @Html.ValidationMessageFor(model => model.City)
+            </div>
+        </div>
+        <div class="control-group">
+            @Html.LabelFor(model => model.PostCode, new { @class = "control-label" })
+            <div class="controls">
+                @Html.EditorFor(model => model.PostCode)<br />
+                @Html.ValidationMessageFor(model => model.PostCode)
+            </div>
+        </div>
+        <div class="control-group">
+            @Html.LabelFor(model => model.Country, new { @class = "control-label" })
+            <div class="controls">
+                @Html.EditorFor(model => model.Country)<br />
+                @Html.ValidationMessageFor(model => model.Country)
+            </div>
+        </div>
+    </div>
+</div>

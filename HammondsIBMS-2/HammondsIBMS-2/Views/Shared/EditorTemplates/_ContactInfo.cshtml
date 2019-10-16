@@ -1,0 +1,71 @@
+﻿@model HammondsIBMS_Domain.Values.ContactInfo
+<div class="row-fluid">
+    <div class="span6">
+        <div class="control-group">
+            @Html.LabelFor(model => model.Tel, new { @class = "control-label" })
+            <div class="controls">
+                @Html.EditorFor(model => model.Tel)<br/>
+                @Html.ValidationMessageFor(model => model.Tel)
+            </div>
+        </div>
+        <div class="control-group">
+            @Html.LabelFor(model => model.Mobile, new { @class = "control-label" })
+            <div class="controls">
+                @Html.EditorFor(model => model.Mobile)<br/>
+                @Html.ValidationMessageFor(model => model.Mobile)
+            </div>
+        </div>
+        <div class="control-group">
+            @Html.LabelFor(model => model.Email, new { @class = "control-label" })
+            <div class="controls">
+                @Html.EditorFor(model => model.Email)<br/>
+                @Html.ValidationMessageFor(model => model.Email)
+            </div>
+        </div>
+        <div class="control-group">
+            @Html.LabelFor(model => model.Fax, new { @class = "control-label" })
+            <div class="controls">
+                @Html.EditorFor(model => model.Fax)<br/>
+                @Html.ValidationMessageFor(model => model.Fax)
+            </div>
+        </div>
+         <div class="control-group">
+            @Html.LabelFor(model => model.Url, new { @class = "control-label" })
+            <div class="controls">
+                @Html.EditorFor(model => model.Url)<br/>
+                @Html.ValidationMessageFor(model => model.Url)
+            </div>
+        </div>
+    </div>
+    <div class="span6">
+        <div class="control-group">
+            @Html.LabelFor(model => model.Tel2, new { @class = "control-label" })
+            <div class="controls">
+                @Html.EditorFor(model => model.Tel2)<br/>
+                @Html.ValidationMessageFor(model => model.Tel2)
+            </div>
+        </div>
+        <div class="control-group">
+            @Html.LabelFor(model => model.Mobile2, new { @class = "control-label" })
+            <div class="controls">
+                @Html.EditorFor(model => model.Mobile2)<br/>
+                @Html.ValidationMessageFor(model => model.Mobile2)
+            </div>
+        </div>
+        <div class="control-group">
+            @Html.LabelFor(model => model.Email2, new { @class = "control-label" })
+            <div class="controls">
+                @Html.EditorFor(model => model.Email2)<br/>
+                @Html.ValidationMessageFor(model => model.Email2)
+            </div>
+        </div>
+        <div class="control-group">
+            @Html.LabelFor(model => model.Fax2, new { @class = "control-label" })
+            <div class="controls">
+                @Html.EditorFor(model => model.Fax2)<br/>
+                @Html.ValidationMessageFor(model => model.Fax2)
+            </div>
+        </div>
+       
+    </div>
+</div>

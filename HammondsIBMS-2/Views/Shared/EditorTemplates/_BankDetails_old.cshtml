@@ -1,0 +1,40 @@
+﻿@using HammondsIBMS_Domain.Values
+@model BankDetails
+<table class="edit-table">
+    <tr>
+        <td style="width:150px">
+            @Html.LabelFor(model => model.BankName)
+        </td>
+        <td>
+            @Html.EditorFor(model => model.BankName)<br />
+            @Html.ValidationMessageFor(model => model.BankName)
+        </td>
+    </tr>
+    <tr>
+        <td>
+            @Html.LabelFor(model => model.AccountHolder)
+        </td>
+        <td>
+            @Html.EditorFor(model => model.AccountHolder)<br />
+            @Html.ValidationMessageFor(model => model.AccountHolder)
+        </td>
+    </tr>
+    <tr>
+        <td>
+            @Html.LabelFor(model => model.SortCode)
+        </td>
+        <td>
+            @Html.EditorFor(model => model.SortCode)<br />
+            @Html.ValidationMessageFor(model => model.SortCode)
+        </td>
+    </tr>
+    <tr>
+        <td>
+            @Html.LabelFor(model => model.AccountNo)
+        </td>
+        <td>
+            @Html.EditorFor(model => model.AccountNo)<br />
+            @Html.ValidationMessageFor(model => model.AccountNo)
+        </td>
+    </tr>
+</table>

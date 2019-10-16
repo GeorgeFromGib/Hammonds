@@ -1,0 +1,11 @@
+﻿@model int
+           
+@{Html.Telerik().DropDownList()
+        .Name(ViewData.TemplateInfo.GetFullHtmlFieldName(string.Empty))
+        .HtmlAttributes(new { style = "width: 30em;" })
+        .DropDownHtmlAttributes(new { style = "width: 300px; " })
+        .BindTo(new SelectList((System.Collections.IEnumerable)ViewBag.PaymentSources
+            , "PaymentSourceId", "Description"
+            , Model == null ? "-1" : Model.ToString()))
+            .ClientEvents(events=>events.OnChange("DropdownChange"))
+        .Render();}

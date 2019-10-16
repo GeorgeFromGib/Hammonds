@@ -1,0 +1,62 @@
+﻿@model HammondsIBMS_2.ViewModels.StockInvoice.StockInvoiceVM
+
+@using (Html.BeginForm()) {
+    @Html.ValidationSummary(true)
+    <fieldset>
+        <table class='edit-table'>
+            @Html.HiddenFor(model => model.StockInvoiceid)
+            <tr>
+                <td>
+                    @Html.LabelFor(model => model.InvoiceDate)
+                </td>
+                <td>
+                    @Html.EditorFor(model => model.InvoiceDate)<br/>
+                    @Html.ValidationMessageFor(model => model.InvoiceDate)
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    @Html.LabelFor(model => model.InvoiceRef)
+                </td>
+                <td>
+                    @Html.EditorFor(model => model.InvoiceRef)<br/>
+                    @Html.ValidationMessageFor(model => model.InvoiceRef)
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    @Html.LabelFor(model => model.SupplierId)
+                </td>
+                <td>
+                    @Html.EditorFor(model => model.SupplierId)
+                    @Html.ValidationMessageFor(model => model.SupplierId)
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    @Html.LabelFor(model => model.ExchangeRateId)
+                </td>
+                <td>
+                    @Html.EditorFor(model => model.ExchangeRateId)
+                    @Html.ValidationMessageFor(model => model.ExchangeRateId)
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    @Html.LabelFor(model => model.NativeCurrencyToGBP)
+                </td>
+                <td>
+                    @Html.EditorFor(model => model.NativeCurrencyToGBP)
+                    @Html.ValidationMessageFor(model => model.NativeCurrencyToGBP)
+                </td>
+            </tr>
+           
+           
+        </table>
+    </fieldset>
+ <div>
+        @Html.FormSubmitButton() @Html.FormCancelButton()
+
+</div>
+}
+

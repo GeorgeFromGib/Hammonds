@@ -1,0 +1,90 @@
+﻿@model HammondsIBMS_Domain.Entities.Contracts.ContractType
+@using (Html.BeginForm())
+{
+    @Html.ValidationSummary(true)
+    <fieldset>
+        <table class='edit-table'>
+            @Html.HiddenFor(model => model.ContractTypeId)
+
+            <tr>
+                <td>
+                    @Html.LabelFor(model => model.Description)
+                </td>
+                <td>
+                    @Html.EditorFor(model => model.Description)<br />
+                    @Html.ValidationMessageFor(model => model.Description)
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    @Html.LabelFor(model => model.PeriodInMonths)
+                </td>
+                <td>
+                    @Html.EditorFor(model => model.PeriodInMonths)
+                    @Html.ValidationMessageFor(model => model.PeriodInMonths)
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    @Html.LabelFor(model => model.NormalTermAmount)
+                </td>
+                <td>
+                    @Html.EditorFor(model => model.NormalTermAmount)
+                    @Html.ValidationMessageFor(model => model.NormalTermAmount)
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    @Html.LabelFor(model => model.PaymentPeriodId)
+                </td>
+                <td>
+                    @Html.EditorFor(model => model.PaymentPeriodId)
+                    @Html.ValidationMessageFor(model => model.PaymentPeriodId)
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    @Html.LabelFor(model => model.PurchaseDefault)
+                </td>
+                <td>
+                    @Html.EditorFor(model => model.PurchaseDefault)<br />
+                    @Html.ValidationMessageFor(model => model.PurchaseDefault)
+                </td>
+            </tr>
+            
+            <tr>
+                <td>
+                    @Html.LabelFor(model => model.HideFromInvoice)
+                </td>
+                <td>
+                    @Html.EditorFor(model => model.HideFromInvoice)<br />
+                    @Html.ValidationMessageFor(model => model.HideFromInvoice)
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    @Html.LabelFor(model => model.Explanation)
+                </td>
+                <td>
+                    @Html.EditorFor(model => model.Explanation)<br />
+                    @Html.ValidationMessageFor(model => model.Explanation)
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    @Html.LabelFor(model => model.Expired)
+                </td>
+                <td>
+                    @Html.EditorFor(model => model.Expired)<br />
+                    @Html.ValidationMessageFor(model => model.Expired)
+                </td>
+            </tr>
+
+        </table>
+    </fieldset>
+    <div>
+        @Html.FormSubmitButton() @Html.FormCancelButton()
+
+    </div>
+}
+

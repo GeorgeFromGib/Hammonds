@@ -1,0 +1,31 @@
+﻿@model HammondsIBMS_Domain.Entities.Contracts.Employer
+@using (Html.BeginForm())
+{
+    <fieldset>
+        @Html.ValidationSummary(true)
+        @Html.HiddenFor(o => o.EmployerId)
+        <fieldset>
+            <legend>Name</legend>
+            <table class='edit-table'>
+                <tr>
+                    <td style="width:150px">
+                        @Html.LabelFor(o => o.EmployerName)
+                    </td>
+                    <td>
+                        @Html.EditorFor(o => o.EmployerName)<br />
+                        @Html.ValidationMessageFor(o => o.EmployerName)
+                    </td>
+                </tr>
+            </table>
+        </fieldset>
+        <fieldset>
+            <legend>Address</legend>
+            @Html.EditorFor(model => model.Address, "_Address")
+        </fieldset>
+    </fieldset>
+
+    <div>
+        @Html.FormSubmitButton()
+        @Html.FormCancelButton()
+    </div>
+}

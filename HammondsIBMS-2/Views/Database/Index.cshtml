@@ -1,0 +1,65 @@
+﻿
+
+@{Html.Telerik().Window()
+      .Name("Sure")
+      .Modal(true)
+      .Content(@<text>
+                <p style="text-align: center">Are you sure you wish to re-populate or reset the Database?</p><br />
+                    @*  @using (Html.BeginForm("Repopulate","Database",FormMethod.Post)) {
+                <button>OK</button>
+                }*@
+                    @*@Ajax.ActionButton(new ButtonParameters(ButtonIcon.Ok), new ActionParameters("Repopulate"), new AjaxOptions {UpdateTargetId = "Databsecontent" })*@
+                    @Html.ClientButton(new ButtonParameters(ButtonIcon.Ok), "onClick()")
+                    @* @using (Ajax.BeginForm("Repopulate", "Database", new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "Databsecontent" }))
+                {
+                    <button id="OK">OK</button>
+                }*@
+                </text>)
+      .Visible(false).Render();
+  
+}
+<div id="DatabaseContent">
+<h4 class="error">Warning ! Re-populating or resetting the database will loose any changes</h4>
+    <p></p>
+    @Html.ClientButton(new ButtonParameters(ButtonIcon.Warning,ButtonType.ImageText,"Re-populate").IconColor(ButtonIconColor.White).Role(ButtonRole.Danger),"repopulate()")
+    @Html.ClientButton(new ButtonParameters(ButtonIcon.Warning,ButtonType.ImageText,"Reset").IconColor(ButtonIconColor.White).Role(ButtonRole.Danger),"reset()")
+@*    <button class="btn btn-danger" onclick="var win=$('#Sure').data('tWindow');win.center().open();"><i class="icon-exclamation-sign icon-white"></i> Repopulate</button>
+    <button class="btn btn-danger" onclick="var win=$('#Sure').data('tWindow');win.center().open();"><i class="icon-exclamation-sign icon-white"></i> Reset</button>*@
+
+</div>
+
+<script type="text/javascript">
+    var repopulate;
+
+    $(function () {
+        $('#OK').click(function (event) { var wdw = $('#Sure').data('tWindow'); wdw.close(); });
+        $(document).ajaxStart($.blockUI).ajaxStop($.unblockUI);
+
+    });
+    
+    function repopulate() {
+        repopulate = true;
+        openWindow();
+    }
+    
+    function reset() {
+        repopulate = false;
+        openWindow();
+    }
+    
+    function openWindow() {
+        var win = $('#Sure').data('tWindow'); win.center().open();
+    }
+
+    function onClick() {
+        var action = "";
+        if (repopulate) {
+            action = '@Url.Action("Repopulate")';
+        } else {
+            action = '@Url.Action("Reset")';
+        }
+        AjaxUpdate(action, "DatabaseContent");
+        var wdw = $('#Sure').data('tWindow'); wdw.close();
+    }
+
+</script>

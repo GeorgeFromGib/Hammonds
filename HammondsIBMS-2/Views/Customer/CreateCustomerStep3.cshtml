@@ -1,0 +1,22 @@
+﻿@model HammondsIBMS_2.ViewModels.Customer.CustomerBankPaymentDetailsVM
+<div class="well well-small well-noBackground">
+    @Html.ContentTitle("Add Customer")
+    @using (Html.BeginForm(null, null, FormMethod.Post, new { @class = "form-horizontal" }))
+    {
+        @Html.ValidationSummary(true)
+        @Html.HiddenFor(model => model.CustomerId);
+        <fieldset>
+            <legend>Bank Details</legend>
+              <div class="control-group">
+                @Html.LabelFor(model => model.PreferredPaymentSourceId, new { @class = "control-label" })
+                <div class="controls">
+                    @Html.EditorFor(model => model.PreferredPaymentSourceId)
+                    @Html.ValidationMessageFor(model => model.PreferredPaymentSourceId)
+                </div>
+            </div>
+            @Html.EditorFor(model => model.BankDetails)
+
+        </fieldset>
+        @Html.Action("StepperControl")
+    }
+</div>

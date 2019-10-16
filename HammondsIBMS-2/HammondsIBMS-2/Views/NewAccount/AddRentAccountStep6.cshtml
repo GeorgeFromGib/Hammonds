@@ -1,0 +1,34 @@
+﻿@model HammondsIBMS_2.ViewModels.Accounts.AcceptAccountVM
+<div class="well well-small well-noBackground">
+    @Html.ContentTitle(Html.Action("StepperHeader").ToHtmlString())
+    @using (Html.BeginForm(null, null, FormMethod.Post, new { @class = "form-horizontal" }))
+    {
+        @Html.HiddenFor(model=>model.CustomerAccountId)
+        @Html.HiddenFor(model=>model.FullPayment)
+        @Html.ValidationSummary(true)
+     
+        <fieldset>
+            <legend>View/Confirm</legend>
+             <div class="control-group">
+                @Html.Label("")
+                 <div class="controls">
+@*                     @Html.ActionButton(new ButtonParameters(ButtonIcon.Document,"View/Print Sales Document"),Url.Action("PrintViewPurchaseAccountDocument",new {id=Model.CustomerAccountId}),new { target = "_blank" })*@
+                     @Html.ActionWindowButton(new ButtonParameters(ButtonIcon.Document,"View/Print Rent Document").Enable(false),
+                                                new ActionParameters("PrintViewRentAccountDocument",new {id=Model.CustomerAccountId}),
+                                                new ActionButtonWindowParameters("PrintViewRentDocument","Rent",650,600))
+                 </div>
+            </div>
+            <div class="control-group">
+                @Html.LabelFor(model => model.AcceptContract, new { @class = "control-label" })
+                 <div class="controls">
+                    @Html.EditorFor(model => model.AcceptContract)
+                    @Html.ValidationMessageFor(model => model.AcceptContract)
+                </div>
+            </div>
+        </fieldset>
+        <div>
+            @Html.Action("StepperControl")
+        </div>
+    }
+</div>
+

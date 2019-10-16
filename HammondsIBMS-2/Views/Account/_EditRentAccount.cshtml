@@ -1,0 +1,103 @@
+﻿@using HammondsIBMS_Domain.Entities.Contracts
+@model HammondsIBMS_Domain.Entities.Accounts.RentalAccount
+
+@*@helper UpdateAttachedContracts()
+{
+    <text>$.get('@Url.Action("_DisplayAttachedContractsForEdit",
+                      new {id = Model.CustomerAccountId})', function(result) {
+        $('#AttachedContractDetails').html(result);</text>
+}*@
+
+@Html.Partial("_CustomerAccountEditHeader", Model)
+
+<fieldset>
+    <legend>Unit Details</legend>
+    <table>
+        <tr>
+            <td class="contentspace">
+                <div id="UnitDetails">
+                    @Html.Action("_DisplayRentalAccountItems", new { id = Model.CustomerAccountId })
+                </div>
+            </td>
+            <td class="buttonspace">
+               @Html.Partial("_BasketButtons",Model,new ViewDataDictionary {{"controller","NewRentalUnit"}})
+
+            </td>
+        </tr>
+    </table>
+</fieldset>
+@*<fieldset>
+    <legend>Rental Details</legend>
+    <table>
+        <tr>
+            <td class="contentspace">
+                <div id="AttachedContractDetails">
+                    @Html.Action("_EditRentalAccountContractsDisplay", new { id = Model.CustomerAccountId })
+                </div>
+            </td>
+            <td class="buttonspace"></td>
+        </tr>
+    </table>
+</fieldset>*@
+<fieldset>
+    <legend>One Off Items</legend>
+    <table>
+        <tr>
+            <td class="contentspace">
+                <div id="OneOffItems">
+                    @Html.Partial("_DisplayOneOffItems", Model)
+                </div>
+            </td>
+        </tr>
+    </table>
+</fieldset>
+<fieldset>
+    <legend>Instructions & Alternate Address</legend>
+    <table>
+        <tr>
+            <td class="contentspace">
+                <div id="AlternateAddressDetails">
+                    @Html.Action("_DisplayAlternateAddress", new { id = Model.CustomerAccountId })
+                </div>
+            </td>
+            <td class="buttonspace">
+                @Html.ActionDialogFormButton(new ButtonParameters(ButtonIcon.Edit, ButtonType.ImageText, "Edit"),
+                                   new ActionParameters("_EditAlternateAddress", new { id = Model.CustomerAccountId }),
+                                   new ActionDialogFormParamters("Edit Alternate Address", "AlternateAddressDetails", Url.Action("_DisplayAlternateAddress", new { id = Model.CustomerAccountId })))
+            </td>
+        </tr>
+    </table>
+</fieldset>
+<script type="text/javascript">
+
+    $(function () {
+        $('#UnitDetails').live('formDialogSuccess', function (event, e) { UpdateAttachedContracts(); });
+
+        $('#_DisplayRentedUnits').die();
+        $('#_DisplayRentedUnits').live('changed', function (event, e) { UpdateAttachedContracts(); });
+
+        //ToggleBasketButtons();
+
+    });
+
+   @* function ToggleBasketButtons() {
+        $.get('@Url.Action("_CheckBasketExistsForAccount", new { Model.CustomerAccountId })', function (data) {
+            if (data) {
+                $('#AddBasket').hide();
+                $('#EditBasket').show();
+            } else {
+                $('#AddBasket').show();
+                $('#EditBasket').hide();
+            }
+        });
+    }*@
+
+    function UpdateAttachedContracts() {
+        AjaxUpdate('@Url.Action("_EditRentalAccountContractsDisplay", new { id = Model.CustomerAccountId })', '#AttachedContractDetails');
+     @*   $.get('@Url.Action("_EditRentalAccountContractsDisplay",new {id = Model.CustomerAccountId})', function(result) {
+            $('#AttachedContractDetails').html(result);
+        });*@
+    }
+
+
+</script>
