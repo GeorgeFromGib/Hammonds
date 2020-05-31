@@ -30,14 +30,13 @@ namespace HammondsIBMS_2.Controllers
         private readonly StockService _stockService;
 
 
-        public AccountController(CustomerService customerService, CustomerAccountService accountService,
-            StockService stockService, ItemChargeService itemChargeService, ContractService contractService,
-            DocumentTemplateService documentTemplateService)
+        public AccountController(CustomerService customerService, CustomerAccountService accountService, StockService stockService, ContractService contractService, DocumentTemplateService documentTemplateService)
+        
         {
             _customerService = customerService;
             _accountService = accountService;
             _stockService = stockService;
-            _itemChargeService = itemChargeService;
+            //_itemChargeService = itemChargeService;
             _contractService = contractService;
             _documentTemplateService = documentTemplateService;
             InitialisePaymentPeriodViewBag(contractService);
@@ -183,7 +182,7 @@ namespace HammondsIBMS_2.Controllers
         public ActionResult DeleteBasketForAccount(PromptVM mPromptVM)
         {
             var basket = _accountService.GetBasket(mPromptVM.RecordIndex);
-            _accountService.DeleteBasket(basket,true);
+            _accountService.DeleteBasket(basket, true);
             _accountService.CommitChanges();
             return ReturnJsonFormSuccess();
         }
@@ -195,7 +194,7 @@ namespace HammondsIBMS_2.Controllers
             return Json(basketExists, JsonRequestBehavior.AllowGet);
         }
 
-#endregion
+        #endregion
 
         #region Rental Account
 
@@ -277,14 +276,14 @@ namespace HammondsIBMS_2.Controllers
         public ActionResult _EditRentalAccountStock(EditCustomerAccountStockVM mContractUnitStock)
         {
             var ru = GetRentedUnit(mContractUnitStock.UnitId);
-         
+
             if (ExecuteRepositoryAction(() =>
             {
-                    _accountService.SwapRentedUnit(ru,mContractUnitStock.StockId,mContractUnitStock.OldStockProductCycleId);
-                    _customerService.CommitChanges();
+                _accountService.SwapRentedUnit(ru, mContractUnitStock.StockId, mContractUnitStock.OldStockProductCycleId);
+                _customerService.CommitChanges();
             }))
             {
-                    return ReturnJsonFormSuccess();
+                return ReturnJsonFormSuccess();
             }
 
             return PartialView("_EditAccountStock", mContractUnitStock);
@@ -315,7 +314,7 @@ namespace HammondsIBMS_2.Controllers
                 {
                     if (ExecuteRepositoryAction(() =>
                     {
-                        _accountService.DeleteRentedUnit(cu,mDeleteRentedUnitVm.ProductCycleLifeId,mDeleteRentedUnitVm.ReturnDeposit);
+                        _accountService.DeleteRentedUnit(cu, mDeleteRentedUnitVm.ProductCycleLifeId, mDeleteRentedUnitVm.ReturnDeposit);
                         _accountService.CommitChanges();
                     }))
                     {
@@ -380,7 +379,7 @@ namespace HammondsIBMS_2.Controllers
         [GridAction]
         public ActionResult _GetOneOffItemsForGrid(int id)
         {
-            var ofis = _accountService.GetAccount(id).OneOffItems.Where(c=>c.RemovalDate==null);
+            var ofis = _accountService.GetAccount(id).OneOffItems.Where(c => c.RemovalDate == null);
             return View(new GridModel(ofis));
         }
 
@@ -458,14 +457,14 @@ namespace HammondsIBMS_2.Controllers
 
         private void AddNonSelectableViewBagContractType()
         {
-            var contractType = new ContractType {ContractTypeId = -1, Description = "----"};
-            var contypes = (List<ContractType>) ViewBag.ContractTypes;
+            var contractType = new ContractType { ContractTypeId = -1, Description = "----" };
+            var contypes = (List<ContractType>)ViewBag.ContractTypes;
             contypes.Add(contractType);
             ViewBag.ContractTypes = contypes;
         }
 
 
-      
+
 
         #endregion
 
@@ -474,7 +473,7 @@ namespace HammondsIBMS_2.Controllers
         public ActionResult _DisplayAlternateAddress(int id)
         {
             var acc = _accountService.GetAccount(id);
-            return PartialView("_AlternateAddress",acc);
+            return PartialView("_AlternateAddress", acc);
         }
 
         public ActionResult _EditAlternateAddress(int id)
@@ -542,7 +541,7 @@ namespace HammondsIBMS_2.Controllers
                                 string.Format("{0}   ({1})", m.Identifier,
                                     m.ProductLifeCycleStatus.DescriptionAbbreviation)
                         });
-            return new JsonResult {Data = new SelectList(rslt.ToList(), "StockId", "Identifier")};
+            return new JsonResult { Data = new SelectList(rslt.ToList(), "StockId", "Identifier") };
         }
 
         [HttpPost]
@@ -559,7 +558,7 @@ namespace HammondsIBMS_2.Controllers
                                 string.Format("{0}   ({1})", m.SerialNumber,
                                     m.ProductLifeCycleStatus.DescriptionAbbreviation)
                         });
-            return new JsonResult {Data = new SelectList(rslt.ToList(), "StockId", "Serial")};
+            return new JsonResult { Data = new SelectList(rslt.ToList(), "StockId", "Serial") };
         }
 
         #endregion

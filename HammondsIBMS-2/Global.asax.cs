@@ -44,7 +44,7 @@ namespace HammondsIBMS_2
 
             DataReferenceSetup.Setup();
             SiteMapSetup.Setup();
-            UnityContainerSetup.SetUp();
+            //UnityContainerSetup.SetUp();
             AutoMapperSetup.Setup();
 
             FluentValidationModelValidatorProvider.Configure();

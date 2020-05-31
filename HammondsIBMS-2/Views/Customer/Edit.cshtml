@@ -16,28 +16,28 @@
     </div>
     <div id="CustomerTabStrip">
         @{ Html.Telerik().TabStrip()
-               .Name("TabStrip")
-               .Items(tabstrip =>
-                          {
-                              tabstrip.Add().Text("Accounts")
+                            .Name("TabStrip")
+                            .Items(tabstrip =>
+                            {
+                                tabstrip.Add().Text("Accounts")
                                   .LoadContentFrom(Url.Action("_DisplayCustomerAccounts", "Account", new { customerId = Model.CustomerId, moveToEditAccount = ViewBag.MoveOnToEditAccount }));
-                              tabstrip.Add().Text("Collections")
-                                  .LoadContentFrom(Url.Action("_DisplayCustomerCollections", "Collections", new { id = Model.CustomerId }));
-                              //tabstrip.Add().Text("Posted")
-                              //    .LoadContentFrom(Url.Action("_DisplayPostedForCustomer", "Invoice", new { id = Model.CustomerId }));
-                              //tabstrip.Add().Text("Invoices")
-                              //    .LoadContentFrom(Url.Action("_DisplayCustomerInvoices", "Invoice", new { id = Model.CustomerId }));
-                              tabstrip.Add().Text("Transactions")
-                                  .LoadContentFrom(Url.Action("_DisplayCustomerAccountTransactions", "Transactions", new { id = Model.CustomerId }));
-                              tabstrip.Add().Text("Details")
-                                  .LoadContentFrom(Url.Action("_DisplayDetails", new { id = Model.CustomerId }));
-                              tabstrip.Add().Text("Employer")
-                                  .LoadContentFrom(Url.Action("_DisplayEmployerDetails", new { id = Model.CustomerId }));
-                              tabstrip.Add().Text("Documents")
-                                  .LoadContentFrom(Url.Action("_DisplayCustomerDocuments", new { id = Model.CustomerId }));
-                          })
-                          .ClientEvents(events=>events.OnSelect("CustomerEditTabSelected"))
-               .SelectedIndex(tabIndex).Render(); 
+                                tabstrip.Add().Text("Collections")
+                                    .LoadContentFrom(Url.Action("_DisplayCustomerCollections", "Collections", new { id = Model.CustomerId }));
+                               ////tabstrip.Add().Text("Posted")
+                               ////    .LoadContentFrom(Url.Action("_DisplayPostedForCustomer", "Invoice", new { id = Model.CustomerId }));
+                               ////tabstrip.Add().Text("Invoices")
+                               ////    .LoadContentFrom(Url.Action("_DisplayCustomerInvoices", "Invoice", new { id = Model.CustomerId }));
+                               tabstrip.Add().Text("Transactions")
+                                    .LoadContentFrom(Url.Action("_DisplayCustomerAccountTransactions", "Transactions", new { id = Model.CustomerId }));
+                                tabstrip.Add().Text("Details")
+                                   .LoadContentFrom(Url.Action("_DisplayDetails", new { id = Model.CustomerId }));
+                                tabstrip.Add().Text("Employer")
+                                   .LoadContentFrom(Url.Action("_DisplayEmployerDetails", new { id = Model.CustomerId }));
+                                tabstrip.Add().Text("Documents")
+                                   .LoadContentFrom(Url.Action("_DisplayCustomerDocuments", new { id = Model.CustomerId }));
+                            })
+                                       .ClientEvents(events=>events.OnSelect("CustomerEditTabSelected"))
+                            .SelectedIndex(tabIndex).Render();
         }
 </div>
 </div>

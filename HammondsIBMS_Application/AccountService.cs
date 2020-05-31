@@ -25,8 +25,7 @@ namespace HammondsIBMS_Application
         private readonly IPaymentPeriodRepository _paymentPeriodRepository;
 
 
-        public CustomerAccountService(IUnitOfWork unitOfWork, IPaymentPeriodRepository paymentPeriodRepository,
-            ICustomerAccountRepository customerAccountRepository,StockService stockService,AccountTransactionService accountTransactionService,IBasketRepository basketRepository) : base(unitOfWork)
+        public CustomerAccountService(IUnitOfWork unitOfWork, IPaymentPeriodRepository paymentPeriodRepository, ICustomerAccountRepository customerAccountRepository, StockService stockService, AccountTransactionService accountTransactionService, IBasketRepository basketRepository) : base(unitOfWork)
         {
             _paymentPeriodRepository = paymentPeriodRepository;
             _customerAccountRepository = customerAccountRepository;

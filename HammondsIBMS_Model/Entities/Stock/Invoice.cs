@@ -13,7 +13,7 @@ namespace HammondsIBMS_Domain.Model.Stock
     {
         //private int _tempItemsIndex=-1;
 
-  
+        [Key]
         public int StockInvoiceid { get; set; }
 
 

@@ -22,14 +22,15 @@ namespace HammondsIBMS_2.Controllers
         private readonly CustomerAccountService _customerAccountService;
         private readonly CustomerService _customerService;
 
-        public CollectionsController(AccountTransactionService accountTransactionService,
-            CustomerService customerService, CustomerAccountService customerAccountService)
+        public CollectionsController(CustomerService customerService, AccountTransactionService accountTransactionService, CustomerAccountService customerAccountService)
+        //public CollectionsController(AccountTransactionService accountTransactionService,
+        //CustomerService customerService, CustomerAccountService customerAccountService)
         {
             _accountTransactionService = accountTransactionService;
             _customerService = customerService;
             _customerAccountService = customerAccountService;
 
-            InitialisePaymentSourcesViewBag(_accountTransactionService);
+           // InitialisePaymentSourcesViewBag(_accountTransactionService);
         }
 
         public ActionResult _DisplayCustomerCollections(int id)

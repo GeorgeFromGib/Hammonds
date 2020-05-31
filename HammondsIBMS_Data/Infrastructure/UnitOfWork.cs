@@ -12,10 +12,7 @@ namespace HammondsIBMS_Data.Infrastructure
             this.databaseFactory = databaseFactory;
         }
 
-        protected HammondsIBMSContext DataContext
-        {
-            get { return dataContext ?? (dataContext = databaseFactory.Get()); }
-        }
+        protected HammondsIBMSContext DataContext => dataContext ?? (dataContext = databaseFactory.Get());
 
         public void Commit()
         {

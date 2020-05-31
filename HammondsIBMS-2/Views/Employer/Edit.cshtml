@@ -1,4 +1,5 @@
 ﻿@model HammondsIBMS_Domain.Entities.Contracts.Employer
+
 @using (Html.BeginForm(null, null, FormMethod.Post, new { @class = "form-horizontal" }))
 {
     <fieldset>
@@ -7,10 +8,10 @@
         <fieldset>
             <legend>Name</legend>
             <div class="control-group">
-                @Html.LabelFor(o => o.EmployerName,new {@class="control-label"})
+                @Html.LabelFor(o => o.EmployerName, new { @class = "control-label" })
                 <div class="controls">
-                     @Html.EditorFor(o => o.EmployerName)<br />
-                     @Html.ValidationMessageFor(o => o.EmployerName)
+                    @Html.EditorFor(o => o.EmployerName)<br />
+                    @Html.ValidationMessageFor(o => o.EmployerName)
                 </div>
             </div>
         </fieldset>

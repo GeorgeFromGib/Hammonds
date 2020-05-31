@@ -83,7 +83,8 @@ namespace HammondsIBMS_Application
         public IEnumerable<Stock> GetSelectableStock()
         {
             const int pending = (int) InvoiceStatusEnum.Pending;
-            var sel = from s in _stockService.GetStocks() where s.InvoiceStatusId == pending select s;
+            var sel = _stockService.GetStocks().Where(s => s.InvoiceStatusId == pending).ToList();
+            //var sel = from s in _stockService.GetStocks() where s.InvoiceStatusId == pending select s;
             return sel;
         }
 

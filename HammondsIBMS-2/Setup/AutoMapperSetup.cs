@@ -57,9 +57,9 @@ namespace HammondsIBMS_2.Setup
             Mapper.CreateMap<StockInvoice, StockInvoiceChargesVM>();
 
             Mapper.CreateMap<Stock, SelectableStockVM>()
-                .ForMember(s=>s.Model,o=>o.MapFrom(m=>m.Model.ModelCode))
-                .ForMember(s=>s.Manufacturer,o=>o.MapFrom(m=>m.Model.Manufacturer.Name))
-                .ForMember(s => s.LastEntry,o=>o.MapFrom(s=>s.History.LastOrDefault().TimeStamp));
+                .ForMember(s => s.Model, o => o.MapFrom(m => m.Model.ModelCode))
+                .ForMember(s => s.Manufacturer, o => o.MapFrom(m => m.Model.Manufacturer.Name))
+                .ForMember(s => s.LastEntry,o=>o.MapFrom(s=>s.History.Count==0?(DateTime?)null:s.History.LastOrDefault().TimeStamp));
             Mapper.CreateMap<Stock, StockVM>()
                 .ForMember(m => m.ModelCode, o => o.MapFrom(f => f.Model.ModelCode))
                 .ForMember(m => m.ManufacturerName, o => o.MapFrom(f => f.Model.Manufacturer.Name))

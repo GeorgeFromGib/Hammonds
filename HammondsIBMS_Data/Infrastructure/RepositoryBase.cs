@@ -4,6 +4,7 @@ using System.Linq;
 using System.Data.Entity;
 using System.Data;
 using System.Linq.Expressions;
+using EntityState = System.Data.Entity.EntityState;
 
 namespace HammondsIBMS_Data.Infrastructure
 {
@@ -48,6 +49,7 @@ namespace HammondsIBMS_Data.Infrastructure
 
         public virtual void Update(T entity)
         {
+            //DBContext.Entry(entity).State = EntityState.Modified;
             //Dbset.Attach(entity);
             //dataContext.Entry(entity).State = EntityState.Modified;
         }

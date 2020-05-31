@@ -171,7 +171,8 @@ namespace HammondsIBMS_2.Controllers
             var selForInvVM = new SelectStockForInvoiceVM
             {
                 StockInvoiceId = id,
-                SelectedStock = AutoMapperSetup.MapList<Stock, SelectableStockVM>(_stockInvSvc.GetSelectableStock()).ToList()
+                SelectedStock = Mapper.Map<IEnumerable<Stock>,IEnumerable<SelectableStockVM>>(_stockInvSvc.GetSelectableStock()).ToList()
+                //SelectedStock = AutoMapperSetup.MapList<Stock, SelectableStockVM>(_stockInvSvc.GetSelectableStock()).ToList()
             };
             Session["_availableForStock"] = selForInvVM.SelectedStock;
             return PartialView(selForInvVM);
